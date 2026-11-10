@@ -1,0 +1,43 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.1.2'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'ru.sibsutis'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('timefoldSolverVersion', "2.8.0")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'ai.timefold.solver:timefold-solver-spring-boot-starter'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testCompileOnly 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "ai.timefold.solver:timefold-solver-bom:${timefoldSolverVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
