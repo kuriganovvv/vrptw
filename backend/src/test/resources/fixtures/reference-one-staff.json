@@ -1,0 +1,63 @@
+{
+  "service_centers": [
+    {
+      "service_center_id": "SC-01",
+      "name": "СЦ Север",
+      "address": "г. Екатеринбург, ул. Победы, 30",
+      "lat": 56.8941,
+      "lon": 60.6105,
+      "opening_hours": { "open": "08:00", "close": "21:00" },
+      "restock_duration_min": 15
+    }
+  ],
+  "staff": [
+    {
+      "staff_id": "ST-001",
+      "display_name": "Монтажник 001",
+      "service_center_id": "SC-01",
+      "profiles": ["LTP3"],
+      "technologies": ["PON"],
+      "height_permit": false,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": { "from": "12:00", "to": "15:00" }
+      },
+      "equipment_start": { "ONT": 5, "ROUTER": 5, "STB": 5 },
+      "equipment_capacity": { "ONT": 5, "ROUTER": 5, "STB": 5 },
+      "experience_years": 4.5
+    }
+  ],
+  "access_nodes": [
+    {
+      "access_node_id": "AN-0001",
+      "node_type": "OLT",
+      "technology": "PON",
+      "name": "OLT Тестовый",
+      "address": "г. Екатеринбург, ул. Учителей, 22",
+      "lat": 56.8712,
+      "lon": 60.6531,
+      "buildings": [
+        { "building_id": "B-00001", "address": "ул. Тестовая, 1", "lat": 56.8712, "lon": 60.6531, "building_type": "MKD", "overhead_line": false, "zone_service_center_id": "SC-01" },
+        { "building_id": "B-00002", "address": "ул. Тестовая, 2", "lat": 56.8722, "lon": 60.6541, "building_type": "MKD", "overhead_line": false, "zone_service_center_id": "SC-01" },
+        { "building_id": "B-00003", "address": "ул. Тестовая, 3", "lat": 56.8732, "lon": 60.6551, "building_type": "MKD", "overhead_line": false, "zone_service_center_id": "SC-01" },
+        { "building_id": "B-00004", "address": "ул. Тестовая, 4", "lat": 56.8742, "lon": 60.6561, "building_type": "MKD", "overhead_line": false, "zone_service_center_id": "SC-01" },
+        { "building_id": "B-00005", "address": "ул. Тестовая, 5", "lat": 56.8752, "lon": 60.6571, "building_type": "MKD", "overhead_line": false, "zone_service_center_id": "SC-01" }
+      ]
+    }
+  ],
+  "work_types": [
+    {
+      "code": "REPAIR",
+      "name": "Устранение неисправности",
+      "profiles": ["LTP3"],
+      "duration_min": 60,
+      "max_start_delay_min": null,
+      "deadline_kind": "HOURS",
+      "deadline_value": 24,
+      "repeat_deadline_value": 12,
+      "pgp_relevant": true
+    }
+  ]
+}
