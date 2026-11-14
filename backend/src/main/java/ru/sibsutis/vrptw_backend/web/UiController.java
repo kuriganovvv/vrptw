@@ -15,7 +15,7 @@ import ru.sibsutis.vrptw_backend.dto.day.DayInput;
 import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 import ru.sibsutis.vrptw_backend.dto.ui.UiDay;
 import ru.sibsutis.vrptw_backend.web.plan.PlanningService;
-import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
+import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
 /**
  * Дополнительные методы для интерфейса диспетчера.
@@ -28,10 +28,10 @@ import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
 @RequestMapping("/api/v1/ui")
 public class UiController {
 
-    private final InMemoryDataStore store;
+    private final DataStore store;
     private final PlanningService planning;
 
-    public UiController(InMemoryDataStore store, PlanningService planning) {
+    public UiController(DataStore store, PlanningService planning) {
         this.store = store;
         this.planning = planning;
     }

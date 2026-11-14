@@ -26,21 +26,21 @@ import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 import ru.sibsutis.vrptw_backend.dto.reference.TravelMatrix;
 import ru.sibsutis.vrptw_backend.service.DaySolutionFactory;
 import ru.sibsutis.vrptw_backend.web.pgp.PgpDetector;
-import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
+import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
 @Service
 public class PlanningService {
 
-    private final InMemoryDataStore store;
-    private final SolverFactory<DaySolution> solverFactory;   // 120s из yml (Влад)
-    private final SolverFactory<DaySolution> replanFactory;   // 5s, чтобы событие ≤10s
+    private final DataStore store;
+    private final SolverFactory<DaySolution> solverFactory;   
+    private final SolverFactory<DaySolution> replanFactory;
     private final PgpDetector pgp;
     private final PlanAssembler assembler;
     private final PlanMerger merger;
     private final DaySolutionFactory factory = new DaySolutionFactory();
     private final ReentrantLock lock = new ReentrantLock();
 
-    public PlanningService(InMemoryDataStore store, SolverFactory<DaySolution> solverFactory,
+    public PlanningService(DataStore store, SolverFactory<DaySolution> solverFactory,
                            PgpDetector pgp, PlanAssembler assembler, PlanMerger merger) {
         this.store = store;
         this.solverFactory = solverFactory;
@@ -95,7 +95,6 @@ public class PlanningService {
                     .forEach(s -> started.add(s.orderId())));
 
             PgpDetector.Result pgpRes = pgp.detect(effective, ref, now, started);
-            // выполненные визиты не оптимизируем повторно — они вернутся в план префиксом
             List<Order> plannedOrders = pgpRes.plannedOrders().stream()
                     .filter(o -> !started.contains(o.orderId()))
                     .toList();

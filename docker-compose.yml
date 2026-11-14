@@ -1,16 +1,43 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rostelecom-postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-vrptw}
+      - POSTGRES_USER=${POSTGRES_USER:-vrptw}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-vrptw}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   backend:
     build: 
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        GRADLE_DISTRIBUTION_URL: ${GRADLE_DISTRIBUTION_URL:-https://repo.huaweicloud.com/gradle/gradle-9.8.2-bin.zip}
     container_name: rostelecom-backend
     ports:
       - "8080:8080"
     environment:
       - JAVA_OPTS=-Xmx2g -Xms512m
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB:-vrptw}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-vrptw}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-vrptw}
+      - VRPTW_STORAGE_MODE=postgres
     volumes:
       - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/api/v1/health"]
       interval: 10s
@@ -28,3 +55,6 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+
+volumes:
+  pgdata:

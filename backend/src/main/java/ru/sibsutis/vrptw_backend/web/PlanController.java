@@ -9,16 +9,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ru.sibsutis.vrptw_backend.dto.plan.Plan;
 import ru.sibsutis.vrptw_backend.web.plan.PlanningService;
-import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
+import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
 @RestController
 @RequestMapping("/api/v1/days/{date}/plan")
 public class PlanController {
 
     private final PlanningService planning;
-    private final InMemoryDataStore store;
+    private final DataStore store;
 
-    public PlanController(PlanningService planning, InMemoryDataStore store) {
+    public PlanController(PlanningService planning, DataStore store) {
         this.planning = planning;
         this.store = store;
     }

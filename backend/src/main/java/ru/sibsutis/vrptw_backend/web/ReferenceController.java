@@ -10,22 +10,22 @@ import org.springframework.web.bind.annotation.*;
 import ru.sibsutis.vrptw_backend.dto.common.LoadResult;
 import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 import ru.sibsutis.vrptw_backend.dto.reference.TravelMatrix;
-import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
+import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
 @RestController
 @RequestMapping("/api/v1")
 public class ReferenceController {
 
-    private final InMemoryDataStore store;
+    private final DataStore store;
 
-    public ReferenceController(InMemoryDataStore store) {
+    public ReferenceController(DataStore store) {
         this.store = store;
     }
 
     @PutMapping(path = "/reference", consumes = MediaType.APPLICATION_JSON_VALUE)
     public LoadResult putReference(@RequestBody ReferenceData body) {
         store.saveReference(body);
-        Map<String, Integer> counts = new LinkedHashMap<>(); // TODO ключи counts сверить со спекой
+        Map<String, Integer> counts = new LinkedHashMap<>();
         counts.put("service_centers", size(body.serviceCenters()));
         counts.put("staff", size(body.staff()));
         counts.put("access_nodes", size(body.accessNodes()));

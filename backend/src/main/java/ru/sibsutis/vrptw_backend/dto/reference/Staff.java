@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** DTO схемы Staff. Строковые enum-поля намеренно оставлены строками: значения задаёт OpenAPI. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Staff(
         @JsonProperty("staff_id") String staffId,

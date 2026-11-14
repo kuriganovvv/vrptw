@@ -18,6 +18,47 @@ npm run build    # production-сборка в dist/frontend/browser
 
 Требуется Node.js 20.19+ / 22.12+ и npm 10+.
 
+## 🗄️ Backend и PostgreSQL
+
+Состояние сервиса (справочники, матрица, наряды дня, планы, события и их эффекты)
+хранится в PostgreSQL. Схема создаётся автоматически при старте приложения
+(`backend/src/main/resources/schema.sql`).
+
+При первом запуске пустая БД автоматически заполняется файлами из `data/`
+(`reference.json`, `travel_matrix.json`, `day_*.json`). Уже загруженные данные
+не перезаписываются. Каталог можно задать через `VRPTW_DATA_DIR`, а автозагрузку
+отключить через `VRPTW_SEED_ENABLED=false`.
+
+По умолчанию backend подключается к `jdbc:postgresql://localhost:5432/vrptw`
+(пользователь/пароль `vrptw`/`vrptw`). Параметры переопределяются переменными
+окружения:
+
+```bash
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/vrptw
+SPRING_DATASOURCE_USERNAME=vrptw
+SPRING_DATASOURCE_PASSWORD=vrptw
+```
+
+Запуск всего стека (PostgreSQL + backend + frontend):
+
+```bash
+docker compose up --build
+```
+
+Только база для локальной разработки:
+
+```bash
+docker compose up -d postgres
+cd backend
+./gradlew bootRun        # http://localhost:8080
+```
+
+Если PostgreSQL недоступен, для отладки можно вернуться к in-memory хранилищу:
+
+```bash
+VRPTW_STORAGE_MODE=memory ./gradlew bootRun
+```
+
 ## 📖 Документация
 
 - [Гайд: Совместная работа в Excalidraw](https://github.com/kuriganovvv/vrptw/blob/0b641a5ce43e040f034115426cae903714d519f8/wiki/Excalidraw.md)

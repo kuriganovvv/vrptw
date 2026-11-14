@@ -2,7 +2,7 @@ package ru.sibsutis.vrptw_backend.dto.common;
 
 import java.util.List;
 
-/** Тело ошибки строго по схеме ErrorResponse из api_spec.yaml. */
+
 public record ErrorResponse(Error error) {
 
     public static ErrorResponse of(String code, String message) {

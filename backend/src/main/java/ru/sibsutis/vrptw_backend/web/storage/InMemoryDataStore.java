@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import ru.sibsutis.vrptw_backend.dto.day.DayInput;
@@ -18,8 +19,10 @@ import ru.sibsutis.vrptw_backend.dto.plan.Plan;
 import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 import ru.sibsutis.vrptw_backend.dto.reference.TravelMatrix;
 
+/** Резервное in-memory хранилище: используется в тестах и при vrptw.storage.mode=memory. */
 @Component
-public class InMemoryDataStore {
+@ConditionalOnProperty(name = "vrptw.storage.mode", havingValue = "memory")
+public class InMemoryDataStore implements DataStore {
 
     private final AtomicReference<ReferenceData> reference = new AtomicReference<>();
     private final AtomicReference<TravelMatrix> travelMatrix = new AtomicReference<>();

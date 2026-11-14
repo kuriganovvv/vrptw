@@ -3,6 +3,17 @@ server:
 spring:
   application:
     name: vrptw-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/vrptw}
+    username: ${SPRING_DATASOURCE_USERNAME:vrptw}
+    password: ${SPRING_DATASOURCE_PASSWORD:vrptw}
+    driver-class-name: org.postgresql.Driver
+vrptw:
+  storage:
+    mode: ${VRPTW_STORAGE_MODE:postgres}
+  seed:
+    enabled: ${VRPTW_SEED_ENABLED:true}
+  data-dir: ${VRPTW_DATA_DIR:}
 timefold:
   solver:
     termination:

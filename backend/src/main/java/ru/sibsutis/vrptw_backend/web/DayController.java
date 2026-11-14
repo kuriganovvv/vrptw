@@ -11,15 +11,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ru.sibsutis.vrptw_backend.dto.common.LoadResult;
 import ru.sibsutis.vrptw_backend.dto.day.DayInput;
-import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
+import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
 @RestController
 @RequestMapping("/api/v1/days")
 public class DayController {
 
-    private final InMemoryDataStore store;
+    private final DataStore store;
 
-    public DayController(InMemoryDataStore store) {
+    public DayController(DataStore store) {
         this.store = store;
     }
 

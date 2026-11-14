@@ -18,23 +18,15 @@ public class DispatchConstraintProvider implements ConstraintProvider {
     @Override
     public Constraint[] defineConstraints(ConstraintFactory factory) {
         return new Constraint[] {
-                // H1 — допуск
                 profileMismatch(factory),
                 technologyMismatch(factory),
                 heightPermitMissing(factory),
-                // H4 — слот
                 visitOutsideSlot(factory),
-                // H3 — перерыв в окне
                 breakOutsideWindow(factory),
-                // H2 — возврат в СЦ до конца смены
                 routeEndsAfterShift(factory),
-                // H7 — АО в рюкзаке
                 equipmentOverflow(factory),
-                // Цель 1 — распределить максимум нарядов
                 unassignedVisit(factory),
-                // Цель 2 — контрольный срок (повторные с весом 2)
                 deadlineMissed(factory),
-                // Цель 3 — минимум времени в пути
                 minimizeTravelTime(factory)
         };
     }

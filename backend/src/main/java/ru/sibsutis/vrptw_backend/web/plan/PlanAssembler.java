@@ -69,8 +69,7 @@ public class PlanAssembler {
             if (t == null) {
                 continue;
             }
-            // Перерыв берётся на выезде к визиту, на локации предыдущей остановки,
-            // поэтому он идёт ПЕРЕД визитом и с нулевым пробегом.
+
             if (t.breakStart() != null) {
                 stops.add(new Stop(seq++, TYPE_BREAK, t.breakLocationId(), null,
                         t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
@@ -133,7 +132,6 @@ public class PlanAssembler {
             text = "Нет сотрудника с нужным профилем, технологией или допуском";
             action = ACTION_REASSIGN;
         } else if (qualified.isEmpty()) {
-            // квалифицированные есть в справочнике, но все выбыли со смены
             code = REASON_UNAVAILABLE;
             text = "Все подходящие сотрудники недоступны в эту смену";
             action = ACTION_REASSIGN;

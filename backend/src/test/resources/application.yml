@@ -1,0 +1,21 @@
+# Тесты не требуют PostgreSQL: используется in-memory реализация DataStore.
+vrptw:
+  storage:
+    mode: memory
+  seed:
+    enabled: false
+spring:
+  application:
+    name: vrptw-backend
+  autoconfigure:
+    exclude: org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+timefold:
+  solver:
+    termination:
+      spent-limit: 30s
+dispatch:
+  team: "С-42"
+  version: "0.1.0"
+  pgp:
+    min-orders: 3
+    window-minutes: 120

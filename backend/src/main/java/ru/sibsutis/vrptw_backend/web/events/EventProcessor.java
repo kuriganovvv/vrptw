@@ -14,7 +14,7 @@ import ru.sibsutis.vrptw_backend.dto.plan.CancelledOrder;
 import ru.sibsutis.vrptw_backend.dto.plan.Plan;
 import ru.sibsutis.vrptw_backend.dto.plan.Stop;
 import ru.sibsutis.vrptw_backend.web.plan.PlanningService;
-import ru.sibsutis.vrptw_backend.web.storage.InMemoryDataStore;
+import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
 @Component
 public class EventProcessor {
@@ -23,11 +23,11 @@ public class EventProcessor {
             "ORDER_TRANSFERRED", "STAFF_UNAVAILABLE", "TIME_TICK");
     private static final Set<String> TRANSFER_TARGETS = Set.of("STATION_EQUIPMENT", "TRUNK_CABLE");
 
-    private final InMemoryDataStore store;
+    private final DataStore store;
     private final PlanningService planning;
     private final tools.jackson.databind.json.JsonMapper mapper;
 
-    public EventProcessor(InMemoryDataStore store, PlanningService planning,
+    public EventProcessor(DataStore store, PlanningService planning,
                           tools.jackson.databind.json.JsonMapper mapper) {
         this.store = store;
         this.planning = planning;
@@ -55,7 +55,6 @@ public class EventProcessor {
         }
 
         apply(date, type, e, ts);
-        // префикс строится по предыдущему плану, но с учётом end из VISIT_DELAYED/ORDER_TRANSFERRED
         Map<String, List<Stop>> prefix = completedPrefix(date, ts);
         store.setNow(date, ts);
         Plan plan = planning.replan(date, ts, id, prefix);
@@ -120,7 +119,6 @@ public class EventProcessor {
         switch (type) {
             case "ORDER_CANCELLED" -> { store.removeOrder(date, (String) e.get("order_id"));
                 store.addCancelled(date, new CancelledOrder((String) e.get("order_id"), ts, (String) e.get("event_id"))); }
-            // Начатый визит остаётся в плане (заморозка H10), меняется только его end (H5).
             case "ORDER_TRANSFERRED" -> store.setVisitEnd(date, (String) e.get("order_id"),
                     OffsetDateTime.parse(text(e, "actual_end")));
             case "VISIT_DELAYED" -> store.setVisitEnd(date, (String) e.get("order_id"),
