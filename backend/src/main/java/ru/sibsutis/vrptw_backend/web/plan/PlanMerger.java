@@ -21,7 +21,13 @@ public class PlanMerger {
             List<Stop> pre = prefix.getOrDefault(r.staffId(), List.of());
             if (pre.isEmpty()) { routes.add(r); continue; }
             List<Stop> stops = new ArrayList<>(pre);
-            for (Stop s : r.stops()) if (!"DEPOT_START".equals(s.type())) stops.add(s);
+            // Перерыв уже мог быть взят до события: второй BREAK нарушит H3 (ровно один перерыв).
+            boolean breakAlreadyTaken = pre.stream().anyMatch(s -> "BREAK".equals(s.type()));
+            for (Stop s : r.stops()) {
+                if ("DEPOT_START".equals(s.type())) continue;
+                if (breakAlreadyTaken && "BREAK".equals(s.type())) continue;
+                stops.add(s);
+            }
             routes.add(new Route(r.staffId(), r.serviceCenterId(), r.status(), r.unavailableFrom(), r.unavailableUntil(),
                     reseq(stops), totals(stops, ref, r.staffId(), now)));
         }

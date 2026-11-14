@@ -31,6 +31,6 @@ public class DayController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "date в теле не совпадает с путём");
         }
         store.saveDay(date, body);
-        return new LoadResult("ok", Map.of("orders", body.orders() == null ? 0 : body.orders().size()));
+        return new LoadResult("loaded", Map.of("orders", body.orders() == null ? 0 : body.orders().size()));
     }
 }

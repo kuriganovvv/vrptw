@@ -17,7 +17,7 @@ EOF
 
 expect "health"            '"status":"ok"'        "$(curl -s $BASE/health)"
 expect "PUT reference"     '"staff":1'            "$(curl -s -X PUT $BASE/reference -H 'Content-Type: application/json' --data-binary @$FIX/reference-one-staff.json)"
-expect "PUT matrix"        '"points":6'           "$(curl -s -X PUT $BASE/travel-matrix -H 'Content-Type: application/json' --data-binary @/tmp/vrptw-matrix.json)"
+expect "PUT matrix"        '"points":6'           "$(curl -s -X PUT $BASE/reference/travel-matrix -H 'Content-Type: application/json' --data-binary @/tmp/vrptw-matrix.json)"
 expect "PUT day"           '"orders":5'           "$(curl -s -X PUT $BASE/days/2026-10-26 -H 'Content-Type: application/json' --data-binary @$FIX/day-five-orders.json)"
 
 PLAN=$(curl -s -X POST $BASE/days/2026-10-26/plan)
