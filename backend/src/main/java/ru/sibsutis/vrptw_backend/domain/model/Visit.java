@@ -75,25 +75,39 @@ public class Visit {
         int travelSec = matrix.travelSec(fromLocation, order.getBuildingId());
         int distanceM = matrix.distanceM(fromLocation, order.getBuildingId());
 
-        OffsetDateTime arrival = base.plusSeconds(travelSec);
-        OffsetDateTime start = arrival.isBefore(order.getSlotStart()) ? order.getSlotStart() : arrival;
-        OffsetDateTime end = start.plusMinutes(workType.durationMin());
-
+        // Перерыв ставится на выезде к этому визиту, на локации предыдущей остановки,
+        // как только окно обеда открылось и это не срывает слот текущего визита.
+        // Так перерыв попадает в окно даже когда первый визит заканчивается позже него.
         OffsetDateTime breakStart = null;
         OffsetDateTime breakEnd = null;
-        OffsetDateTime departure = end;
+        String breakLocationId = null;
+        OffsetDateTime readyToTravel = base;
 
-        if (!breakDone && !end.isBefore(staff.getShift().breakWindowFromAt(solution.getNow()))) {
-            breakStart = end;
-            breakEnd = breakStart.plusMinutes(staff.getShift().breakDurationMin());
-            departure = breakEnd;
-            breakDone = true;
+        if (!breakDone) {
+            OffsetDateTime windowFrom = staff.getShift().breakWindowFromAt(solution.getNow());
+            OffsetDateTime windowTo = staff.getShift().breakWindowToAt(solution.getNow());
+            OffsetDateTime candidateStart = base.isBefore(windowFrom) ? windowFrom : base;
+            OffsetDateTime candidateEnd = candidateStart.plusMinutes(staff.getShift().breakDurationMin());
+            boolean insideWindow = !candidateStart.isAfter(windowTo);
+            boolean keepsSlot = !candidateEnd.plusSeconds(travelSec).isAfter(order.getLatestStart());
+            if (insideWindow && keepsSlot) {
+                breakStart = candidateStart;
+                breakEnd = candidateEnd;
+                breakLocationId = fromLocation;
+                readyToTravel = candidateEnd;
+                breakDone = true;
+            }
         }
+
+        OffsetDateTime arrival = readyToTravel.plusSeconds(travelSec);
+        OffsetDateTime start = arrival.isBefore(order.getSlotStart()) ? order.getSlotStart() : arrival;
+        OffsetDateTime end = start.plusMinutes(workType.durationMin());
+        OffsetDateTime departure = end;
 
         return new Timings(arrival, start, end, departure, travelSec, distanceM,
                 cumulativeTravelSec + travelSec,
                 cumulativeDistanceM + distanceM,
-                breakStart, breakEnd, breakDone);
+                breakStart, breakEnd, breakLocationId, breakDone);
     }
 
     public String locationId() {
@@ -192,6 +206,7 @@ public class Visit {
             long cumulativeDistanceM,
             OffsetDateTime breakStart,
             OffsetDateTime breakEnd,
+            String breakLocationId,
             boolean breakDone) {
     }
 }
