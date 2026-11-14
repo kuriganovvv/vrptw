@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import ru.sibsutis.vrptw_backend.dto.day.Order;
 import ru.sibsutis.vrptw_backend.dto.event.EventResult;
 import ru.sibsutis.vrptw_backend.dto.plan.CancelledOrder;
 import ru.sibsutis.vrptw_backend.dto.plan.Plan;
@@ -23,8 +24,14 @@ public class EventProcessor {
 
     private final InMemoryDataStore store;
     private final PlanningService planning;
+    private final tools.jackson.databind.json.JsonMapper mapper;
 
-    public EventProcessor(InMemoryDataStore store, PlanningService planning) { this.store = store; this.planning = planning; }
+    public EventProcessor(InMemoryDataStore store, PlanningService planning,
+                          tools.jackson.databind.json.JsonMapper mapper) {
+        this.store = store;
+        this.planning = planning;
+        this.mapper = mapper;
+    }
 
     public EventResult process(LocalDate date, Map<String, Object> e) {
         long t0 = System.nanoTime();
@@ -75,7 +82,12 @@ public class EventProcessor {
                 store.addCancelled(date, new CancelledOrder((String) e.get("order_id"), ts, (String) e.get("event_id"))); }
             case "ORDER_TRANSFERRED" -> store.removeOrder(date, (String) e.get("order_id"));
             case "STAFF_UNAVAILABLE" -> store.markUnavailable(date, (String) e.get("staff_id"));
-            default -> { /* NEW_ORDER / VISIT_DELAYED / TIME_TICK: пересборка из состояния */ }
+            case "NEW_ORDER" -> {
+                Object raw = e.get("order");
+                if (raw == null) throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "NEW_ORDER без поля order");
+                store.addOrder(date, mapper.convertValue(raw, Order.class));
+            }
+            default -> { /* VISIT_DELAYED / TIME_TICK: пересборка из состояния */ }
         }
     }
 
