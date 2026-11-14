@@ -33,6 +33,7 @@ public class InMemoryDataStore {
     private final ConcurrentMap<LocalDate, Set<String>> removedOrders = new ConcurrentHashMap<>();
     private final ConcurrentMap<LocalDate, List<Order>> extraOrders = new ConcurrentHashMap<>();
     private final ConcurrentMap<LocalDate, Set<String>> unavailableStaff = new ConcurrentHashMap<>();
+    private final ConcurrentMap<LocalDate, Map<String, OffsetDateTime>> visitEnds = new ConcurrentHashMap<>();
 
     public void saveReference(ReferenceData d) { reference.set(d); }
     public Optional<ReferenceData> findReference() { return Optional.ofNullable(reference.get()); }
@@ -44,6 +45,7 @@ public class InMemoryDataStore {
         plans.remove(date); versions.remove(date); events.remove(date);
         modelNow.remove(date); cancelled.remove(date); alerts.remove(date);
         removedOrders.remove(date); extraOrders.remove(date); unavailableStaff.remove(date);
+        visitEnds.remove(date);
     }
     public Optional<DayInput> findDay(LocalDate d) { return Optional.ofNullable(days.get(d)); }
     public void savePlan(LocalDate d, Plan p) { plans.put(d, p); }
@@ -88,4 +90,12 @@ public class InMemoryDataStore {
     public List<Order> extraOrders(LocalDate d) { return extraOrders.getOrDefault(d, List.of()); }
     public void markUnavailable(LocalDate d, String staffId) { unavailableStaff.computeIfAbsent(d, k -> new HashSet<>()).add(staffId); }
     public Set<String> unavailableStaff(LocalDate d) { return unavailableStaff.getOrDefault(d, Set.of()); }
+
+    /** Новый конец уже начатого визита из событий VISIT_DELAYED / ORDER_TRANSFERRED. */
+    public void setVisitEnd(LocalDate d, String orderId, OffsetDateTime end) {
+        visitEnds.computeIfAbsent(d, k -> new ConcurrentHashMap<>()).put(orderId, end);
+    }
+    public Optional<OffsetDateTime> visitEnd(LocalDate d, String orderId) {
+        return Optional.ofNullable(visitEnds.getOrDefault(d, Map.of()).get(orderId));
+    }
 }

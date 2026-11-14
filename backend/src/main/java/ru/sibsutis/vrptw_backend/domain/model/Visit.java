@@ -54,7 +54,7 @@ public class Visit {
             if (staff.getShift() == null) {
                 return null;
             }
-            base = staff.shiftStart(solution.getNow());
+            base = staff.startOfAvailability(solution.getNow());
             fromLocation = staff.getServiceCenterId();
             breakDone = false;
             cumulativeTravelSec = 0;
