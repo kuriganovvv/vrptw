@@ -13,6 +13,7 @@ vrptw:
     mode: ${VRPTW_STORAGE_MODE:postgres}
   seed:
     enabled: ${VRPTW_SEED_ENABLED:true}
+    force: ${VRPTW_SEED_FORCE:false}
   data-dir: ${VRPTW_DATA_DIR:}
 timefold:
   solver:

@@ -40,8 +40,11 @@ public class InMemoryDataStore implements DataStore {
 
     public void saveReference(ReferenceData d) { reference.set(d); }
     public Optional<ReferenceData> findReference() { return Optional.ofNullable(reference.get()); }
+    /** В памяти меток времени нет: автозагрузка не перезаписывает уже загруженные данные. */
+    public Optional<OffsetDateTime> referenceUpdatedAt() { return Optional.empty(); }
     public void saveTravelMatrix(TravelMatrix m) { travelMatrix.set(m); }
     public Optional<TravelMatrix> findTravelMatrix() { return Optional.ofNullable(travelMatrix.get()); }
+    public Optional<OffsetDateTime> travelMatrixUpdatedAt() { return Optional.empty(); }
 
     public void saveDay(LocalDate date, DayInput day) {
         days.put(date, day);
@@ -51,6 +54,7 @@ public class InMemoryDataStore implements DataStore {
         visitEnds.remove(date);
     }
     public Optional<DayInput> findDay(LocalDate d) { return Optional.ofNullable(days.get(d)); }
+    public Optional<OffsetDateTime> dayUpdatedAt(LocalDate d) { return Optional.empty(); }
     /** Даты, загруженные в сервис (для UI-списка дней). */
     public Set<LocalDate> loadedDates() { return Set.copyOf(days.keySet()); }
     public void savePlan(LocalDate d, Plan p) { plans.put(d, p); }

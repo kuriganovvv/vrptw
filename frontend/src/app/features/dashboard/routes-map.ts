@@ -303,7 +303,18 @@ interface MapPoint {
 
 /** Дорожная геометрия: OSRM отдаёт её по тем же координатам, что и точки маршрута. */
 const OSRM_URL = 'https://router.project-osrm.org/route/v1/driving';
+/**
+ * `continue_straight=false` разрешает разворот на промежуточной точке.
+ * Без него OSRM отвечает `NoRoute`, если маршрут требует разворота через
+ * разделитель/одностороннюю улицу (например, маршрут ST-008), и линия
+ * остаётся пунктирной прямой.
+ */
+const OSRM_QUERY = 'continue_straight=false&overview=full&geometries=geojson';
+const OSRM_TIMEOUT_MS = 15_000;
+const ROAD_RETRY_MS = 60_000;
+
 const roadGeometry = new Map<string, L.LatLngTuple[]>();
+const roadFailedAt = new Map<string, number>();
 const roadQueue: { key: string; points: MapPoint[] }[] = [];
 const roadListeners = new Set<() => void>();
 let roadBusy = false;
@@ -313,9 +324,46 @@ function geometryKey(points: MapPoint[]): string {
 }
 
 function requestRoadGeometry(key: string, points: MapPoint[]): void {
-  if (roadGeometry.has(key) || roadQueue.some((job) => job.key === key)) return;
+  if (roadGeometry.has(key)) return;
+  const failedAt = roadFailedAt.get(key);
+  if (failedAt !== undefined && Date.now() - failedAt < ROAD_RETRY_MS) return;
+  if (roadQueue.some((job) => job.key === key)) return;
   roadQueue.push({ key, points });
   pumpRoadQueue();
+}
+
+interface OsrmRouteBody {
+  code?: string;
+  routes?: { geometry?: { coordinates?: [number, number][] } }[];
+}
+
+async function fetchRoadLine(points: MapPoint[]): Promise<L.LatLngTuple[]> {
+  const coords = points.map((p) => `${p.lon.toFixed(5)},${p.lat.toFixed(5)}`).join(';');
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), OSRM_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${OSRM_URL}/${coords}?${OSRM_QUERY}`, {
+      signal: controller.signal,
+    });
+    if (!response.ok) throw new Error(String(response.status));
+    const body = (await response.json()) as OsrmRouteBody;
+    const line = body.routes?.[0]?.geometry?.coordinates;
+    if (!line?.length) throw new Error(body.code ?? 'no geometry');
+    return line.map(([lon, lat]) => [lat, lon] as L.LatLngTuple);
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+/** Резервный вариант: собираем маршрут из отдельных участков между соседними точками. */
+async function fetchRoadByLegs(points: MapPoint[]): Promise<L.LatLngTuple[]> {
+  const line: L.LatLngTuple[] = [];
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const leg = await fetchRoadLine([points[i], points[i + 1]]);
+    line.push(...(i === 0 ? leg : leg.slice(1)));
+  }
+  if (!line.length) throw new Error('empty route');
+  return line;
 }
 
 /** Публичный OSRM не любит всплески запросов: по одному с паузой. */
@@ -328,17 +376,17 @@ function pumpRoadQueue(): void {
     return;
   }
   roadBusy = true;
-  const coords = job.points.map((p) => `${p.lon.toFixed(5)},${p.lat.toFixed(5)}`).join(';');
-  fetch(`${OSRM_URL}/${coords}?overview=full&geometries=geojson`)
-    .then((response) => (response.ok ? response.json() : Promise.reject(new Error(String(response.status)))))
-    .then((body: { routes?: { geometry?: { coordinates?: [number, number][] } }[] }) => {
-      const line = body.routes?.[0]?.geometry?.coordinates;
-      if (!line?.length) return;
-      roadGeometry.set(job.key, line.map(([lon, lat]) => [lat, lon] as L.LatLngTuple));
+  fetchRoadLine(job.points)
+    .catch(() => fetchRoadByLegs(job.points))
+    .then((line) => {
+      roadGeometry.set(job.key, line);
+      roadFailedAt.delete(job.key);
       roadListeners.forEach((listener) => listener());
     })
     .catch(() => {
-      // маршрутизатор недоступен — остаёмся на пунктирной прямой
+      // маршрутизатор недоступен — остаёмся на пунктирной прямой,
+      // но не повторяем запрос на каждой перерисовке карты
+      roadFailedAt.set(job.key, Date.now());
     })
     .finally(() => {
       roadBusy = false;

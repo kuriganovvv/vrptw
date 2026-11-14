@@ -33,6 +33,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-vrptw}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-vrptw}
       - VRPTW_STORAGE_MODE=postgres
+      - VRPTW_SEED_FORCE=${VRPTW_SEED_FORCE:-false}
     volumes:
       - ./data:/app/data
     depends_on:

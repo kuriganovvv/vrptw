@@ -25,13 +25,22 @@ public interface DataStore {
 
     Optional<ReferenceData> findReference();
 
+    /** Когда справочник последний раз сохранялся (нужно автозагрузке данных). */
+    Optional<OffsetDateTime> referenceUpdatedAt();
+
     void saveTravelMatrix(TravelMatrix m);
 
     Optional<TravelMatrix> findTravelMatrix();
 
+    /** Когда матрица последний раз сохранялась. */
+    Optional<OffsetDateTime> travelMatrixUpdatedAt();
+
     void saveDay(LocalDate date, DayInput day);
 
     Optional<DayInput> findDay(LocalDate d);
+
+    /** Когда наряды этой даты последний раз сохранялись. */
+    Optional<OffsetDateTime> dayUpdatedAt(LocalDate d);
 
     /** Даты, загруженные в сервис (для UI-списка дней). */
     Set<LocalDate> loadedDates();

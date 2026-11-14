@@ -75,6 +75,11 @@ public class PostgresDataStore implements DataStore {
     }
 
     @Override
+    public Optional<OffsetDateTime> referenceUpdatedAt() {
+        return firstTimestamp("SELECT updated_at FROM reference_data WHERE id = 1");
+    }
+
+    @Override
     public void saveTravelMatrix(TravelMatrix m) {
         jdbc.update("""
                 INSERT INTO travel_matrix (id, payload) VALUES (1, ?::jsonb)
@@ -85,6 +90,11 @@ public class PostgresDataStore implements DataStore {
     @Override
     public Optional<TravelMatrix> findTravelMatrix() {
         return first("SELECT payload FROM travel_matrix WHERE id = 1", TravelMatrix.class);
+    }
+
+    @Override
+    public Optional<OffsetDateTime> travelMatrixUpdatedAt() {
+        return firstTimestamp("SELECT updated_at FROM travel_matrix WHERE id = 1");
     }
 
     @Override
@@ -102,6 +112,11 @@ public class PostgresDataStore implements DataStore {
     @Override
     public Optional<DayInput> findDay(LocalDate d) {
         return first("SELECT payload FROM day WHERE date = ?", DayInput.class, d);
+    }
+
+    @Override
+    public Optional<OffsetDateTime> dayUpdatedAt(LocalDate d) {
+        return firstTimestamp("SELECT updated_at FROM day WHERE date = ?", d);
     }
 
     @Override
@@ -286,6 +301,12 @@ public class PostgresDataStore implements DataStore {
     private <T> Optional<T> first(String sql, Class<T> type, Object... args) {
         List<T> values = jdbc.query(sql,
                 (rs, rowNum) -> mapper.readValue(rs.getString("payload"), type), args);
+        return values.isEmpty() ? Optional.empty() : Optional.ofNullable(values.get(0));
+    }
+
+    private Optional<OffsetDateTime> firstTimestamp(String sql, Object... args) {
+        List<OffsetDateTime> values = jdbc.query(sql,
+                (rs, rowNum) -> rs.getObject("updated_at", OffsetDateTime.class), args);
         return values.isEmpty() ? Optional.empty() : Optional.ofNullable(values.get(0));
     }
 

@@ -3,8 +3,11 @@ package ru.sibsutis.vrptw_backend.config;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
+import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -31,7 +34,12 @@ import ru.sibsutis.vrptw_backend.web.storage.DataStore;
  * JSON-файлами, которые лежат в репозитории и монтируются в контейнер.
  *
  * Уже загруженные сущности не перезаписываются, поэтому события и
- * пересчитанные планы не теряются при рестарте.
+ * пересчитанные планы не теряются при рестарте. Исключение — файл в {@code data/}
+ * изменился позже, чем запись в БД (например, после merge обновился набор
+ * нарядов): тогда устаревшая запись заменяется, а план и события этой даты
+ * сбрасываются. Данные, загруженные через API после изменения файлов, не
+ * затрагиваются. Принудительно перечитать всё можно через
+ * {@code VRPTW_SEED_FORCE=true}.
  */
 @Component
 @ConditionalOnProperty(name = "vrptw.seed.enabled", havingValue = "true", matchIfMissing = true)
@@ -44,12 +52,15 @@ public class DataSeeder implements ApplicationRunner {
     private final DataStore store;
     private final JsonMapper mapper;
     private final String configuredDir;
+    private final boolean force;
 
     public DataSeeder(DataStore store, JsonMapper mapper,
-                      @Value("${vrptw.data-dir:}") String configuredDir) {
+                      @Value("${vrptw.data-dir:}") String configuredDir,
+                      @Value("${vrptw.seed.force:false}") boolean force) {
         this.store = store;
         this.mapper = mapper;
         this.configuredDir = configuredDir;
+        this.force = force;
     }
 
     @Override
@@ -70,20 +81,28 @@ public class DataSeeder implements ApplicationRunner {
 
     private void seedReference(Path dir) throws IOException {
         Path file = dir.resolve(REFERENCE_FILE);
-        if (store.findReference().isPresent() || !Files.isRegularFile(file)) {
+        if (!Files.isRegularFile(file)) {
+            return;
+        }
+        boolean exists = store.findReference().isPresent();
+        if (exists && !shouldReplace(file, store.referenceUpdatedAt())) {
             return;
         }
         store.saveReference(read(file, ReferenceData.class));
-        log.info("Загружен справочник из {}", file);
+        log.info("{} справочник из {}", exists ? "Обновлён" : "Загружен", file);
     }
 
     private void seedTravelMatrix(Path dir) throws IOException {
         Path file = dir.resolve(MATRIX_FILE);
-        if (store.findTravelMatrix().isPresent() || !Files.isRegularFile(file)) {
+        if (!Files.isRegularFile(file)) {
+            return;
+        }
+        boolean exists = store.findTravelMatrix().isPresent();
+        if (exists && !shouldReplace(file, store.travelMatrixUpdatedAt())) {
             return;
         }
         store.saveTravelMatrix(read(file, TravelMatrix.class));
-        log.info("Загружена матрица перемещений из {}", file);
+        log.info("{} матрица перемещений из {}", exists ? "Обновлена" : "Загружена", file);
     }
 
     private void seedDays(Path dir) throws IOException {
@@ -102,11 +121,33 @@ public class DataSeeder implements ApplicationRunner {
                 log.warn("Пропускаю {}: в JSON не указана дата дня", file);
                 continue;
             }
-            if (store.findDay(day.date()).isPresent()) {
+            boolean exists = store.findDay(day.date()).isPresent();
+            if (exists && !shouldReplace(file, store.dayUpdatedAt(day.date()))) {
                 continue;
             }
             store.saveDay(day.date(), day);
-            log.info("Загружен день {} из {}", day.date(), file);
+            log.info("{} день {} из {}", exists ? "Обновлён" : "Загружен", day.date(), file);
+        }
+    }
+
+    /**
+     * Данные из {@code data/} перезаписывают БД, только если файл новее записи
+     * в БД (или включён {@code VRPTW_SEED_FORCE}). Так обновления из репозитория
+     * подхватываются автоматически, а данные, загруженные через API, не теряются.
+     */
+    private boolean shouldReplace(Path file, Optional<OffsetDateTime> savedAt) {
+        if (force) {
+            return true;
+        }
+        if (savedAt.isEmpty()) {
+            return false;
+        }
+        try {
+            FileTime modified = Files.getLastModifiedTime(file);
+            return modified.toInstant().isAfter(savedAt.get().toInstant());
+        } catch (IOException e) {
+            log.warn("Не удалось прочитать время изменения {}", file, e);
+            return false;
         }
     }
 
