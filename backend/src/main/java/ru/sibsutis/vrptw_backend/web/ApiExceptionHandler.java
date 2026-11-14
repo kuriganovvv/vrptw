@@ -13,7 +13,6 @@ import ru.sibsutis.vrptw_backend.service.DataMappingException;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-/** Все ошибки — в формате ErrorResponse из api_spec.yaml. */
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
