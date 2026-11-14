@@ -24,5 +24,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/analytics/analytics-page').then((m) => m.AnalyticsPage),
   },
+  {
+    path: 'field',
+    title: 'Выезд бригады — Ростелеком',
+    loadComponent: () => import('./features/field/field-page').then((m) => m.FieldPage),
+  },
   { path: '**', redirectTo: 'dashboard' },
 ];

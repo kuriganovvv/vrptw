@@ -239,13 +239,11 @@ export interface Health {
   version?: string;
 }
 
-/** UI-эндпоинт: загруженный в сервис день. */
 export interface UiDay {
   date: string;
   now: string;
 }
 
-/** DayInput из контракта: наряды дня и модельное время. */
 export interface DayInput {
   date: string;
   now: string;
@@ -348,4 +346,29 @@ export interface StatCard {
   note: string;
   tone: 'brand' | 'green' | 'amber' | 'red' | 'slate';
   icon: string;
+}
+
+/** Мобильный интерфейс бригады: отметки по визиту. */
+export interface FieldMark {
+  calledAt?: string;
+  arrivedAt?: string;
+  completedAt?: string;
+}
+
+export type FieldVisitState = 'PLANNED' | 'CALLED' | 'ARRIVED' | 'DONE';
+
+export interface FieldVisitView {
+  stop: StopView;
+  order: Order;
+  staff: Staff;
+  color: string;
+  state: FieldVisitState;
+  mark: FieldMark;
+  /** Порядковый номер визита в смене (1-based, без служебных остановок). */
+  index: number;
+  phone: string;
+  telHref: string;
+  navUrl: string;
+  mapUrl: string;
+  isCurrent: boolean;
 }

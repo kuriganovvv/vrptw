@@ -29,14 +29,7 @@ import ru.sibsutis.vrptw_backend.dto.plan.Plan;
 import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 import ru.sibsutis.vrptw_backend.dto.reference.TravelMatrix;
 
-/**
- * PostgreSQL-хранилище состояния сервиса.
- *
- * Справочники, наряды дня и планы хранятся как JSONB-документы (их структура
- * задана внешним контрактом и меняется вместе с API), а состояние обработки
- * событий — в отдельных таблицах, чтобы уникальность event_id, версии плана и
- * выборки по дате обеспечивала сама СУБД.
- */
+
 @Repository
 @ConditionalOnProperty(name = "vrptw.storage.mode", havingValue = "postgres", matchIfMissing = true)
 public class PostgresDataStore implements DataStore {
@@ -62,7 +55,6 @@ public class PostgresDataStore implements DataStore {
         this.mapper = mapper;
     }
 
-    /** Схема создаётся только при активном PostgreSQL-хранилище. */
     @PostConstruct
     void initializeSchema() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator(new ClassPathResource("schema.sql"));

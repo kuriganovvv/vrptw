@@ -2,6 +2,9 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   AlertView,
   Building,
+  FieldMark,
+  FieldVisitState,
+  FieldVisitView,
   Order,
   OrderRow,
   PgpView,
@@ -17,6 +20,7 @@ import {
   StaffPresence,
   StatCard,
   Stop,
+  StopStatus,
   StopView,
   UnassignedView,
   WorkType,
@@ -24,7 +28,7 @@ import {
 import { forkJoin } from 'rxjs';
 import { DispatchApiService } from './dispatch-api.service';
 import { DEMO_NOW, DEMO_ORDERS, DEMO_PLAN, DEMO_REFERENCE, DEMO_STAFF_META } from './demo-data';
-import { fmtKm, fmtTime, fmtTimeRange, minutesOfDay } from './time';
+import { fmtKm, fmtTime, fmtTimeRange, minutesOfDay, toModelIso } from './time';
 
 const PALETTE = ['#7C3AED', '#0EA5E9', '#F97316', '#10B981', '#8B5CF6', '#EC4899', '#14B8A6'];
 
@@ -74,6 +78,11 @@ export class DispatchStore {
   readonly problemTab = signal<ProblemTab>('risk');
   readonly replanning = signal(false);
   readonly toast = signal<Toast | null>(null);
+
+  /** Мобильный интерфейс бригады. */
+  readonly fieldStaffId = signal<string | null>('ST-001');
+  readonly fieldMarks = signal<Record<string, FieldMark>>({});
+  readonly fieldPickerOpen = signal(false);
 
   readonly now = computed(() => this.plan().as_of);
   readonly nowMinutes = computed(() => minutesOfDay(this.now()));
@@ -224,6 +233,44 @@ export class DispatchStore {
   });
 
   readonly activeRoutes = computed(() => this.routes().filter((r) => r.visits > 0));
+
+  /** Бригада, выбранная в мобильном интерфейсе (с фолбэком на первую активную). */
+  readonly fieldRoute = computed<RouteView | null>(() => {
+    const routes = this.routes();
+    const id = this.fieldStaffId();
+    return (
+      routes.find((r) => r.staff.staff_id === id) ??
+      routes.find((r) => r.visits > 0) ??
+      routes[0] ??
+      null
+    );
+  });
+
+  /** Отметки выбранной бригады, разложенные по order_id. */
+  readonly fieldMarksByOrder = computed<Record<string, FieldMark>>(() => {
+    const staffId = this.fieldRoute()?.staff.staff_id;
+    const result: Record<string, FieldMark> = {};
+    if (!staffId) return result;
+    for (const [key, mark] of Object.entries(this.fieldMarks())) {
+      const [owner, orderId] = key.split('|');
+      if (owner === staffId) result[orderId] = mark;
+    }
+    return result;
+  });
+
+  readonly fieldStops = computed(() => this.fieldRoute()?.stops ?? []);
+
+  readonly fieldVisits = computed(() => this.fieldStops().filter((s) => s.stop.type === 'VISIT'));
+
+  readonly fieldCurrentVisit = computed(
+    () => this.fieldVisits().find((s) => s.stop.status !== 'DONE') ?? null,
+  );
+
+  readonly fieldDone = computed(() => this.fieldVisits().filter((s) => s.stop.status === 'DONE').length);
+
+  readonly fieldTotal = computed(() => this.fieldVisits().length);
+
+  readonly fieldNextAddress = computed(() => this.fieldCurrentVisit()?.order?.address ?? null);
 
   readonly stats = computed<StatCard[]>(() => {
     const plan = this.plan();
@@ -395,7 +442,6 @@ export class DispatchStore {
         this.showToast(`План версии ${this.plan().plan_version} актуален на ${fmtTime(this.now())}`, 'info');
       }
     }, 900);
-    // Демо-данные — только запасной вариант: сразу пробуем взять состояние из сервиса.
     this.loadFromBackend();
   }
 
@@ -405,6 +451,71 @@ export class DispatchStore {
 
   toggleStaff(staffId: string): void {
     this.selectedStaffId.update((current) => (current === staffId ? null : staffId));
+  }
+
+  /** Мобильный интерфейс бригады: выбор исполнителя и отметки по визиту. */
+  selectFieldStaff(staffId: string): void {
+    this.fieldStaffId.set(staffId);
+    this.fieldPickerOpen.set(false);
+  }
+
+  toggleFieldPicker(): void {
+    this.fieldPickerOpen.update((open) => !open);
+  }
+
+  markCalled(orderId: string): void {
+    this.patchFieldMark(orderId, { calledAt: this.markTime(orderId) });
+    this.showToast('Абонент предупреждён о визите', 'success');
+  }
+
+  markArrived(orderId: string): void {
+    this.patchFieldMark(orderId, { arrivedAt: this.markTime(orderId) });
+    this.patchVisitStatus(orderId, 'IN_PROGRESS');
+    this.showToast('Прибытие на адрес отмечено', 'success');
+  }
+
+  markCompleted(orderId: string): void {
+    const mark = this.fieldMarksByOrder()[orderId];
+    const completedAt = this.markTime(orderId);
+    this.patchFieldMark(orderId, { arrivedAt: mark?.arrivedAt ?? completedAt, completedAt });
+    this.patchVisitStatus(orderId, 'DONE');
+    this.showToast('Визит завершён', 'success');
+  }
+
+  resetFieldMarks(): void {
+    this.fieldMarks.set({});
+    this.showToast('Отметки выезда сброшены', 'info');
+  }
+
+  /** Время отметки в модельном времени: не раньше `now` и планового начала визита, монотонно по визиту. */
+  private markTime(orderId: string): string {
+    const stop = this.plan()
+      .routes.flatMap((route) => route.stops)
+      .find((s) => s.order_id === orderId);
+    const existing = this.fieldMarksByOrder()[orderId];
+    const last = existing?.completedAt ?? existing?.arrivedAt ?? existing?.calledAt;
+    let ms = Math.max(new Date(this.now()).getTime(), new Date(stop?.start ?? this.now()).getTime());
+    if (last) ms = Math.max(ms, new Date(last).getTime() + 60_000);
+    return toModelIso(new Date(ms));
+  }
+
+  private patchFieldMark(orderId: string, patch: Partial<FieldMark>): void {
+    const staffId = this.fieldRoute()?.staff.staff_id;
+    if (!staffId) return;
+    const key = `${staffId}|${orderId}`;
+    this.fieldMarks.update((marks) => ({ ...marks, [key]: { ...marks[key], ...patch } }));
+  }
+
+  private patchVisitStatus(orderId: string, status: StopStatus): void {
+    this.plan.update((plan) => ({
+      ...plan,
+      routes: plan.routes.map((route) => ({
+        ...route,
+        stops: route.stops.map((stop) =>
+          stop.type === 'VISIT' && stop.order_id === orderId ? { ...stop, status } : stop,
+        ),
+      })),
+    }));
   }
 
   setSearch(value: string): void {
@@ -479,7 +590,6 @@ export class DispatchStore {
       },
       error: (error: { status?: number }) => {
         if (error?.status === 404) {
-          // день загружен, но план ещё не строили — строим сразу
           this.replan(date);
           return;
         }
