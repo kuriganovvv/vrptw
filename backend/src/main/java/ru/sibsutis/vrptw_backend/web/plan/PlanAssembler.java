@@ -13,21 +13,27 @@ import ru.sibsutis.vrptw_backend.domain.model.Staff;
 import ru.sibsutis.vrptw_backend.domain.model.Visit;
 import ru.sibsutis.vrptw_backend.dto.day.DayInput;
 import ru.sibsutis.vrptw_backend.dto.plan.*;
+import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 
 @Component
 public class PlanAssembler {
 
-
-    private static final String TYPE_DEPOT = "DEPOT";
+    private static final String TYPE_DEPOT_START = "DEPOT_START";
+    private static final String TYPE_DEPOT_END = "DEPOT_END";
     private static final String TYPE_VISIT = "VISIT";
     private static final String TYPE_BREAK = "BREAK";
     private static final String STATUS_PLANNED = "PLANNED";
     private static final String REASON_NO_STAFF = "NO_QUALIFIED_STAFF";
-    private static final String REASON_NO_TIME = "NO_SHIFT_CAPACITY";
+    private static final String REASON_NO_EQUIPMENT = "NO_EQUIPMENT";
+    private static final String REASON_SLOT = "SLOT_UNREACHABLE";
+    private static final String REASON_NO_TIME = "NO_SHIFT_TIME";
+    private static final String REASON_UNAVAILABLE = "STAFF_UNAVAILABLE";
+    private static final String REASON_OTHER = "OTHER";
     private static final String ACTION_RESCHEDULE = "RESCHEDULE";
+    private static final String ACTION_REASSIGN = "REASSIGN";
 
     public Plan assemble(DaySolution solution, DayInput day, List<PgpGroup> pgpGroups,
-                         int planVersion, long computationMs) {
+                         int planVersion, long computationMs, ReferenceData reference) {
         List<Route> routes = new ArrayList<>();
         List<Double> utilizations = new ArrayList<>();
         long travelTotal = 0;
@@ -37,7 +43,7 @@ public class PlanAssembler {
             utilizations.add(route.totals().utilization());
             travelTotal += route.totals().travelSec();
         }
-        List<UnassignedOrder> unassigned = unassigned(solution);
+        List<UnassignedOrder> unassigned = unassigned(solution, reference);
         int visitsPlanned = (int) solution.getVisits().stream().filter(Visit::isAssigned).count();
         int pgpOrders = pgpGroups.stream().mapToInt(g -> g.orderIds().size()).sum();
         PlanSummary summary = new PlanSummary(
@@ -52,7 +58,7 @@ public class PlanAssembler {
         int seq = 1;
         OffsetDateTime shiftStart = staff.shiftStart(now);
         Equipment remaining = staff.getEquipmentStart();
-        stops.add(new Stop(seq++, TYPE_DEPOT, staff.getServiceCenterId(), null,
+        stops.add(new Stop(seq++, TYPE_DEPOT_START, staff.getServiceCenterId(), null,
                 shiftStart, shiftStart, shiftStart, 0L, 0L, STATUS_PLANNED, dto(remaining), null));
 
         long travelSec = 0;
@@ -63,6 +69,13 @@ public class PlanAssembler {
             if (t == null) {
                 continue;
             }
+            // Перерыв берётся на выезде к визиту, на локации предыдущей остановки,
+            // поэтому он идёт ПЕРЕД визитом и с нулевым пробегом.
+            if (t.breakStart() != null) {
+                stops.add(new Stop(seq++, TYPE_BREAK, t.breakLocationId(), null,
+                        t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
+                        STATUS_PLANNED, dto(remaining), null));
+            }
             remaining = remaining.minus(visit.getOrder().getRequiredEquipment());
             travelSec += t.travelSec();
             distanceM += t.distanceM();
@@ -70,11 +83,6 @@ public class PlanAssembler {
             stops.add(new Stop(seq++, TYPE_VISIT, visit.locationId(), visit.getOrder().getOrderId(),
                     t.arrival(), t.start(), t.end(), t.travelSec(), t.distanceM(),
                     STATUS_PLANNED, dto(remaining), null));
-            if (t.breakStart() != null) {
-                stops.add(new Stop(seq++, TYPE_BREAK, visit.locationId(), null,
-                        t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
-                        STATUS_PLANNED, dto(remaining), null));
-            }
         }
 
         long backSec = 0;
@@ -90,29 +98,64 @@ public class PlanAssembler {
             travelSec += backSec;
             distanceM += backM;
         }
-        stops.add(new Stop(seq++, TYPE_DEPOT, staff.getServiceCenterId(), null,
+        stops.add(new Stop(seq++, TYPE_DEPOT_END, staff.getServiceCenterId(), null,
                 backAt, backAt, backAt, backSec, backM, STATUS_PLANNED, dto(remaining), null));
 
         long shiftSec = Duration.between(shiftStart, staff.shiftEnd(now)).toSeconds();
         double utilization = shiftSec <= 0 ? 0 : (workMin * 60.0 + travelSec) / shiftSec;
         RouteTotals totals = new RouteTotals(visits.size(), travelSec, distanceM, workMin, utilization);
-        return new Route(staff.getStaffId(), staff.getServiceCenterId(), STATUS_PLANNED, null, null, stops, totals);
+        return new Route(staff.getStaffId(), staff.getServiceCenterId(), "ACTIVE", null, null, stops, totals);
     }
 
-    private List<UnassignedOrder> unassigned(DaySolution solution) {
+    /** Порядок по записке: H1 → H7 → H4 → H2 → STAFF_UNAVAILABLE → OTHER. */
+    private List<UnassignedOrder> unassigned(DaySolution solution, ReferenceData reference) {
         List<UnassignedOrder> result = new ArrayList<>();
         for (Visit visit : solution.getVisits()) {
             if (visit.isAssigned()) {
                 continue;
             }
-            boolean qualified = solution.getStaff().stream().anyMatch(staff -> matches(staff, visit));
-            result.add(new UnassignedOrder(visit.getOrder().getOrderId(),
-                    qualified ? REASON_NO_TIME : REASON_NO_STAFF,
-                    qualified ? "Не хватает времени смены у подходящих сотрудников"
-                              : "Нет сотрудника с нужным профилем, технологией или допуском",
-                    ACTION_RESCHEDULE, null, solution.getNow()));
+            result.add(classify(visit, solution, reference));
         }
         return result;
+    }
+
+    private UnassignedOrder classify(Visit visit, DaySolution solution, ReferenceData reference) {
+        List<Staff> qualified = solution.getStaff().stream().filter(s -> matches(s, visit)).toList();
+        boolean anyInReference = reference == null || reference.staff() == null
+                ? !qualified.isEmpty()
+                : reference.staff().stream().anyMatch(rs -> matchesRef(rs, visit));
+
+        String code;
+        String text;
+        String action;
+        if (!anyInReference) {
+            code = REASON_NO_STAFF;
+            text = "Нет сотрудника с нужным профилем, технологией или допуском";
+            action = ACTION_REASSIGN;
+        } else if (qualified.isEmpty()) {
+            // квалифицированные есть в справочнике, но все выбыли со смены
+            code = REASON_UNAVAILABLE;
+            text = "Все подходящие сотрудники недоступны в эту смену";
+            action = ACTION_REASSIGN;
+        } else if (qualified.stream().noneMatch(s ->
+                visit.getOrder().getRequiredEquipment().fitsInto(s.getEquipmentStart()))) {
+            code = REASON_NO_EQUIPMENT;
+            text = "Потребность в АО превышает запас в рюкзаке подходящих сотрудников";
+            action = ACTION_REASSIGN;
+        } else if (qualified.stream().noneMatch(s -> canReachSlot(s, visit, solution.getNow()))) {
+            code = REASON_SLOT;
+            text = "Ни один подходящий сотрудник не успевает начать визит до latest_start";
+            action = ACTION_RESCHEDULE;
+        } else if (qualified.stream().noneMatch(s -> fitsShift(s, visit, solution.getNow()))) {
+            code = REASON_NO_TIME;
+            text = "Не хватает времени смены у подходящих сотрудников";
+            action = ACTION_RESCHEDULE;
+        } else {
+            code = REASON_OTHER;
+            text = "Солвер не нашёл допустимое место в маршрутах (комбинация ограничений)";
+            action = ACTION_RESCHEDULE;
+        }
+        return new UnassignedOrder(visit.getOrder().getOrderId(), code, text, action, null, solution.getNow());
     }
 
     private boolean matches(Staff staff, Visit visit) {
@@ -120,6 +163,35 @@ public class PlanAssembler {
         boolean technology = staff.hasTechnology(visit.getOrder().getTechnology());
         boolean height = !visit.getOrder().isRequiresHeight() || staff.isHeightPermit();
         return profile && technology && height;
+    }
+
+    private boolean matchesRef(ru.sibsutis.vrptw_backend.dto.reference.Staff rs, Visit visit) {
+        boolean profile = rs.profiles() != null && visit.getWorkType().profiles().stream()
+                .anyMatch(p -> rs.profiles().contains(p.name()));
+        boolean technology = rs.technologies() != null
+                && rs.technologies().contains(visit.getOrder().getTechnology().name());
+        boolean height = !visit.getOrder().isRequiresHeight() || rs.heightPermit();
+        return profile && technology && height;
+    }
+
+    private OffsetDateTime earliestStart(Staff staff, Visit visit, OffsetDateTime now) {
+        OffsetDateTime shiftStart = staff.shiftStart(now);
+        OffsetDateTime base = now.isAfter(shiftStart) ? now : shiftStart;
+        int travel = staff.getTravelMatrix() == null ? 0
+                : staff.getTravelMatrix().travelSec(staff.getServiceCenterId(), visit.locationId());
+        OffsetDateTime earliest = base.plusSeconds(travel);
+        return earliest.isBefore(visit.getOrder().getSlotStart()) ? visit.getOrder().getSlotStart() : earliest;
+    }
+
+    private boolean canReachSlot(Staff staff, Visit visit, OffsetDateTime now) {
+        return !earliestStart(staff, visit, now).isAfter(visit.getOrder().getLatestStart());
+    }
+
+    private boolean fitsShift(Staff staff, Visit visit, OffsetDateTime now) {
+        OffsetDateTime end = earliestStart(staff, visit, now)
+                .plusMinutes(visit.getWorkType().durationMin())
+                .plusSeconds(staff.travelBackSec(visit.locationId()));
+        return !end.isAfter(staff.shiftEnd(now));
     }
 
     private static double cv(List<Double> values) {

@@ -85,4 +85,14 @@ public class PlanMerger {
         double util = shiftSec <= 0 ? 0 : (work * 60.0 + travel) / shiftSec;
         return new RouteTotals(visits, travel, dist, work, util);
     }
+    
+    public Plan withDayState(Plan plan, List<CancelledOrder> cancelled, String eventId) {
+        PlanSummary s = plan.summary();
+        PlanSummary sum = new PlanSummary(s.ordersTotal(), s.visitsPlanned(), s.unassigned(), s.pgpOrders(),
+                cancelled.size(), s.travelSecTotal(), s.utilizationCv());
+        return new Plan(plan.date(), plan.planVersion(),
+                eventId != null ? eventId : plan.basedOnEventId(),
+                plan.asOf(), plan.computationMs(), plan.routes(), plan.unassigned(), plan.pgpGroups(),
+                cancelled, plan.alerts(), sum);
+    }
 }
