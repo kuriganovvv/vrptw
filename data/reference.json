@@ -2,10 +2,10 @@
   "service_centers": [
     {
       "service_center_id": "SC-01",
-      "name": "СЦ «Район 1»",
-      "address": "ул. Ленина, 10",
-      "lat": 56.809999999999995,
-      "lon": 60.61,
+      "name": "СЦ «Север»",
+      "address": "г. Екатеринбург, ул. Победы, 30",
+      "lat": 56.8941,
+      "lon": 60.6105,
       "opening_hours": {
         "open": "08:00",
         "close": "21:00"
@@ -14,10 +14,10 @@
     },
     {
       "service_center_id": "SC-02",
-      "name": "СЦ «Район 2»",
-      "address": "ул. Ленина, 20",
-      "lat": 56.82,
-      "lon": 60.620000000000005,
+      "name": "СЦ «Центр»",
+      "address": "г. Екатеринбург, ул. Малышева, 51",
+      "lat": 56.8389,
+      "lon": 60.597,
       "opening_hours": {
         "open": "08:00",
         "close": "21:00"
@@ -26,10 +26,10 @@
     },
     {
       "service_center_id": "SC-03",
-      "name": "СЦ «Район 3»",
-      "address": "ул. Ленина, 30",
-      "lat": 56.83,
-      "lon": 60.63,
+      "name": "СЦ «Юг»",
+      "address": "г. Екатеринбург, ул. Белинского, 222",
+      "lat": 56.803,
+      "lon": 60.61,
       "opening_hours": {
         "open": "08:00",
         "close": "21:00"
@@ -38,10 +38,10 @@
     },
     {
       "service_center_id": "SC-04",
-      "name": "СЦ «Район 4»",
-      "address": "ул. Ленина, 40",
-      "lat": 56.839999999999996,
-      "lon": 60.64,
+      "name": "СЦ «Запад»",
+      "address": "г. Екатеринбург, ул. Академика Сахарова, 10",
+      "lat": 56.845,
+      "lon": 60.553,
       "opening_hours": {
         "open": "08:00",
         "close": "21:00"
@@ -50,10 +50,10 @@
     },
     {
       "service_center_id": "SC-05",
-      "name": "СЦ «Район 5»",
-      "address": "ул. Ленина, 50",
-      "lat": 56.849999999999994,
-      "lon": 60.65,
+      "name": "СЦ «Восток»",
+      "address": "г. Екатеринбург, ул. Сибирский тракт, 15",
+      "lat": 56.845,
+      "lon": 60.675,
       "opening_hours": {
         "open": "08:00",
         "close": "21:00"
@@ -64,8 +64,8 @@
   "staff": [
     {
       "staff_id": "ST-001",
-      "display_name": "Сотрудник 1",
-      "service_center_id": "SC-02",
+      "display_name": "Монтажник 001",
+      "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
       ],
@@ -85,20 +85,21 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 2.9
     },
     {
       "staff_id": "ST-002",
-      "display_name": "Сотрудник 2",
-      "service_center_id": "SC-03",
+      "display_name": "Монтажник 002",
+      "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
       ],
@@ -107,40 +108,42 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 4.9
     },
     {
       "staff_id": "ST-003",
-      "display_name": "Сотрудник 3",
-      "service_center_id": "SC-04",
+      "display_name": "Монтажник 003",
+      "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
-      "height_permit": true,
+      "height_permit": false,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -151,20 +154,21 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 3.3
     },
     {
       "staff_id": "ST-004",
-      "display_name": "Сотрудник 4",
-      "service_center_id": "SC-05",
+      "display_name": "Монтажник 004",
+      "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
       ],
@@ -173,30 +177,31 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 9.3
     },
     {
       "staff_id": "ST-005",
-      "display_name": "Сотрудник 5",
+      "display_name": "Монтажник 005",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -217,27 +222,29 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 10.2
     },
     {
       "staff_id": "ST-006",
-      "display_name": "Сотрудник 6",
-      "service_center_id": "SC-02",
+      "display_name": "Монтажник 006",
+      "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
       "height_permit": true,
       "shift": {
@@ -245,34 +252,34 @@
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 1.1
     },
     {
       "staff_id": "ST-007",
-      "display_name": "Сотрудник 7",
-      "service_center_id": "SC-03",
+      "display_name": "Инсталлятор 007",
+      "service_center_id": "SC-01",
       "profiles": [
-        "LTP3"
+        "INSTALL"
       ],
       "technologies": [
         "PON",
-        "FTTB",
-        "XDSL"
+        "FTTB"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -284,61 +291,64 @@
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
+        "STB": 6
+      },
+      "experience_years": 7.8
     },
     {
       "staff_id": "ST-008",
-      "display_name": "Сотрудник 8",
-      "service_center_id": "SC-04",
+      "display_name": "Инсталлятор 008",
+      "service_center_id": "SC-01",
       "profiles": [
-        "LTP3"
+        "INSTALL"
       ],
       "technologies": [
         "PON",
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
+        "STB": 6
+      },
+      "experience_years": 7.0
     },
     {
       "staff_id": "ST-009",
-      "display_name": "Сотрудник 9",
-      "service_center_id": "SC-05",
+      "display_name": "Монтажник 009",
+      "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
-      "height_permit": true,
+      "height_permit": false,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -349,20 +359,21 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 6.8
     },
     {
       "staff_id": "ST-010",
-      "display_name": "Сотрудник 10",
-      "service_center_id": "SC-01",
+      "display_name": "Монтажник 010",
+      "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
       ],
@@ -371,30 +382,31 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 12.0
     },
     {
       "staff_id": "ST-011",
-      "display_name": "Сотрудник 11",
+      "display_name": "Монтажник 011",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -415,27 +427,29 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 5.6
     },
     {
       "staff_id": "ST-012",
-      "display_name": "Сотрудник 12",
-      "service_center_id": "SC-03",
+      "display_name": "Монтажник 012",
+      "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
       "height_permit": true,
       "shift": {
@@ -443,25 +457,26 @@
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 9.5
     },
     {
       "staff_id": "ST-013",
-      "display_name": "Сотрудник 13",
-      "service_center_id": "SC-04",
+      "display_name": "Монтажник 013",
+      "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
       ],
@@ -481,20 +496,21 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 6.8
     },
     {
       "staff_id": "ST-014",
-      "display_name": "Сотрудник 14",
-      "service_center_id": "SC-05",
+      "display_name": "Монтажник 014",
+      "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
       ],
@@ -503,40 +519,40 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 16.1
     },
     {
       "staff_id": "ST-015",
-      "display_name": "Сотрудник 15",
-      "service_center_id": "SC-01",
+      "display_name": "Инсталлятор 015",
+      "service_center_id": "SC-02",
       "profiles": [
-        "LTP3"
+        "INSTALL"
       ],
       "technologies": [
         "PON",
-        "FTTB",
-        "XDSL"
+        "FTTB"
       ],
-      "height_permit": true,
+      "height_permit": false,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -548,51 +564,53 @@
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
+        "STB": 6
+      },
+      "experience_years": 17.2
     },
     {
       "staff_id": "ST-016",
-      "display_name": "Сотрудник 16",
+      "display_name": "Инсталлятор 016",
       "service_center_id": "SC-02",
       "profiles": [
-        "LTP3"
+        "INSTALL"
       ],
       "technologies": [
         "PON",
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
+        "STB": 6
+      },
+      "experience_years": 1.9
     },
     {
       "staff_id": "ST-017",
-      "display_name": "Сотрудник 17",
+      "display_name": "Монтажник 017",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -613,27 +631,29 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 4.7
     },
     {
       "staff_id": "ST-018",
-      "display_name": "Сотрудник 18",
-      "service_center_id": "SC-04",
+      "display_name": "Монтажник 018",
+      "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
       "height_permit": true,
       "shift": {
@@ -641,25 +661,26 @@
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 9.4
     },
     {
       "staff_id": "ST-019",
-      "display_name": "Сотрудник 19",
-      "service_center_id": "SC-05",
+      "display_name": "Монтажник 019",
+      "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
       ],
@@ -679,20 +700,21 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 11.5
     },
     {
       "staff_id": "ST-020",
-      "display_name": "Сотрудник 20",
-      "service_center_id": "SC-01",
+      "display_name": "Монтажник 020",
+      "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
       ],
@@ -701,40 +723,42 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 17.2
     },
     {
       "staff_id": "ST-021",
-      "display_name": "Сотрудник 21",
-      "service_center_id": "SC-02",
+      "display_name": "Монтажник 021",
+      "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
-      "height_permit": true,
+      "height_permit": false,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -745,19 +769,20 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 3.2
     },
     {
       "staff_id": "ST-022",
-      "display_name": "Сотрудник 22",
+      "display_name": "Монтажник 022",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -767,40 +792,40 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 7.6
     },
     {
       "staff_id": "ST-023",
-      "display_name": "Сотрудник 23",
-      "service_center_id": "SC-04",
+      "display_name": "Инсталлятор 023",
+      "service_center_id": "SC-03",
       "profiles": [
-        "LTP3"
+        "INSTALL"
       ],
       "technologies": [
         "PON",
-        "FTTB",
-        "XDSL"
+        "FTTB"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -812,21 +837,22 @@
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
+        "STB": 6
+      },
+      "experience_years": 16.3
     },
     {
       "staff_id": "ST-024",
-      "display_name": "Сотрудник 24",
-      "service_center_id": "SC-05",
+      "display_name": "Инсталлятор 024",
+      "service_center_id": "SC-03",
       "profiles": [
-        "LTP3"
+        "INSTALL"
       ],
       "technologies": [
         "PON",
@@ -839,25 +865,26 @@
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
+        "STB": 6
+      },
+      "experience_years": 6.2
     },
     {
       "staff_id": "ST-025",
-      "display_name": "Сотрудник 25",
-      "service_center_id": "SC-01",
+      "display_name": "Монтажник 025",
+      "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
       ],
@@ -877,20 +904,21 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 13.8
     },
     {
       "staff_id": "ST-026",
-      "display_name": "Сотрудник 26",
-      "service_center_id": "SC-02",
+      "display_name": "Монтажник 026",
+      "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
       ],
@@ -899,40 +927,42 @@
         "FTTB",
         "XDSL"
       ],
-      "height_permit": false,
+      "height_permit": true,
       "shift": {
         "start": "12:00",
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 7.7
     },
     {
       "staff_id": "ST-027",
-      "display_name": "Сотрудник 27",
-      "service_center_id": "SC-03",
+      "display_name": "Монтажник 027",
+      "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
       ],
       "technologies": [
         "PON",
         "FTTB",
-        "XDSL"
+        "XDSL",
+        "DOCSIS"
       ],
-      "height_permit": true,
+      "height_permit": false,
       "shift": {
         "start": "09:00",
         "end": "18:00",
@@ -943,22 +973,429 @@
         }
       },
       "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
       },
       "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 6.5
     },
     {
       "staff_id": "ST-028",
-      "display_name": "Сотрудник 28",
+      "display_name": "Монтажник 028",
       "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "12:00",
+        "end": "21:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "15:00",
+          "to": "18:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 2.2
+    },
+    {
+      "staff_id": "ST-029",
+      "display_name": "Монтажник 029",
+      "service_center_id": "SC-04",
+      "profiles": [
+        "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL"
+      ],
+      "height_permit": false,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "12:00",
+          "to": "15:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 14.5
+    },
+    {
+      "staff_id": "ST-030",
+      "display_name": "Инсталлятор 030",
+      "service_center_id": "SC-04",
+      "profiles": [
+        "INSTALL"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB"
+      ],
+      "height_permit": false,
+      "shift": {
+        "start": "12:00",
+        "end": "21:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "15:00",
+          "to": "18:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 4,
+        "ROUTER": 5,
+        "STB": 3
+      },
+      "equipment_capacity": {
+        "ONT": 8,
+        "ROUTER": 8,
+        "STB": 6
+      },
+      "experience_years": 13.8
+    },
+    {
+      "staff_id": "ST-031",
+      "display_name": "Инсталлятор 031",
+      "service_center_id": "SC-04",
+      "profiles": [
+        "INSTALL"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "12:00",
+          "to": "15:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 4,
+        "ROUTER": 5,
+        "STB": 3
+      },
+      "equipment_capacity": {
+        "ONT": 8,
+        "ROUTER": 8,
+        "STB": 6
+      },
+      "experience_years": 3.5
+    },
+    {
+      "staff_id": "ST-032",
+      "display_name": "Инсталлятор 032",
+      "service_center_id": "SC-04",
+      "profiles": [
+        "INSTALL"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "12:00",
+        "end": "21:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "15:00",
+          "to": "18:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 4,
+        "ROUTER": 5,
+        "STB": 3
+      },
+      "equipment_capacity": {
+        "ONT": 8,
+        "ROUTER": 8,
+        "STB": 6
+      },
+      "experience_years": 6.5
+    },
+    {
+      "staff_id": "ST-033",
+      "display_name": "Монтажник 033",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL",
+        "DOCSIS"
+      ],
+      "height_permit": false,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "12:00",
+          "to": "15:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 10.9
+    },
+    {
+      "staff_id": "ST-034",
+      "display_name": "Монтажник 034",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "12:00",
+        "end": "21:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "15:00",
+          "to": "18:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 13.2
+    },
+    {
+      "staff_id": "ST-035",
+      "display_name": "Монтажник 035",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL"
+      ],
+      "height_permit": false,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "12:00",
+          "to": "15:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 16.6
+    },
+    {
+      "staff_id": "ST-036",
+      "display_name": "Монтажник 036",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL",
+        "DOCSIS"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "12:00",
+        "end": "21:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "15:00",
+          "to": "18:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 9.1
+    },
+    {
+      "staff_id": "ST-037",
+      "display_name": "Монтажник 037",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "LTP3"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB",
+        "XDSL"
+      ],
+      "height_permit": false,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "12:00",
+          "to": "15:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 2,
+        "ROUTER": 3,
+        "STB": 2
+      },
+      "equipment_capacity": {
+        "ONT": 6,
+        "ROUTER": 6,
+        "STB": 4
+      },
+      "experience_years": 7.3
+    },
+    {
+      "staff_id": "ST-038",
+      "display_name": "Инсталлятор 038",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "INSTALL"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "12:00",
+        "end": "21:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "15:00",
+          "to": "18:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 4,
+        "ROUTER": 5,
+        "STB": 3
+      },
+      "equipment_capacity": {
+        "ONT": 8,
+        "ROUTER": 8,
+        "STB": 6
+      },
+      "experience_years": 6.7
+    },
+    {
+      "staff_id": "ST-039",
+      "display_name": "Инсталлятор 039",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "INSTALL"
+      ],
+      "technologies": [
+        "PON",
+        "FTTB"
+      ],
+      "height_permit": true,
+      "shift": {
+        "start": "09:00",
+        "end": "18:00",
+        "break_duration_min": 60,
+        "break_window": {
+          "from": "12:00",
+          "to": "15:00"
+        }
+      },
+      "equipment_start": {
+        "ONT": 4,
+        "ROUTER": 5,
+        "STB": 3
+      },
+      "equipment_capacity": {
+        "ONT": 8,
+        "ROUTER": 8,
+        "STB": 6
+      },
+      "experience_years": 16.9
+    },
+    {
+      "staff_id": "ST-040",
+      "display_name": "Инсталлятор 040",
+      "service_center_id": "SC-05",
+      "profiles": [
+        "INSTALL"
       ],
       "technologies": [
         "PON",
@@ -971,404 +1408,21 @@
         "end": "21:00",
         "break_duration_min": 60,
         "break_window": {
-          "from": "16:00",
-          "to": "19:00"
+          "from": "15:00",
+          "to": "18:00"
         }
       },
       "equipment_start": {
         "ONT": 4,
-        "ROUTER": 4,
+        "ROUTER": 5,
         "STB": 3
       },
       "equipment_capacity": {
         "ONT": 8,
         "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-029",
-      "display_name": "Сотрудник 29",
-      "service_center_id": "SC-05",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "09:00",
-        "end": "18:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "12:00",
-          "to": "15:00"
-        }
+        "STB": 6
       },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-030",
-      "display_name": "Сотрудник 30",
-      "service_center_id": "SC-01",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": true,
-      "shift": {
-        "start": "12:00",
-        "end": "21:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "16:00",
-          "to": "19:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-031",
-      "display_name": "Сотрудник 31",
-      "service_center_id": "SC-02",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "09:00",
-        "end": "18:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "12:00",
-          "to": "15:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-032",
-      "display_name": "Сотрудник 32",
-      "service_center_id": "SC-03",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "12:00",
-        "end": "21:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "16:00",
-          "to": "19:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-033",
-      "display_name": "Сотрудник 33",
-      "service_center_id": "SC-04",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": true,
-      "shift": {
-        "start": "09:00",
-        "end": "18:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "12:00",
-          "to": "15:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-034",
-      "display_name": "Сотрудник 34",
-      "service_center_id": "SC-05",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "12:00",
-        "end": "21:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "16:00",
-          "to": "19:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-035",
-      "display_name": "Сотрудник 35",
-      "service_center_id": "SC-01",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "09:00",
-        "end": "18:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "12:00",
-          "to": "15:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-036",
-      "display_name": "Сотрудник 36",
-      "service_center_id": "SC-02",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": true,
-      "shift": {
-        "start": "12:00",
-        "end": "21:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "16:00",
-          "to": "19:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-037",
-      "display_name": "Сотрудник 37",
-      "service_center_id": "SC-03",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "09:00",
-        "end": "18:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "12:00",
-          "to": "15:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-038",
-      "display_name": "Сотрудник 38",
-      "service_center_id": "SC-04",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "12:00",
-        "end": "21:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "16:00",
-          "to": "19:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-039",
-      "display_name": "Сотрудник 39",
-      "service_center_id": "SC-05",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": true,
-      "shift": {
-        "start": "09:00",
-        "end": "18:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "12:00",
-          "to": "15:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
-    },
-    {
-      "staff_id": "ST-040",
-      "display_name": "Сотрудник 40",
-      "service_center_id": "SC-01",
-      "profiles": [
-        "INSTALL"
-      ],
-      "technologies": [
-        "PON",
-        "FTTB"
-      ],
-      "height_permit": false,
-      "shift": {
-        "start": "12:00",
-        "end": "21:00",
-        "break_duration_min": 60,
-        "break_window": {
-          "from": "16:00",
-          "to": "19:00"
-        }
-      },
-      "equipment_start": {
-        "ONT": 4,
-        "ROUTER": 4,
-        "STB": 3
-      },
-      "equipment_capacity": {
-        "ONT": 8,
-        "ROUTER": 8,
-        "STB": 5
-      }
+      "experience_years": 3.6
     }
   ],
   "access_nodes": [
@@ -1376,363 +1430,556 @@
       "access_node_id": "AN-0001",
       "node_type": "OLT",
       "technology": "PON",
-      "name": "OLT-1",
-      "address": "ул. Тестовая, 1а",
-      "lat": 56.81533455835405,
-      "lon": 60.698698448735605,
+      "name": "OLT Север-1",
+      "address": "г. Екатеринбург, ул. Победы, 2",
+      "lat": 56.885793,
+      "lon": 60.614864,
       "buildings": [
         {
           "building_id": "B-00001",
-          "address": "ул. Тестовая, 1",
-          "lat": 56.81533455835405,
-          "lon": 60.698698448735605,
+          "address": "г. Екатеринбург, ул. Победы, 2",
+          "lat": 56.883465,
+          "lon": 60.593973,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00002",
-          "address": "ул. Тестовая, 2",
-          "lat": 56.9140524646877,
-          "lon": 60.57741476055148,
+          "address": "г. Екатеринбург, ул. Уральская, 4",
+          "lat": 56.893237,
+          "lon": 60.598008,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00003",
-          "address": "ул. Тестовая, 3",
-          "lat": 56.90352541906091,
-          "lon": 60.62412025838838,
+          "address": "г. Екатеринбург, ул. Учителей, 6",
+          "lat": 56.878288,
+          "lon": 60.606907,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00004",
-          "address": "ул. Тестовая, 4",
-          "lat": 56.82591834482998,
-          "lon": 60.62609779056888,
+          "address": "г. Екатеринбург, ул. Пионерская, 8",
+          "lat": 56.890251,
+          "lon": 60.605447,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00005",
-          "address": "ул. Тестовая, 5",
-          "lat": 56.862894852616535,
-          "lon": 60.59027117794472,
-          "building_type": "PRIVATE",
-          "overhead_line": true
+          "address": "г. Екатеринбург, ул. Мира, 10",
+          "lat": 56.91132,
+          "lon": 60.612174,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00006",
-          "address": "ул. Тестовая, 6",
-          "lat": 56.84185127122645,
-          "lon": 60.56178792427974,
+          "address": "г. Екатеринбург, ул. Победы, 12",
+          "lat": 56.900233,
+          "lon": 60.626836,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00007",
-          "address": "ул. Тестовая, 7",
-          "lat": 56.903369527406966,
-          "lon": 60.6490199832551,
+          "address": "г. Екатеринбург, ул. Уральская, 14",
+          "lat": 56.884147,
+          "lon": 60.608225,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00008",
-          "address": "ул. Тестовая, 8",
-          "lat": 56.804114782658,
-          "lon": 60.66446450156376,
+          "address": "г. Екатеринбург, ул. Учителей, 16",
+          "lat": 56.880693,
+          "lon": 60.594387,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00009",
-          "address": "ул. Тестовая, 9",
-          "lat": 56.879516329984114,
-          "lon": 60.58340848152005,
+          "address": "г. Екатеринбург, ул. Пионерская, 18",
+          "lat": 56.886154,
+          "lon": 60.621026,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00010",
-          "address": "ул. Тестовая, 10",
-          "lat": 56.88949284123905,
-          "lon": 60.56818799883781,
+          "address": "г. Екатеринбург, ул. Мира, 20",
+          "lat": 56.905772,
+          "lon": 60.617509,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00011",
+          "address": "г. Екатеринбург, ул. Победы, 22",
+          "lat": 56.888902,
+          "lon": 60.591072,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00012",
+          "address": "г. Екатеринбург, ул. Уральская, 24",
+          "lat": 56.897459,
+          "lon": 60.634462,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00013",
+          "address": "г. Екатеринбург, ул. Учителей, 26",
+          "lat": 56.886696,
+          "lon": 60.620954,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00014",
+          "address": "г. Екатеринбург, ул. Пионерская, 28",
+          "lat": 56.899375,
+          "lon": 60.590398,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00015",
+          "address": "г. Екатеринбург, ул. Мира, 30",
+          "lat": 56.878978,
+          "lon": 60.586994,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00016",
+          "address": "г. Екатеринбург, ул. Победы, 32",
+          "lat": 56.895641,
+          "lon": 60.57698,
           "building_type": "PRIVATE",
-          "overhead_line": true
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00017",
+          "address": "г. Екатеринбург, ул. Уральская, 34",
+          "lat": 56.916941,
+          "lon": 60.640785,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00019",
+          "address": "г. Екатеринбург, ул. Пионерская, 38",
+          "lat": 56.918998,
+          "lon": 60.648334,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00020",
+          "address": "г. Екатеринбург, ул. Мира, 40",
+          "lat": 56.923462,
+          "lon": 60.585279,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
         }
       ]
     },
     {
       "access_node_id": "AN-0002",
-      "node_type": "OLT",
-      "technology": "PON",
-      "name": "OLT-2",
-      "address": "ул. Тестовая, 11а",
-      "lat": 56.85339784639176,
-      "lon": 60.55327872848898,
+      "node_type": "SWITCH",
+      "technology": "FTTB",
+      "name": "SWITCH Север-2",
+      "address": "г. Екатеринбург, ул. Победы, 3",
+      "lat": 56.900608,
+      "lon": 60.625782,
       "buildings": [
         {
-          "building_id": "B-00011",
-          "address": "ул. Тестовая, 11",
-          "lat": 56.85339784639176,
-          "lon": 60.55327872848898,
+          "building_id": "B-00001",
+          "address": "г. Екатеринбург, ул. Победы, 2",
+          "lat": 56.883465,
+          "lon": 60.593973,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00002",
+          "address": "г. Екатеринбург, ул. Уральская, 4",
+          "lat": 56.893237,
+          "lon": 60.598008,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00003",
+          "address": "г. Екатеринбург, ул. Учителей, 6",
+          "lat": 56.878288,
+          "lon": 60.606907,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00004",
+          "address": "г. Екатеринбург, ул. Пионерская, 8",
+          "lat": 56.890251,
+          "lon": 60.605447,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00005",
+          "address": "г. Екатеринбург, ул. Мира, 10",
+          "lat": 56.91132,
+          "lon": 60.612174,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00006",
+          "address": "г. Екатеринбург, ул. Победы, 12",
+          "lat": 56.900233,
+          "lon": 60.626836,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00007",
+          "address": "г. Екатеринбург, ул. Уральская, 14",
+          "lat": 56.884147,
+          "lon": 60.608225,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00008",
+          "address": "г. Екатеринбург, ул. Учителей, 16",
+          "lat": 56.880693,
+          "lon": 60.594387,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00009",
+          "address": "г. Екатеринбург, ул. Пионерская, 18",
+          "lat": 56.886154,
+          "lon": 60.621026,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00010",
+          "address": "г. Екатеринбург, ул. Мира, 20",
+          "lat": 56.905772,
+          "lon": 60.617509,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
+        },
+        {
+          "building_id": "B-00011",
+          "address": "г. Екатеринбург, ул. Победы, 22",
+          "lat": 56.888902,
+          "lon": 60.591072,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00012",
-          "address": "ул. Тестовая, 12",
-          "lat": 56.861766982420036,
-          "lon": 60.61092504046911,
+          "address": "г. Екатеринбург, ул. Уральская, 24",
+          "lat": 56.897459,
+          "lon": 60.634462,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00013",
-          "address": "ул. Тестовая, 13",
-          "lat": 56.9115398058904,
-          "lon": 60.69822666196691,
+          "address": "г. Екатеринбург, ул. Учителей, 26",
+          "lat": 56.886696,
+          "lon": 60.620954,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00014",
-          "address": "ул. Тестовая, 14",
-          "lat": 56.87788828156681,
-          "lon": 60.6606005878952,
+          "address": "г. Екатеринбург, ул. Пионерская, 28",
+          "lat": 56.899375,
+          "lon": 60.590398,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00015",
-          "address": "ул. Тестовая, 15",
-          "lat": 56.81707305031951,
-          "lon": 60.587681666275934,
-          "building_type": "PRIVATE",
-          "overhead_line": true
+          "address": "г. Екатеринбург, ул. Мира, 30",
+          "lat": 56.878978,
+          "lon": 60.586994,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00016",
-          "address": "ул. Тестовая, 16",
-          "lat": 56.81829136116703,
-          "lon": 60.64060250390465,
-          "building_type": "MKD",
-          "overhead_line": false
+          "address": "г. Екатеринбург, ул. Победы, 32",
+          "lat": 56.895641,
+          "lon": 60.57698,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00017",
-          "address": "ул. Тестовая, 17",
-          "lat": 56.89483901992789,
-          "lon": 60.598515948522014,
-          "building_type": "MKD",
-          "overhead_line": false
+          "address": "г. Екатеринбург, ул. Уральская, 34",
+          "lat": 56.916941,
+          "lon": 60.640785,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00018",
-          "address": "ул. Тестовая, 18",
-          "lat": 56.92252355365408,
-          "lon": 60.587603496546805,
-          "building_type": "MKD",
-          "overhead_line": false
+          "address": "г. Екатеринбург, ул. Учителей, 36",
+          "lat": 56.894219,
+          "lon": 60.575108,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00019",
-          "address": "ул. Тестовая, 19",
-          "lat": 56.93470321053016,
-          "lon": 60.55952907671966,
-          "building_type": "MKD",
-          "overhead_line": false
+          "address": "г. Екатеринбург, ул. Пионерская, 38",
+          "lat": 56.918998,
+          "lon": 60.648334,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
         },
         {
           "building_id": "B-00020",
-          "address": "ул. Тестовая, 20",
-          "lat": 56.91987442891316,
-          "lon": 60.676935184687025,
+          "address": "г. Екатеринбург, ул. Мира, 40",
+          "lat": 56.923462,
+          "lon": 60.585279,
           "building_type": "PRIVATE",
-          "overhead_line": true
+          "overhead_line": true,
+          "zone_service_center_id": "SC-01"
         }
       ]
     },
     {
       "access_node_id": "AN-0003",
-      "node_type": "OLT",
-      "technology": "PON",
-      "name": "OLT-3",
-      "address": "ул. Тестовая, 21а",
-      "lat": 56.822329641954546,
-      "lon": 60.58970398991425,
+      "node_type": "DSLAM",
+      "technology": "XDSL",
+      "name": "DSLAM Север-3",
+      "address": "г. Екатеринбург, ул. Победы, 4",
+      "lat": 56.904741,
+      "lon": 60.605435,
       "buildings": [
         {
-          "building_id": "B-00021",
-          "address": "ул. Тестовая, 21",
-          "lat": 56.822329641954546,
-          "lon": 60.58970398991425,
+          "building_id": "B-00001",
+          "address": "г. Екатеринбург, ул. Победы, 2",
+          "lat": 56.883465,
+          "lon": 60.593973,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00022",
-          "address": "ул. Тестовая, 22",
-          "lat": 56.926267631184245,
-          "lon": 60.684655986179315,
+          "building_id": "B-00002",
+          "address": "г. Екатеринбург, ул. Уральская, 4",
+          "lat": 56.893237,
+          "lon": 60.598008,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00023",
-          "address": "ул. Тестовая, 23",
-          "lat": 56.91295124304007,
-          "lon": 60.582445935010696,
+          "building_id": "B-00005",
+          "address": "г. Екатеринбург, ул. Мира, 10",
+          "lat": 56.91132,
+          "lon": 60.612174,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00024",
-          "address": "ул. Тестовая, 24",
-          "lat": 56.8811259598229,
-          "lon": 60.60586969141761,
+          "building_id": "B-00006",
+          "address": "г. Екатеринбург, ул. Победы, 12",
+          "lat": 56.900233,
+          "lon": 60.626836,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00025",
-          "address": "ул. Тестовая, 25",
-          "lat": 56.81413933382227,
-          "lon": 60.6746495836863,
-          "building_type": "PRIVATE",
-          "overhead_line": true
-        },
-        {
-          "building_id": "B-00026",
-          "address": "ул. Тестовая, 26",
-          "lat": 56.9004378988135,
-          "lon": 60.65919024901707,
+          "building_id": "B-00009",
+          "address": "г. Екатеринбург, ул. Пионерская, 18",
+          "lat": 56.886154,
+          "lon": 60.621026,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00027",
-          "address": "ул. Тестовая, 27",
-          "lat": 56.8856182117866,
-          "lon": 60.563140915917955,
+          "building_id": "B-00010",
+          "address": "г. Екатеринбург, ул. Мира, 20",
+          "lat": 56.905772,
+          "lon": 60.617509,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00028",
-          "address": "ул. Тестовая, 28",
-          "lat": 56.87646879729212,
-          "lon": 60.63263645522688,
+          "building_id": "B-00011",
+          "address": "г. Екатеринбург, ул. Победы, 22",
+          "lat": 56.888902,
+          "lon": 60.591072,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00029",
-          "address": "ул. Тестовая, 29",
-          "lat": 56.80590077207774,
-          "lon": 60.58675286502191,
+          "building_id": "B-00013",
+          "address": "г. Екатеринбург, ул. Учителей, 26",
+          "lat": 56.886696,
+          "lon": 60.620954,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00030",
-          "address": "ул. Тестовая, 30",
-          "lat": 56.928477923180516,
-          "lon": 60.67961768084635,
-          "building_type": "PRIVATE",
-          "overhead_line": true
+          "building_id": "B-00015",
+          "address": "г. Екатеринбург, ул. Мира, 30",
+          "lat": 56.878978,
+          "lon": 60.586994,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         }
       ]
     },
     {
       "access_node_id": "AN-0004",
-      "node_type": "OLT",
-      "technology": "PON",
-      "name": "OLT-4",
-      "address": "ул. Тестовая, 31а",
-      "lat": 56.81301873933929,
-      "lon": 60.60918274449508,
+      "node_type": "CMTS",
+      "technology": "DOCSIS",
+      "name": "CMTS Север-4",
+      "address": "г. Екатеринбург, ул. Победы, 5",
+      "lat": 56.898611,
+      "lon": 60.61906,
       "buildings": [
         {
-          "building_id": "B-00031",
-          "address": "ул. Тестовая, 31",
-          "lat": 56.81301873933929,
-          "lon": 60.60918274449508,
+          "building_id": "B-00001",
+          "address": "г. Екатеринбург, ул. Победы, 2",
+          "lat": 56.883465,
+          "lon": 60.593973,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00032",
-          "address": "ул. Тестовая, 32",
-          "lat": 56.845913032396204,
-          "lon": 60.55556866059253,
+          "building_id": "B-00002",
+          "address": "г. Екатеринбург, ул. Уральская, 4",
+          "lat": 56.893237,
+          "lon": 60.598008,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00033",
-          "address": "ул. Тестовая, 33",
-          "lat": 56.892914146464626,
-          "lon": 60.685947234945694,
+          "building_id": "B-00005",
+          "address": "г. Екатеринбург, ул. Мира, 10",
+          "lat": 56.91132,
+          "lon": 60.612174,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00034",
-          "address": "ул. Тестовая, 34",
-          "lat": 56.81749920513729,
-          "lon": 60.566679151548016,
+          "building_id": "B-00007",
+          "address": "г. Екатеринбург, ул. Уральская, 14",
+          "lat": 56.884147,
+          "lon": 60.608225,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00035",
-          "address": "ул. Тестовая, 35",
-          "lat": 56.949872122823486,
-          "lon": 60.606392722987394,
-          "building_type": "PRIVATE",
-          "overhead_line": true
-        },
-        {
-          "building_id": "B-00036",
-          "address": "ул. Тестовая, 36",
-          "lat": 56.930892572262735,
-          "lon": 60.55993431721763,
+          "building_id": "B-00009",
+          "address": "г. Екатеринбург, ул. Пионерская, 18",
+          "lat": 56.886154,
+          "lon": 60.621026,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00037",
-          "address": "ул. Тестовая, 37",
-          "lat": 56.87006258693955,
-          "lon": 60.5596441070627,
+          "building_id": "B-00010",
+          "address": "г. Екатеринбург, ул. Мира, 20",
+          "lat": 56.905772,
+          "lon": 60.617509,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00038",
-          "address": "ул. Тестовая, 38",
-          "lat": 56.92565831239861,
-          "lon": 60.64689945913023,
+          "building_id": "B-00011",
+          "address": "г. Екатеринбург, ул. Победы, 22",
+          "lat": 56.888902,
+          "lon": 60.591072,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00039",
-          "address": "ул. Тестовая, 39",
-          "lat": 56.9106322325174,
-          "lon": 60.575058722263115,
+          "building_id": "B-00014",
+          "address": "г. Екатеринбург, ул. Пионерская, 28",
+          "lat": 56.899375,
+          "lon": 60.590398,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         },
         {
-          "building_id": "B-00040",
-          "address": "ул. Тестовая, 40",
-          "lat": 56.929328899001014,
-          "lon": 60.66914802852856,
-          "building_type": "PRIVATE",
-          "overhead_line": true
+          "building_id": "B-00015",
+          "address": "г. Екатеринбург, ул. Мира, 30",
+          "lat": 56.878978,
+          "lon": 60.586994,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-01"
         }
       ]
     },
@@ -1740,98 +1987,1962 @@
       "access_node_id": "AN-0005",
       "node_type": "OLT",
       "technology": "PON",
-      "name": "OLT-5",
-      "address": "ул. Тестовая, 41а",
-      "lat": 56.80166996953874,
-      "lon": 60.677368159423885,
+      "name": "OLT Центр-5",
+      "address": "г. Екатеринбург, ул. Малышева, 6",
+      "lat": 56.84297,
+      "lon": 60.59035,
+      "buildings": [
+        {
+          "building_id": "B-00021",
+          "address": "г. Екатеринбург, ул. Малышева, 3",
+          "lat": 56.838647,
+          "lon": 60.583376,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00022",
+          "address": "г. Екатеринбург, ул. Ленина, 5",
+          "lat": 56.83689,
+          "lon": 60.599493,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00023",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 7",
+          "lat": 56.849468,
+          "lon": 60.596546,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00024",
+          "address": "г. Екатеринбург, ул. Свердлова, 9",
+          "lat": 56.836587,
+          "lon": 60.581305,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00025",
+          "address": "г. Екатеринбург, ул. Пушкина, 11",
+          "lat": 56.845724,
+          "lon": 60.591364,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00026",
+          "address": "г. Екатеринбург, ул. Малышева, 13",
+          "lat": 56.85285,
+          "lon": 60.619558,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00027",
+          "address": "г. Екатеринбург, ул. Ленина, 15",
+          "lat": 56.855387,
+          "lon": 60.594675,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00028",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 17",
+          "lat": 56.82373,
+          "lon": 60.579386,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00029",
+          "address": "г. Екатеринбург, ул. Свердлова, 19",
+          "lat": 56.832897,
+          "lon": 60.618901,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00030",
+          "address": "г. Екатеринбург, ул. Пушкина, 21",
+          "lat": 56.845435,
+          "lon": 60.595961,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00031",
+          "address": "г. Екатеринбург, ул. Малышева, 23",
+          "lat": 56.85039,
+          "lon": 60.590812,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00032",
+          "address": "г. Екатеринбург, ул. Ленина, 25",
+          "lat": 56.85095,
+          "lon": 60.582235,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00033",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 27",
+          "lat": 56.831923,
+          "lon": 60.608728,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00034",
+          "address": "г. Екатеринбург, ул. Свердлова, 29",
+          "lat": 56.830338,
+          "lon": 60.609405,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00035",
+          "address": "г. Екатеринбург, ул. Пушкина, 31",
+          "lat": 56.826619,
+          "lon": 60.606858,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00036",
+          "address": "г. Екатеринбург, ул. Малышева, 33",
+          "lat": 56.851178,
+          "lon": 60.588338,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00039",
+          "address": "г. Екатеринбург, ул. Свердлова, 39",
+          "lat": 56.849146,
+          "lon": 60.627368,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00040",
+          "address": "г. Екатеринбург, ул. Пушкина, 41",
+          "lat": 56.813983,
+          "lon": 60.634213,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0006",
+      "node_type": "SWITCH",
+      "technology": "FTTB",
+      "name": "SWITCH Центр-6",
+      "address": "г. Екатеринбург, ул. Малышева, 7",
+      "lat": 56.834931,
+      "lon": 60.580969,
+      "buildings": [
+        {
+          "building_id": "B-00021",
+          "address": "г. Екатеринбург, ул. Малышева, 3",
+          "lat": 56.838647,
+          "lon": 60.583376,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00022",
+          "address": "г. Екатеринбург, ул. Ленина, 5",
+          "lat": 56.83689,
+          "lon": 60.599493,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00023",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 7",
+          "lat": 56.849468,
+          "lon": 60.596546,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00024",
+          "address": "г. Екатеринбург, ул. Свердлова, 9",
+          "lat": 56.836587,
+          "lon": 60.581305,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00025",
+          "address": "г. Екатеринбург, ул. Пушкина, 11",
+          "lat": 56.845724,
+          "lon": 60.591364,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00026",
+          "address": "г. Екатеринбург, ул. Малышева, 13",
+          "lat": 56.85285,
+          "lon": 60.619558,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00027",
+          "address": "г. Екатеринбург, ул. Ленина, 15",
+          "lat": 56.855387,
+          "lon": 60.594675,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00028",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 17",
+          "lat": 56.82373,
+          "lon": 60.579386,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00029",
+          "address": "г. Екатеринбург, ул. Свердлова, 19",
+          "lat": 56.832897,
+          "lon": 60.618901,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00030",
+          "address": "г. Екатеринбург, ул. Пушкина, 21",
+          "lat": 56.845435,
+          "lon": 60.595961,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00031",
+          "address": "г. Екатеринбург, ул. Малышева, 23",
+          "lat": 56.85039,
+          "lon": 60.590812,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00032",
+          "address": "г. Екатеринбург, ул. Ленина, 25",
+          "lat": 56.85095,
+          "lon": 60.582235,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00033",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 27",
+          "lat": 56.831923,
+          "lon": 60.608728,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00034",
+          "address": "г. Екатеринбург, ул. Свердлова, 29",
+          "lat": 56.830338,
+          "lon": 60.609405,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00035",
+          "address": "г. Екатеринбург, ул. Пушкина, 31",
+          "lat": 56.826619,
+          "lon": 60.606858,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00036",
+          "address": "г. Екатеринбург, ул. Малышева, 33",
+          "lat": 56.851178,
+          "lon": 60.588338,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00037",
+          "address": "г. Екатеринбург, ул. Ленина, 35",
+          "lat": 56.836509,
+          "lon": 60.628443,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00038",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 37",
+          "lat": 56.846573,
+          "lon": 60.582705,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00039",
+          "address": "г. Екатеринбург, ул. Свердлова, 39",
+          "lat": 56.849146,
+          "lon": 60.627368,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00040",
+          "address": "г. Екатеринбург, ул. Пушкина, 41",
+          "lat": 56.813983,
+          "lon": 60.634213,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-02"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0007",
+      "node_type": "DSLAM",
+      "technology": "XDSL",
+      "name": "DSLAM Центр-7",
+      "address": "г. Екатеринбург, ул. Малышева, 8",
+      "lat": 56.850288,
+      "lon": 60.582518,
+      "buildings": [
+        {
+          "building_id": "B-00022",
+          "address": "г. Екатеринбург, ул. Ленина, 5",
+          "lat": 56.83689,
+          "lon": 60.599493,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00028",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 17",
+          "lat": 56.82373,
+          "lon": 60.579386,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00031",
+          "address": "г. Екатеринбург, ул. Малышева, 23",
+          "lat": 56.85039,
+          "lon": 60.590812,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00032",
+          "address": "г. Екатеринбург, ул. Ленина, 25",
+          "lat": 56.85095,
+          "lon": 60.582235,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0008",
+      "node_type": "CMTS",
+      "technology": "DOCSIS",
+      "name": "CMTS Центр-8",
+      "address": "г. Екатеринбург, ул. Малышева, 9",
+      "lat": 56.846869,
+      "lon": 60.600424,
+      "buildings": [
+        {
+          "building_id": "B-00021",
+          "address": "г. Екатеринбург, ул. Малышева, 3",
+          "lat": 56.838647,
+          "lon": 60.583376,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00022",
+          "address": "г. Екатеринбург, ул. Ленина, 5",
+          "lat": 56.83689,
+          "lon": 60.599493,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00023",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 7",
+          "lat": 56.849468,
+          "lon": 60.596546,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00025",
+          "address": "г. Екатеринбург, ул. Пушкина, 11",
+          "lat": 56.845724,
+          "lon": 60.591364,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00026",
+          "address": "г. Екатеринбург, ул. Малышева, 13",
+          "lat": 56.85285,
+          "lon": 60.619558,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00028",
+          "address": "г. Екатеринбург, ул. Карла Либкнехта, 17",
+          "lat": 56.82373,
+          "lon": 60.579386,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00029",
+          "address": "г. Екатеринбург, ул. Свердлова, 19",
+          "lat": 56.832897,
+          "lon": 60.618901,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00030",
+          "address": "г. Екатеринбург, ул. Пушкина, 21",
+          "lat": 56.845435,
+          "lon": 60.595961,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        },
+        {
+          "building_id": "B-00035",
+          "address": "г. Екатеринбург, ул. Пушкина, 31",
+          "lat": 56.826619,
+          "lon": 60.606858,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-02"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0009",
+      "node_type": "OLT",
+      "technology": "PON",
+      "name": "OLT Юг-9",
+      "address": "г. Екатеринбург, ул. Белинского, 10",
+      "lat": 56.797686,
+      "lon": 60.612907,
       "buildings": [
         {
           "building_id": "B-00041",
-          "address": "ул. Тестовая, 41",
-          "lat": 56.80166996953874,
-          "lon": 60.677368159423885,
+          "address": "г. Екатеринбург, ул. Белинского, 4",
+          "lat": 56.806269,
+          "lon": 60.611793,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00042",
-          "address": "ул. Тестовая, 42",
-          "lat": 56.89210363926018,
-          "lon": 60.55342712456869,
+          "address": "г. Екатеринбург, ул. Щербакова, 6",
+          "lat": 56.800051,
+          "lon": 60.626692,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00043",
-          "address": "ул. Тестовая, 43",
-          "lat": 56.88530312551358,
-          "lon": 60.674394397589865,
+          "address": "г. Екатеринбург, ул. Авиационная, 8",
+          "lat": 56.814862,
+          "lon": 60.607909,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00044",
-          "address": "ул. Тестовая, 44",
-          "lat": 56.90172974576899,
-          "lon": 60.689750952568474,
+          "address": "г. Екатеринбург, ул. Чкалова, 10",
+          "lat": 56.819553,
+          "lon": 60.615852,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00045",
-          "address": "ул. Тестовая, 45",
-          "lat": 56.921473808573346,
-          "lon": 60.65431811106921,
-          "building_type": "PRIVATE",
-          "overhead_line": true
+          "address": "г. Екатеринбург, ул. Громова, 12",
+          "lat": 56.798099,
+          "lon": 60.617747,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00046",
-          "address": "ул. Тестовая, 46",
-          "lat": 56.85984136091794,
-          "lon": 60.559920559076325,
+          "address": "г. Екатеринбург, ул. Белинского, 14",
+          "lat": 56.808207,
+          "lon": 60.613819,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00047",
-          "address": "ул. Тестовая, 47",
-          "lat": 56.944239106818465,
-          "lon": 60.6138915486457,
+          "address": "г. Екатеринбург, ул. Щербакова, 16",
+          "lat": 56.792877,
+          "lon": 60.593586,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00048",
-          "address": "ул. Тестовая, 48",
-          "lat": 56.937452696810986,
-          "lon": 60.579237318746756,
+          "address": "г. Екатеринбург, ул. Авиационная, 18",
+          "lat": 56.80837,
+          "lon": 60.617672,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00049",
-          "address": "ул. Тестовая, 49",
-          "lat": 56.93477690603537,
-          "lon": 60.642498957287266,
+          "address": "г. Екатеринбург, ул. Чкалова, 20",
+          "lat": 56.812194,
+          "lon": 60.603151,
           "building_type": "MKD",
-          "overhead_line": false
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
         },
         {
           "building_id": "B-00050",
-          "address": "ул. Тестовая, 50",
-          "lat": 56.88760707771968,
-          "lon": 60.59350634787164,
+          "address": "г. Екатеринбург, ул. Громова, 22",
+          "lat": 56.809344,
+          "lon": 60.622005,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00051",
+          "address": "г. Екатеринбург, ул. Белинского, 24",
+          "lat": 56.81184,
+          "lon": 60.605546,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00052",
+          "address": "г. Екатеринбург, ул. Щербакова, 26",
+          "lat": 56.802327,
+          "lon": 60.611374,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00053",
+          "address": "г. Екатеринбург, ул. Авиационная, 28",
+          "lat": 56.805314,
+          "lon": 60.629222,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00054",
+          "address": "г. Екатеринбург, ул. Чкалова, 30",
+          "lat": 56.817006,
+          "lon": 60.627242,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00055",
+          "address": "г. Екатеринбург, ул. Громова, 32",
+          "lat": 56.788523,
+          "lon": 60.611639,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00056",
+          "address": "г. Екатеринбург, ул. Белинского, 34",
+          "lat": 56.814064,
+          "lon": 60.577343,
           "building_type": "PRIVATE",
-          "overhead_line": true
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00057",
+          "address": "г. Екатеринбург, ул. Щербакова, 36",
+          "lat": 56.808203,
+          "lon": 60.593914,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00058",
+          "address": "г. Екатеринбург, ул. Авиационная, 38",
+          "lat": 56.818284,
+          "lon": 60.613568,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00059",
+          "address": "г. Екатеринбург, ул. Чкалова, 40",
+          "lat": 56.78359,
+          "lon": 60.618301,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00060",
+          "address": "г. Екатеринбург, ул. Громова, 42",
+          "lat": 56.813339,
+          "lon": 60.579083,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0010",
+      "node_type": "SWITCH",
+      "technology": "FTTB",
+      "name": "SWITCH Юг-10",
+      "address": "г. Екатеринбург, ул. Белинского, 11",
+      "lat": 56.797744,
+      "lon": 60.603208,
+      "buildings": [
+        {
+          "building_id": "B-00041",
+          "address": "г. Екатеринбург, ул. Белинского, 4",
+          "lat": 56.806269,
+          "lon": 60.611793,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00042",
+          "address": "г. Екатеринбург, ул. Щербакова, 6",
+          "lat": 56.800051,
+          "lon": 60.626692,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00043",
+          "address": "г. Екатеринбург, ул. Авиационная, 8",
+          "lat": 56.814862,
+          "lon": 60.607909,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00044",
+          "address": "г. Екатеринбург, ул. Чкалова, 10",
+          "lat": 56.819553,
+          "lon": 60.615852,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00045",
+          "address": "г. Екатеринбург, ул. Громова, 12",
+          "lat": 56.798099,
+          "lon": 60.617747,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00046",
+          "address": "г. Екатеринбург, ул. Белинского, 14",
+          "lat": 56.808207,
+          "lon": 60.613819,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00047",
+          "address": "г. Екатеринбург, ул. Щербакова, 16",
+          "lat": 56.792877,
+          "lon": 60.593586,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00048",
+          "address": "г. Екатеринбург, ул. Авиационная, 18",
+          "lat": 56.80837,
+          "lon": 60.617672,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00049",
+          "address": "г. Екатеринбург, ул. Чкалова, 20",
+          "lat": 56.812194,
+          "lon": 60.603151,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00050",
+          "address": "г. Екатеринбург, ул. Громова, 22",
+          "lat": 56.809344,
+          "lon": 60.622005,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00051",
+          "address": "г. Екатеринбург, ул. Белинского, 24",
+          "lat": 56.81184,
+          "lon": 60.605546,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00052",
+          "address": "г. Екатеринбург, ул. Щербакова, 26",
+          "lat": 56.802327,
+          "lon": 60.611374,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00053",
+          "address": "г. Екатеринбург, ул. Авиационная, 28",
+          "lat": 56.805314,
+          "lon": 60.629222,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00054",
+          "address": "г. Екатеринбург, ул. Чкалова, 30",
+          "lat": 56.817006,
+          "lon": 60.627242,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00055",
+          "address": "г. Екатеринбург, ул. Громова, 32",
+          "lat": 56.788523,
+          "lon": 60.611639,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00056",
+          "address": "г. Екатеринбург, ул. Белинского, 34",
+          "lat": 56.814064,
+          "lon": 60.577343,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00057",
+          "address": "г. Екатеринбург, ул. Щербакова, 36",
+          "lat": 56.808203,
+          "lon": 60.593914,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00058",
+          "address": "г. Екатеринбург, ул. Авиационная, 38",
+          "lat": 56.818284,
+          "lon": 60.613568,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00059",
+          "address": "г. Екатеринбург, ул. Чкалова, 40",
+          "lat": 56.78359,
+          "lon": 60.618301,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00060",
+          "address": "г. Екатеринбург, ул. Громова, 42",
+          "lat": 56.813339,
+          "lon": 60.579083,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-03"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0011",
+      "node_type": "DSLAM",
+      "technology": "XDSL",
+      "name": "DSLAM Юг-11",
+      "address": "г. Екатеринбург, ул. Белинского, 12",
+      "lat": 56.792354,
+      "lon": 60.625212,
+      "buildings": [
+        {
+          "building_id": "B-00041",
+          "address": "г. Екатеринбург, ул. Белинского, 4",
+          "lat": 56.806269,
+          "lon": 60.611793,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00044",
+          "address": "г. Екатеринбург, ул. Чкалова, 10",
+          "lat": 56.819553,
+          "lon": 60.615852,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00045",
+          "address": "г. Екатеринбург, ул. Громова, 12",
+          "lat": 56.798099,
+          "lon": 60.617747,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00046",
+          "address": "г. Екатеринбург, ул. Белинского, 14",
+          "lat": 56.808207,
+          "lon": 60.613819,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00048",
+          "address": "г. Екатеринбург, ул. Авиационная, 18",
+          "lat": 56.80837,
+          "lon": 60.617672,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00052",
+          "address": "г. Екатеринбург, ул. Щербакова, 26",
+          "lat": 56.802327,
+          "lon": 60.611374,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00053",
+          "address": "г. Екатеринбург, ул. Авиационная, 28",
+          "lat": 56.805314,
+          "lon": 60.629222,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00054",
+          "address": "г. Екатеринбург, ул. Чкалова, 30",
+          "lat": 56.817006,
+          "lon": 60.627242,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        },
+        {
+          "building_id": "B-00055",
+          "address": "г. Екатеринбург, ул. Громова, 32",
+          "lat": 56.788523,
+          "lon": 60.611639,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-03"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0012",
+      "node_type": "OLT",
+      "technology": "PON",
+      "name": "OLT Запад-12",
+      "address": "г. Екатеринбург, ул. Академика Сахарова, 13",
+      "lat": 56.842627,
+      "lon": 60.551515,
+      "buildings": [
+        {
+          "building_id": "B-00061",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 5",
+          "lat": 56.843865,
+          "lon": 60.575596,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00062",
+          "address": "г. Екатеринбург, ул. Металлургов, 7",
+          "lat": 56.835032,
+          "lon": 60.563562,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00063",
+          "address": "г. Екатеринбург, ул. Заводская, 9",
+          "lat": 56.859801,
+          "lon": 60.566263,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00064",
+          "address": "г. Екатеринбург, ул. Викулова, 11",
+          "lat": 56.839,
+          "lon": 60.542831,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00065",
+          "address": "г. Екатеринбург, ул. Татищева, 13",
+          "lat": 56.827563,
+          "lon": 60.555812,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00066",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 15",
+          "lat": 56.856231,
+          "lon": 60.556249,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00067",
+          "address": "г. Екатеринбург, ул. Металлургов, 17",
+          "lat": 56.851016,
+          "lon": 60.540973,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00068",
+          "address": "г. Екатеринбург, ул. Заводская, 19",
+          "lat": 56.857391,
+          "lon": 60.531088,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00069",
+          "address": "г. Екатеринбург, ул. Викулова, 21",
+          "lat": 56.838926,
+          "lon": 60.556044,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00070",
+          "address": "г. Екатеринбург, ул. Татищева, 23",
+          "lat": 56.856338,
+          "lon": 60.55709,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00071",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 25",
+          "lat": 56.843254,
+          "lon": 60.569003,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00072",
+          "address": "г. Екатеринбург, ул. Металлургов, 27",
+          "lat": 56.857143,
+          "lon": 60.532683,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00073",
+          "address": "г. Екатеринбург, ул. Заводская, 29",
+          "lat": 56.842052,
+          "lon": 60.545744,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00074",
+          "address": "г. Екатеринбург, ул. Викулова, 31",
+          "lat": 56.852908,
+          "lon": 60.568424,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00075",
+          "address": "г. Екатеринбург, ул. Татищева, 33",
+          "lat": 56.854221,
+          "lon": 60.552718,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00077",
+          "address": "г. Екатеринбург, ул. Металлургов, 37",
+          "lat": 56.874046,
+          "lon": 60.578837,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00078",
+          "address": "г. Екатеринбург, ул. Заводская, 39",
+          "lat": 56.857659,
+          "lon": 60.568543,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00080",
+          "address": "г. Екатеринбург, ул. Татищева, 43",
+          "lat": 56.816821,
+          "lon": 60.553385,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0013",
+      "node_type": "SWITCH",
+      "technology": "FTTB",
+      "name": "SWITCH Запад-13",
+      "address": "г. Екатеринбург, ул. Академика Сахарова, 14",
+      "lat": 56.839634,
+      "lon": 60.558974,
+      "buildings": [
+        {
+          "building_id": "B-00061",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 5",
+          "lat": 56.843865,
+          "lon": 60.575596,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00062",
+          "address": "г. Екатеринбург, ул. Металлургов, 7",
+          "lat": 56.835032,
+          "lon": 60.563562,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00063",
+          "address": "г. Екатеринбург, ул. Заводская, 9",
+          "lat": 56.859801,
+          "lon": 60.566263,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00064",
+          "address": "г. Екатеринбург, ул. Викулова, 11",
+          "lat": 56.839,
+          "lon": 60.542831,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00065",
+          "address": "г. Екатеринбург, ул. Татищева, 13",
+          "lat": 56.827563,
+          "lon": 60.555812,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00066",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 15",
+          "lat": 56.856231,
+          "lon": 60.556249,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00067",
+          "address": "г. Екатеринбург, ул. Металлургов, 17",
+          "lat": 56.851016,
+          "lon": 60.540973,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00068",
+          "address": "г. Екатеринбург, ул. Заводская, 19",
+          "lat": 56.857391,
+          "lon": 60.531088,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00069",
+          "address": "г. Екатеринбург, ул. Викулова, 21",
+          "lat": 56.838926,
+          "lon": 60.556044,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00070",
+          "address": "г. Екатеринбург, ул. Татищева, 23",
+          "lat": 56.856338,
+          "lon": 60.55709,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00071",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 25",
+          "lat": 56.843254,
+          "lon": 60.569003,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00072",
+          "address": "г. Екатеринбург, ул. Металлургов, 27",
+          "lat": 56.857143,
+          "lon": 60.532683,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00073",
+          "address": "г. Екатеринбург, ул. Заводская, 29",
+          "lat": 56.842052,
+          "lon": 60.545744,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00074",
+          "address": "г. Екатеринбург, ул. Викулова, 31",
+          "lat": 56.852908,
+          "lon": 60.568424,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00075",
+          "address": "г. Екатеринбург, ул. Татищева, 33",
+          "lat": 56.854221,
+          "lon": 60.552718,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00076",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 35",
+          "lat": 56.829969,
+          "lon": 60.570203,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00077",
+          "address": "г. Екатеринбург, ул. Металлургов, 37",
+          "lat": 56.874046,
+          "lon": 60.578837,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00078",
+          "address": "г. Екатеринбург, ул. Заводская, 39",
+          "lat": 56.857659,
+          "lon": 60.568543,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00079",
+          "address": "г. Екатеринбург, ул. Викулова, 41",
+          "lat": 56.828033,
+          "lon": 60.56424,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00080",
+          "address": "г. Екатеринбург, ул. Татищева, 43",
+          "lat": 56.816821,
+          "lon": 60.553385,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0014",
+      "node_type": "DSLAM",
+      "technology": "XDSL",
+      "name": "DSLAM Запад-14",
+      "address": "г. Екатеринбург, ул. Академика Сахарова, 15",
+      "lat": 56.841357,
+      "lon": 60.552554,
+      "buildings": [
+        {
+          "building_id": "B-00062",
+          "address": "г. Екатеринбург, ул. Металлургов, 7",
+          "lat": 56.835032,
+          "lon": 60.563562,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00064",
+          "address": "г. Екатеринбург, ул. Викулова, 11",
+          "lat": 56.839,
+          "lon": 60.542831,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00066",
+          "address": "г. Екатеринбург, ул. Академика Сахарова, 15",
+          "lat": 56.856231,
+          "lon": 60.556249,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00067",
+          "address": "г. Екатеринбург, ул. Металлургов, 17",
+          "lat": 56.851016,
+          "lon": 60.540973,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00068",
+          "address": "г. Екатеринбург, ул. Заводская, 19",
+          "lat": 56.857391,
+          "lon": 60.531088,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00072",
+          "address": "г. Екатеринбург, ул. Металлургов, 27",
+          "lat": 56.857143,
+          "lon": 60.532683,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        },
+        {
+          "building_id": "B-00074",
+          "address": "г. Екатеринбург, ул. Викулова, 31",
+          "lat": 56.852908,
+          "lon": 60.568424,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-04"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0015",
+      "node_type": "OLT",
+      "technology": "PON",
+      "name": "OLT Восток-15",
+      "address": "г. Екатеринбург, ул. Сибирский тракт, 16",
+      "lat": 56.840257,
+      "lon": 60.659216,
+      "buildings": [
+        {
+          "building_id": "B-00081",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 6",
+          "lat": 56.851223,
+          "lon": 60.66649,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00082",
+          "address": "г. Екатеринбург, ул. Восточная, 8",
+          "lat": 56.857312,
+          "lon": 60.653933,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00083",
+          "address": "г. Екатеринбург, ул. Луначарского, 10",
+          "lat": 56.832249,
+          "lon": 60.68877,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00084",
+          "address": "г. Екатеринбург, ул. Первомайская, 12",
+          "lat": 56.842735,
+          "lon": 60.692278,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00085",
+          "address": "г. Екатеринбург, ул. Сулимова, 14",
+          "lat": 56.848197,
+          "lon": 60.658154,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00086",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 16",
+          "lat": 56.850272,
+          "lon": 60.676878,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00087",
+          "address": "г. Екатеринбург, ул. Восточная, 18",
+          "lat": 56.845767,
+          "lon": 60.655927,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00088",
+          "address": "г. Екатеринбург, ул. Луначарского, 20",
+          "lat": 56.853233,
+          "lon": 60.689841,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00089",
+          "address": "г. Екатеринбург, ул. Первомайская, 22",
+          "lat": 56.835648,
+          "lon": 60.672032,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00090",
+          "address": "г. Екатеринбург, ул. Сулимова, 24",
+          "lat": 56.830725,
+          "lon": 60.684381,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00091",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 26",
+          "lat": 56.858166,
+          "lon": 60.669077,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00092",
+          "address": "г. Екатеринбург, ул. Восточная, 28",
+          "lat": 56.839033,
+          "lon": 60.67389,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00093",
+          "address": "г. Екатеринбург, ул. Луначарского, 30",
+          "lat": 56.857726,
+          "lon": 60.669554,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00094",
+          "address": "г. Екатеринбург, ул. Первомайская, 32",
+          "lat": 56.849388,
+          "lon": 60.676201,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00095",
+          "address": "г. Екатеринбург, ул. Сулимова, 34",
+          "lat": 56.833491,
+          "lon": 60.65409,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00096",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 36",
+          "lat": 56.841607,
+          "lon": 60.68936,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00097",
+          "address": "г. Екатеринбург, ул. Восточная, 38",
+          "lat": 56.826698,
+          "lon": 60.64205,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-05"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0016",
+      "node_type": "SWITCH",
+      "technology": "FTTB",
+      "name": "SWITCH Восток-16",
+      "address": "г. Екатеринбург, ул. Сибирский тракт, 17",
+      "lat": 56.852672,
+      "lon": 60.659756,
+      "buildings": [
+        {
+          "building_id": "B-00081",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 6",
+          "lat": 56.851223,
+          "lon": 60.66649,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00082",
+          "address": "г. Екатеринбург, ул. Восточная, 8",
+          "lat": 56.857312,
+          "lon": 60.653933,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00083",
+          "address": "г. Екатеринбург, ул. Луначарского, 10",
+          "lat": 56.832249,
+          "lon": 60.68877,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00084",
+          "address": "г. Екатеринбург, ул. Первомайская, 12",
+          "lat": 56.842735,
+          "lon": 60.692278,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00085",
+          "address": "г. Екатеринбург, ул. Сулимова, 14",
+          "lat": 56.848197,
+          "lon": 60.658154,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00086",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 16",
+          "lat": 56.850272,
+          "lon": 60.676878,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00087",
+          "address": "г. Екатеринбург, ул. Восточная, 18",
+          "lat": 56.845767,
+          "lon": 60.655927,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00088",
+          "address": "г. Екатеринбург, ул. Луначарского, 20",
+          "lat": 56.853233,
+          "lon": 60.689841,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00089",
+          "address": "г. Екатеринбург, ул. Первомайская, 22",
+          "lat": 56.835648,
+          "lon": 60.672032,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00090",
+          "address": "г. Екатеринбург, ул. Сулимова, 24",
+          "lat": 56.830725,
+          "lon": 60.684381,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00091",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 26",
+          "lat": 56.858166,
+          "lon": 60.669077,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00092",
+          "address": "г. Екатеринбург, ул. Восточная, 28",
+          "lat": 56.839033,
+          "lon": 60.67389,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00093",
+          "address": "г. Екатеринбург, ул. Луначарского, 30",
+          "lat": 56.857726,
+          "lon": 60.669554,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00094",
+          "address": "г. Екатеринбург, ул. Первомайская, 32",
+          "lat": 56.849388,
+          "lon": 60.676201,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00095",
+          "address": "г. Екатеринбург, ул. Сулимова, 34",
+          "lat": 56.833491,
+          "lon": 60.65409,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00096",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 36",
+          "lat": 56.841607,
+          "lon": 60.68936,
+          "building_type": "PRIVATE",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00097",
+          "address": "г. Екатеринбург, ул. Восточная, 38",
+          "lat": 56.826698,
+          "lon": 60.64205,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00098",
+          "address": "г. Екатеринбург, ул. Луначарского, 40",
+          "lat": 56.864749,
+          "lon": 60.704017,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00099",
+          "address": "г. Екатеринбург, ул. Первомайская, 42",
+          "lat": 56.831866,
+          "lon": 60.64642,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00100",
+          "address": "г. Екатеринбург, ул. Сулимова, 44",
+          "lat": 56.82545,
+          "lon": 60.635679,
+          "building_type": "PRIVATE",
+          "overhead_line": true,
+          "zone_service_center_id": "SC-05"
+        }
+      ]
+    },
+    {
+      "access_node_id": "AN-0017",
+      "node_type": "DSLAM",
+      "technology": "XDSL",
+      "name": "DSLAM Восток-17",
+      "address": "г. Екатеринбург, ул. Сибирский тракт, 18",
+      "lat": 56.834044,
+      "lon": 60.669301,
+      "buildings": [
+        {
+          "building_id": "B-00081",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 6",
+          "lat": 56.851223,
+          "lon": 60.66649,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00082",
+          "address": "г. Екатеринбург, ул. Восточная, 8",
+          "lat": 56.857312,
+          "lon": 60.653933,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00083",
+          "address": "г. Екатеринбург, ул. Луначарского, 10",
+          "lat": 56.832249,
+          "lon": 60.68877,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00084",
+          "address": "г. Екатеринбург, ул. Первомайская, 12",
+          "lat": 56.842735,
+          "lon": 60.692278,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00086",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 16",
+          "lat": 56.850272,
+          "lon": 60.676878,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00087",
+          "address": "г. Екатеринбург, ул. Восточная, 18",
+          "lat": 56.845767,
+          "lon": 60.655927,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00088",
+          "address": "г. Екатеринбург, ул. Луначарского, 20",
+          "lat": 56.853233,
+          "lon": 60.689841,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00090",
+          "address": "г. Екатеринбург, ул. Сулимова, 24",
+          "lat": 56.830725,
+          "lon": 60.684381,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00091",
+          "address": "г. Екатеринбург, ул. Сибирский тракт, 26",
+          "lat": 56.858166,
+          "lon": 60.669077,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00092",
+          "address": "г. Екатеринбург, ул. Восточная, 28",
+          "lat": 56.839033,
+          "lon": 60.67389,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00093",
+          "address": "г. Екатеринбург, ул. Луначарского, 30",
+          "lat": 56.857726,
+          "lon": 60.669554,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
+        },
+        {
+          "building_id": "B-00094",
+          "address": "г. Екатеринбург, ул. Первомайская, 32",
+          "lat": 56.849388,
+          "lon": 60.676201,
+          "building_type": "MKD",
+          "overhead_line": false,
+          "zone_service_center_id": "SC-05"
         }
       ]
     }
   ],
   "work_types": [
     {
+      "code": "INST_PON_MKD",
+      "name": "Инсталляция ШПД/IPTV, МКД, PON",
+      "profiles": [
+        "INSTALL"
+      ],
+      "duration_min": 90,
+      "max_start_delay_min": 10,
+      "deadline_kind": "WORKING_DAYS",
+      "deadline_value": 3,
+      "repeat_deadline_value": null,
+      "pgp_relevant": false
+    },
+    {
+      "code": "INST_FTTB_MKD",
+      "name": "Инсталляция ШПД/IPTV, МКД, FTTB",
+      "profiles": [
+        "INSTALL"
+      ],
+      "duration_min": 60,
+      "max_start_delay_min": 10,
+      "deadline_kind": "WORKING_DAYS",
+      "deadline_value": 3,
+      "repeat_deadline_value": null,
+      "pgp_relevant": false
+    },
+    {
+      "code": "INST_PRIVATE_VLS",
+      "name": "Инсталляция, частный сектор, с ВЛС",
+      "profiles": [
+        "INSTALL"
+      ],
+      "duration_min": 180,
+      "max_start_delay_min": 10,
+      "deadline_kind": "WORKING_DAYS",
+      "deadline_value": 5,
+      "repeat_deadline_value": null,
+      "pgp_relevant": false
+    },
+    {
+      "code": "ADD_SERVICE",
+      "name": "Доподключение услуги (IPTV, Wi-Fi-роутер)",
+      "profiles": [
+        "INSTALL"
+      ],
+      "duration_min": 40,
+      "max_start_delay_min": 10,
+      "deadline_kind": "SLOT",
+      "deadline_value": null,
+      "repeat_deadline_value": null,
+      "pgp_relevant": false
+    },
+    {
+      "code": "SURVEY_PRIVATE",
+      "name": "Обследование (частный сектор)",
+      "profiles": [
+        "INSTALL",
+        "LTP3"
+      ],
+      "duration_min": 45,
+      "max_start_delay_min": null,
+      "deadline_kind": "WORKING_DAYS",
+      "deadline_value": 2,
+      "repeat_deadline_value": null,
+      "pgp_relevant": false
+    },
+    {
       "code": "REPAIR",
-      "name": "Устранение неисправности",
+      "name": "Устранение неисправности (обращение абонента)",
       "profiles": [
         "LTP3"
       ],
@@ -1844,7 +3955,7 @@
     },
     {
       "code": "DEGRADATION",
-      "name": "Устранение деградации",
+      "name": "Устранение деградации, выявленной системой мониторинга качества",
       "profiles": [
         "LTP3"
       ],
@@ -1865,58 +3976,6 @@
       "max_start_delay_min": null,
       "deadline_kind": "WORKING_DAYS",
       "deadline_value": 5,
-      "repeat_deadline_value": null,
-      "pgp_relevant": false
-    },
-    {
-      "code": "INST_PON_MKD",
-      "name": "Инсталляция PON",
-      "profiles": [
-        "INSTALL"
-      ],
-      "duration_min": 90,
-      "max_start_delay_min": 10,
-      "deadline_kind": "WORKING_DAYS",
-      "deadline_value": 3,
-      "repeat_deadline_value": null,
-      "pgp_relevant": false
-    },
-    {
-      "code": "INST_FTTB_MKD",
-      "name": "Инсталляция FTTB",
-      "profiles": [
-        "INSTALL"
-      ],
-      "duration_min": 60,
-      "max_start_delay_min": 10,
-      "deadline_kind": "WORKING_DAYS",
-      "deadline_value": 3,
-      "repeat_deadline_value": null,
-      "pgp_relevant": false
-    },
-    {
-      "code": "INST_PRIVATE_VLS",
-      "name": "Инсталляция ВЛС",
-      "profiles": [
-        "INSTALL"
-      ],
-      "duration_min": 180,
-      "max_start_delay_min": 10,
-      "deadline_kind": "WORKING_DAYS",
-      "deadline_value": 5,
-      "repeat_deadline_value": null,
-      "pgp_relevant": false
-    },
-    {
-      "code": "ADD_SERVICE",
-      "name": "Доподключение услуги",
-      "profiles": [
-        "INSTALL"
-      ],
-      "duration_min": 40,
-      "max_start_delay_min": 10,
-      "deadline_kind": "SLOT",
-      "deadline_value": null,
       "repeat_deadline_value": null,
       "pgp_relevant": false
     }
