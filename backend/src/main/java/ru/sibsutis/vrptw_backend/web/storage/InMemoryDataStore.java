@@ -48,6 +48,8 @@ public class InMemoryDataStore {
         visitEnds.remove(date);
     }
     public Optional<DayInput> findDay(LocalDate d) { return Optional.ofNullable(days.get(d)); }
+    /** Даты, загруженные в сервис (для UI-списка дней). */
+    public Set<LocalDate> loadedDates() { return Set.copyOf(days.keySet()); }
     public void savePlan(LocalDate d, Plan p) { plans.put(d, p); }
     public Optional<Plan> findPlan(LocalDate d) { return Optional.ofNullable(plans.get(d)); }
 

@@ -21,6 +21,7 @@ import {
   UnassignedView,
   WorkType,
 } from './models';
+import { forkJoin } from 'rxjs';
 import { DispatchApiService } from './dispatch-api.service';
 import { DEMO_NOW, DEMO_ORDERS, DEMO_PLAN, DEMO_REFERENCE, DEMO_STAFF_META } from './demo-data';
 import { fmtKm, fmtTime, fmtTimeRange, minutesOfDay } from './time';
@@ -394,6 +395,8 @@ export class DispatchStore {
         this.showToast(`План версии ${this.plan().plan_version} актуален на ${fmtTime(this.now())}`, 'info');
       }
     }, 900);
+    // Демо-данные — только запасной вариант: сразу пробуем взять состояние из сервиса.
+    this.loadFromBackend();
   }
 
   selectStaff(staffId: string | null): void {
@@ -424,16 +427,42 @@ export class DispatchStore {
   }
 
   checkApi(): void {
+    this.loadFromBackend();
+  }
+
+  /** Берёт справочники, день и план из сервиса; демо-данные остаются только фолбэком. */
+  loadFromBackend(): void {
     if (this.apiStatus() === 'checking') return;
     this.apiStatus.set('checking');
     this.api.health().subscribe({
       next: (health) => {
         this.apiStatus.set('online');
-        this.showToast(
-          `Backend доступен${health.team ? `: ${health.team}` : ''}. Загружаю план…`,
-          'success',
-        );
-        this.loadLivePlan();
+        this.api.listDays().subscribe({
+          next: (days) => {
+            if (!days.length) {
+              this.showToast(
+                'Backend доступен, но день не загружен — показываю демо-данные',
+                'warning',
+              );
+              return;
+            }
+            const latest = [...days].sort((a, b) => a.date.localeCompare(b.date)).at(-1)!;
+            forkJoin({ reference: this.api.getReference(), day: this.api.getDay(latest.date) }).subscribe({
+              next: ({ reference, day }) => {
+                this.reference.set(reference);
+                this.orders.set(day.orders ?? []);
+                this.extraStaff.set([]);
+                this.showToast(
+                  `Данные из backend: ${health.team ?? 'сервис'} · день ${latest.date}`,
+                  'success',
+                );
+                this.loadLivePlan(latest.date);
+              },
+              error: () => this.showToast('Не удалось загрузить справочники и наряды дня', 'warning'),
+            });
+          },
+          error: () => this.showToast('Backend не отдал список загруженных дней', 'warning'),
+        });
       },
       error: () => {
         this.apiStatus.set('offline');
@@ -442,31 +471,41 @@ export class DispatchStore {
     });
   }
 
-  loadLivePlan(): void {
-    this.api.getPlan(this.plan().date).subscribe({
+  loadLivePlan(date = this.plan().date): void {
+    this.api.getPlan(date).subscribe({
       next: (plan) => {
         this.applyLivePlan(plan);
         this.showToast(`Получен план версии ${plan.plan_version} из API`, 'success');
       },
-      error: () => {
+      error: (error: { status?: number }) => {
+        if (error?.status === 404) {
+          // день загружен, но план ещё не строили — строим сразу
+          this.replan(date);
+          return;
+        }
         this.showToast('План ещё не построен в backend — показываю демо-данные', 'warning');
       },
     });
   }
 
-  replan(): void {
+  replan(date = this.plan().date): void {
     if (this.replanning()) return;
     this.replanning.set(true);
     if (this.apiStatus() === 'online') {
-      this.api.buildPlan(this.plan().date).subscribe({
+      this.api.buildPlan(date).subscribe({
         next: (plan) => {
           this.applyLivePlan(plan);
           this.replanning.set(false);
           this.showToast(`Маршруты пересчитаны: версия ${plan.plan_version}`, 'success');
         },
-        error: () => {
+        error: (error: { status?: number }) => {
           this.replanning.set(false);
-          this.showToast('Не удалось пересчитать план через API', 'warning');
+          this.showToast(
+            error?.status === 409
+              ? 'После событий план пересчитывается только через POST /events'
+              : 'Не удалось пересчитать план через API',
+            'warning',
+          );
         },
       });
       return;

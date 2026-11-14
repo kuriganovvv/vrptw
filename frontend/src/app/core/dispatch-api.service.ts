@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { Health, LoadResult, Plan } from './models';
+import { DayInput, Health, LoadResult, Plan, ReferenceData, UiDay } from './models';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL', {
   providedIn: 'root',
@@ -16,6 +16,18 @@ export class DispatchApiService {
 
   health(): Observable<Health> {
     return this.http.get<Health>(`${this.baseUrl}/health`).pipe(timeout(4000));
+  }
+
+  listDays(): Observable<UiDay[]> {
+    return this.http.get<UiDay[]>(`${this.baseUrl}/ui/days`).pipe(timeout(4000));
+  }
+
+  getDay(date: string): Observable<DayInput> {
+    return this.http.get<DayInput>(`${this.baseUrl}/ui/days/${date}`).pipe(timeout(10_000));
+  }
+
+  getReference(): Observable<ReferenceData> {
+    return this.http.get<ReferenceData>(`${this.baseUrl}/ui/reference`).pipe(timeout(10_000));
   }
 
   getPlan(date: string): Observable<Plan> {

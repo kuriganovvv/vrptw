@@ -239,6 +239,20 @@ export interface Health {
   version?: string;
 }
 
+/** UI-эндпоинт: загруженный в сервис день. */
+export interface UiDay {
+  date: string;
+  now: string;
+}
+
+/** DayInput из контракта: наряды дня и модельное время. */
+export interface DayInput {
+  date: string;
+  now: string;
+  orders: Order[];
+  absent_staff_ids?: string[];
+}
+
 export interface LoadResult {
   status: string;
   counts: Record<string, number>;

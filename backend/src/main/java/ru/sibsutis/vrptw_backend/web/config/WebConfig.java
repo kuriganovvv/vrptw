@@ -9,8 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // Браузер присылает Origin и на same-origin POST, поэтому порт dev-сервера
+        // не должен быть захардкожен: Angular может занять любой свободный порт.
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost", "http://localhost:80", "http://localhost:4200")
+                .allowedOriginPatterns("http://localhost:*", "http://127.0.0.1:*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
     }
 }
