@@ -155,12 +155,16 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
 
     setTimeout(() => this.map?.invalidateSize(), 60);
     this.render(this.store.routes(), this.store.selectedStaffId());
+    roadListeners.add(this.rerender);
   }
 
   ngOnDestroy(): void {
+    roadListeners.delete(this.rerender);
     this.map?.remove();
     this.map = undefined;
   }
+
+  private readonly rerender = () => this.render(this.store.routes(), this.store.selectedStaffId());
 
   private render(routes: RouteView[], selectedId: string | null): void {
     if (!this.map || !this.layer) return;
@@ -179,18 +183,24 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       const dim = selectedId !== null && !isSelected;
       const color = view.meta.color;
 
-      const points: L.LatLngExpression[] = [];
+      const points: L.LatLngTuple[] = [];
+      const coords: MapPoint[] = [];
       let previous: string | null = null;
       for (const stopView of view.stops) {
         const key = `${stopView.lat.toFixed(5)}:${stopView.lon.toFixed(5)}`;
         if (key === previous) continue;
         previous = key;
         points.push([stopView.lat, stopView.lon]);
+        coords.push({ lat: stopView.lat, lon: stopView.lon });
         bounds.extend([stopView.lat, stopView.lon]);
       }
 
       if (points.length > 1) {
-        L.polyline(points, {
+        const geometryKeyValue = geometryKey(coords);
+        const road = roadGeometry.get(geometryKeyValue);
+        const shape: L.LatLngExpression[] = road ?? points;
+
+        L.polyline(shape, {
           color: '#ffffff',
           weight: isSelected ? 11 : 9,
           opacity: dim ? 0.15 : 0.9,
@@ -199,12 +209,13 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
           interactive: false,
         }).addTo(this.layer);
 
-        const line = L.polyline(points, {
+        const line = L.polyline(shape, {
           color,
           weight: isSelected ? 6 : 4,
           opacity: dim ? 0.15 : 1,
           lineCap: 'round',
           lineJoin: 'round',
+          dashArray: road ? undefined : '7 8',
           className: 'route-line',
         }).addTo(this.layer);
         line.on('click', () => this.store.selectStaff(view.staff.staff_id));
@@ -214,6 +225,8 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
             .replace('.', ',')} км`,
           { sticky: true, direction: 'top', opacity: 1 },
         );
+
+        if (!road) requestRoadGeometry(geometryKeyValue, coords);
       }
 
       for (const stopView of view.stops) {
@@ -279,4 +292,50 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       this.fitted = true;
     }
   }
+}
+
+interface MapPoint {
+  lat: number;
+  lon: number;
+}
+
+const OSRM_URL = 'https://router.project-osrm.org/route/v1/driving';
+const roadGeometry = new Map<string, L.LatLngTuple[]>();
+const roadQueue: { key: string; points: MapPoint[] }[] = [];
+const roadListeners = new Set<() => void>();
+let roadBusy = false;
+
+function geometryKey(points: MapPoint[]): string {
+  return points.map((p) => `${p.lat.toFixed(5)},${p.lon.toFixed(5)}`).join('|');
+}
+
+function requestRoadGeometry(key: string, points: MapPoint[]): void {
+  if (roadGeometry.has(key) || roadQueue.some((job) => job.key === key)) return;
+  roadQueue.push({ key, points });
+  pumpRoadQueue();
+}
+
+function pumpRoadQueue(): void {
+  if (roadBusy) return;
+  const job = roadQueue.shift();
+  if (!job) return;
+  if (roadGeometry.has(job.key)) {
+    pumpRoadQueue();
+    return;
+  }
+  roadBusy = true;
+  const coords = job.points.map((p) => `${p.lon.toFixed(5)},${p.lat.toFixed(5)}`).join(';');
+  fetch(`${OSRM_URL}/${coords}?overview=full&geometries=geojson`)
+    .then((response) => (response.ok ? response.json() : Promise.reject(new Error(String(response.status)))))
+    .then((body: { routes?: { geometry?: { coordinates?: [number, number][] } }[] }) => {
+      const line = body.routes?.[0]?.geometry?.coordinates;
+      if (!line?.length) return;
+      roadGeometry.set(job.key, line.map(([lon, lat]) => [lat, lon] as L.LatLngTuple));
+      roadListeners.forEach((listener) => listener());
+    })
+    .catch(() => undefined)
+    .finally(() => {
+      roadBusy = false;
+      window.setTimeout(pumpRoadQueue, 700);
+    });
 }

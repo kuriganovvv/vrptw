@@ -63,6 +63,12 @@ public class PlanningService {
         return solve(date, day.now(), null, Map.of(), false);
     }
 
+    public DayInput currentDay(LocalDate date) {
+        DayInput day = store.findDay(date).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Наряды не загружены: PUT /api/v1/days/" + date));
+        return effectiveDay(day, store.now(date));
+    }
+
     public Plan replan(LocalDate date, OffsetDateTime ts, String eventId, Map<String, List<Stop>> completedPrefix) {
         return solve(date, ts, eventId, completedPrefix, true);
     }
