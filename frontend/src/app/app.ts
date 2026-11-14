@@ -37,6 +37,13 @@ const NAV: NavItem[] = [
     title: 'Сотрудники на смене',
   },
   {
+    path: '/field',
+    label: 'Выезд бригады',
+    short: 'Выезд',
+    icon: 'smartphone',
+    title: 'Мобильный интерфейс бригады',
+  },
+  {
     path: '/analytics',
     label: 'Аналитика',
     short: 'Метрики',

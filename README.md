@@ -80,8 +80,12 @@ npm start                  # http://localhost:4200, /api проксируетс�
 
 Production-сборка frontend: `npm run build`.
 
-## Проверки
+Разделы интерфейса диспетчера: `/dashboard` — карта и сводка, `/orders` — наряды дня,
+`/staff` — сотрудники, `/analytics` — метрики смены. Раздел `/field` — мобильный
+интерфейс бригады: навигация к следующему адресу и отметки о звонке абоненту,
+прибытии и завершении визита.
 
+## Проверки
 ```bash
 cd backend && ./gradlew test
 cd frontend && npm run build
