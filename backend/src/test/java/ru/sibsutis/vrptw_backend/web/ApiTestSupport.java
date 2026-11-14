@@ -26,7 +26,7 @@ final class ApiTestSupport {
         mvc.perform(put("/api/v1/reference").contentType(MediaType.APPLICATION_JSON)
                 .content(resource("fixtures/reference-one-staff.json")))
                 .andExpect(status().isOk());
-        mvc.perform(put("/api/v1/travel-matrix").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put("/api/v1/reference/travel-matrix").contentType(MediaType.APPLICATION_JSON)
                 .content(matrixJson()))
                 .andExpect(status().isOk());
         mvc.perform(put("/api/v1/days/2026-10-26").contentType(MediaType.APPLICATION_JSON)

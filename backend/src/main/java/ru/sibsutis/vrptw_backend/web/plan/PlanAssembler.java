@@ -18,12 +18,13 @@ import ru.sibsutis.vrptw_backend.dto.plan.*;
 public class PlanAssembler {
 
 
-    private static final String TYPE_DEPOT = "DEPOT";
+    private static final String TYPE_DEPOT_START = "DEPOT_START";
+    private static final String TYPE_DEPOT_END = "DEPOT_END";
     private static final String TYPE_VISIT = "VISIT";
     private static final String TYPE_BREAK = "BREAK";
     private static final String STATUS_PLANNED = "PLANNED";
     private static final String REASON_NO_STAFF = "NO_QUALIFIED_STAFF";
-    private static final String REASON_NO_TIME = "NO_SHIFT_CAPACITY";
+    private static final String REASON_NO_TIME = "NO_SHIFT_TIME";
     private static final String ACTION_RESCHEDULE = "RESCHEDULE";
 
     public Plan assemble(DaySolution solution, DayInput day, List<PgpGroup> pgpGroups,
@@ -52,7 +53,7 @@ public class PlanAssembler {
         int seq = 1;
         OffsetDateTime shiftStart = staff.shiftStart(now);
         Equipment remaining = staff.getEquipmentStart();
-        stops.add(new Stop(seq++, TYPE_DEPOT, staff.getServiceCenterId(), null,
+        stops.add(new Stop(seq++, TYPE_DEPOT_START, staff.getServiceCenterId(), null,
                 shiftStart, shiftStart, shiftStart, 0L, 0L, STATUS_PLANNED, dto(remaining), null));
 
         long travelSec = 0;
@@ -63,6 +64,13 @@ public class PlanAssembler {
             if (t == null) {
                 continue;
             }
+            // Перерыв берётся на выезде к визиту, на локации предыдущей остановки,
+            // поэтому он идёт ПЕРЕД визитом и с нулевым пробегом.
+            if (t.breakStart() != null) {
+                stops.add(new Stop(seq++, TYPE_BREAK, t.breakLocationId(), null,
+                        t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
+                        STATUS_PLANNED, dto(remaining), null));
+            }
             remaining = remaining.minus(visit.getOrder().getRequiredEquipment());
             travelSec += t.travelSec();
             distanceM += t.distanceM();
@@ -70,11 +78,6 @@ public class PlanAssembler {
             stops.add(new Stop(seq++, TYPE_VISIT, visit.locationId(), visit.getOrder().getOrderId(),
                     t.arrival(), t.start(), t.end(), t.travelSec(), t.distanceM(),
                     STATUS_PLANNED, dto(remaining), null));
-            if (t.breakStart() != null) {
-                stops.add(new Stop(seq++, TYPE_BREAK, visit.locationId(), null,
-                        t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
-                        STATUS_PLANNED, dto(remaining), null));
-            }
         }
 
         long backSec = 0;
@@ -90,13 +93,13 @@ public class PlanAssembler {
             travelSec += backSec;
             distanceM += backM;
         }
-        stops.add(new Stop(seq++, TYPE_DEPOT, staff.getServiceCenterId(), null,
+        stops.add(new Stop(seq++, TYPE_DEPOT_END, staff.getServiceCenterId(), null,
                 backAt, backAt, backAt, backSec, backM, STATUS_PLANNED, dto(remaining), null));
 
         long shiftSec = Duration.between(shiftStart, staff.shiftEnd(now)).toSeconds();
         double utilization = shiftSec <= 0 ? 0 : (workMin * 60.0 + travelSec) / shiftSec;
         RouteTotals totals = new RouteTotals(visits.size(), travelSec, distanceM, workMin, utilization);
-        return new Route(staff.getStaffId(), staff.getServiceCenterId(), STATUS_PLANNED, null, null, stops, totals);
+        return new Route(staff.getStaffId(), staff.getServiceCenterId(), "ACTIVE", null, null, stops, totals);
     }
 
     private List<UnassignedOrder> unassigned(DaySolution solution) {

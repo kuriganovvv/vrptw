@@ -6,10 +6,10 @@ spring:
 timefold:
   solver:
     termination:
-      spent-limit: 30s  
+      spent-limit: 120s  
 dispatch:
   team: "С-42"          
   version: "0.1.0"
   pgp:
     min-orders: 3       
-    window-minutes: 120
+    window-minutes: 60

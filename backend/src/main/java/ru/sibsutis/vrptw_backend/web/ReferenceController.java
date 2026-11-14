@@ -30,13 +30,13 @@ public class ReferenceController {
         counts.put("staff", size(body.staff()));
         counts.put("access_nodes", size(body.accessNodes()));
         counts.put("work_types", size(body.workTypes()));
-        return new LoadResult("ok", counts);
+        return new LoadResult("loaded", counts);
     }
 
-    @PutMapping(path = "/travel-matrix", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/reference/travel-matrix", consumes = MediaType.APPLICATION_JSON_VALUE)
     public LoadResult putTravelMatrix(@RequestBody TravelMatrix body) {
         store.saveTravelMatrix(body);
-        return new LoadResult("ok", Map.of("points", size(body.points())));
+        return new LoadResult("loaded", Map.of("points", size(body.points())));
     }
 
     private static int size(List<?> list) {

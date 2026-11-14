@@ -19,7 +19,7 @@ public class PgpDetector {
     @Value("${dispatch.pgp.min-orders:3}")
     private int minOrders;
 
-    @Value("${dispatch.pgp.window-minutes:120}")
+    @Value("${dispatch.pgp.window-minutes:60}")
     private long windowMinutes;
 
     public record Result(List<PgpGroup> groups, List<Order> plannedOrders) {
