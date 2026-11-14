@@ -4,28 +4,2602 @@
   "orders": [
     {
       "order_id": "ORD-20261026-0001",
-      "work_type_code": "REPAIR",
+      "work_type_code": "ADD_SERVICE",
       "technology": "PON",
-      "building_id": "B-00412",
-      "address": "ул. Учителей, 18",
-      "lat": 56.8712,
-      "lon": 60.6531,
+      "building_id": "B-00002",
+      "address": "ул. Тестовая, 2",
+      "lat": 56.9140524646877,
+      "lon": 60.57741476055148,
       "building_type": "MKD",
       "requires_height": false,
-      "access_node_id": "AN-0031",
-      "registered_at": "2026-10-26T08:00:00+05:00",
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0002",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "FTTB",
+      "building_id": "B-00041",
+      "address": "ул. Тестовая, 41",
+      "lat": 56.80166996953874,
+      "lon": 60.677368159423885,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0003",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0004",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00047",
+      "address": "ул. Тестовая, 47",
+      "lat": 56.944239106818465,
+      "lon": 60.6138915486457,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0005",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "PON",
+      "building_id": "B-00024",
+      "address": "ул. Тестовая, 24",
+      "lat": 56.8811259598229,
+      "lon": 60.60586969141761,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0006",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00020",
+      "address": "ул. Тестовая, 20",
+      "lat": 56.91987442891316,
+      "lon": 60.676935184687025,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0007",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00014",
+      "address": "ул. Тестовая, 14",
+      "lat": 56.87788828156681,
+      "lon": 60.6606005878952,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0008",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00006",
+      "address": "ул. Тестовая, 6",
+      "lat": 56.84185127122645,
+      "lon": 60.56178792427974,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0009",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00022",
+      "address": "ул. Тестовая, 22",
+      "lat": 56.926267631184245,
+      "lon": 60.684655986179315,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0010",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00004",
+      "address": "ул. Тестовая, 4",
+      "lat": 56.82591834482998,
+      "lon": 60.62609779056888,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
       "slot": {
         "start": "2026-10-26T09:00:00+05:00",
         "end": "2026-10-26T11:00:00+05:00"
       },
-      "latest_start": "2026-10-26T11:00:00+05:00",
-      "deadline": "2026-10-26T18:40:00+05:00",
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
       "required_equipment": {
-        "ONT": 1,
-        "ROUTER": 0,
-        "STB": 0
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0011",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00044",
+      "address": "ул. Тестовая, 44",
+      "lat": 56.90172974576899,
+      "lon": 60.689750952568474,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
       },
       "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0012",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "FTTB",
+      "building_id": "B-00028",
+      "address": "ул. Тестовая, 28",
+      "lat": 56.87646879729212,
+      "lon": 60.63263645522688,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0013",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00013",
+      "address": "ул. Тестовая, 13",
+      "lat": 56.9115398058904,
+      "lon": 60.69822666196691,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0014",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00016",
+      "address": "ул. Тестовая, 16",
+      "lat": 56.81829136116703,
+      "lon": 60.64060250390465,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0015",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00007",
+      "address": "ул. Тестовая, 7",
+      "lat": 56.903369527406966,
+      "lon": 60.6490199832551,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0016",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00027",
+      "address": "ул. Тестовая, 27",
+      "lat": 56.8856182117866,
+      "lon": 60.563140915917955,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0017",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00042",
+      "address": "ул. Тестовая, 42",
+      "lat": 56.89210363926018,
+      "lon": 60.55342712456869,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0018",
+      "work_type_code": "DEGRADATION",
+      "technology": "PON",
+      "building_id": "B-00021",
+      "address": "ул. Тестовая, 21",
+      "lat": 56.822329641954546,
+      "lon": 60.58970398991425,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0019",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00042",
+      "address": "ул. Тестовая, 42",
+      "lat": 56.89210363926018,
+      "lon": 60.55342712456869,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0020",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00015",
+      "address": "ул. Тестовая, 15",
+      "lat": 56.81707305031951,
+      "lon": 60.587681666275934,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0021",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00042",
+      "address": "ул. Тестовая, 42",
+      "lat": 56.89210363926018,
+      "lon": 60.55342712456869,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0022",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0023",
+      "work_type_code": "DEGRADATION",
+      "technology": "PON",
+      "building_id": "B-00036",
+      "address": "ул. Тестовая, 36",
+      "lat": 56.930892572262735,
+      "lon": 60.55993431721763,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0024",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "PON",
+      "building_id": "B-00030",
+      "address": "ул. Тестовая, 30",
+      "lat": 56.928477923180516,
+      "lon": 60.67961768084635,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0025",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00019",
+      "address": "ул. Тестовая, 19",
+      "lat": 56.93470321053016,
+      "lon": 60.55952907671966,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0026",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "FTTB",
+      "building_id": "B-00050",
+      "address": "ул. Тестовая, 50",
+      "lat": 56.88760707771968,
+      "lon": 60.59350634787164,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0027",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "FTTB",
+      "building_id": "B-00045",
+      "address": "ул. Тестовая, 45",
+      "lat": 56.921473808573346,
+      "lon": 60.65431811106921,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0028",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00003",
+      "address": "ул. Тестовая, 3",
+      "lat": 56.90352541906091,
+      "lon": 60.62412025838838,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0029",
+      "work_type_code": "DEGRADATION",
+      "technology": "PON",
+      "building_id": "B-00048",
+      "address": "ул. Тестовая, 48",
+      "lat": 56.937452696810986,
+      "lon": 60.579237318746756,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0030",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00016",
+      "address": "ул. Тестовая, 16",
+      "lat": 56.81829136116703,
+      "lon": 60.64060250390465,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0031",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00021",
+      "address": "ул. Тестовая, 21",
+      "lat": 56.822329641954546,
+      "lon": 60.58970398991425,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0032",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "PON",
+      "building_id": "B-00008",
+      "address": "ул. Тестовая, 8",
+      "lat": 56.804114782658,
+      "lon": 60.66446450156376,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0033",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00032",
+      "address": "ул. Тестовая, 32",
+      "lat": 56.845913032396204,
+      "lon": 60.55556866059253,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0034",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0035",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00006",
+      "address": "ул. Тестовая, 6",
+      "lat": 56.84185127122645,
+      "lon": 60.56178792427974,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0036",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0037",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00031",
+      "address": "ул. Тестовая, 31",
+      "lat": 56.81301873933929,
+      "lon": 60.60918274449508,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0038",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "FTTB",
+      "building_id": "B-00025",
+      "address": "ул. Тестовая, 25",
+      "lat": 56.81413933382227,
+      "lon": 60.6746495836863,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0039",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00046",
+      "address": "ул. Тестовая, 46",
+      "lat": 56.85984136091794,
+      "lon": 60.559920559076325,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0040",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00008",
+      "address": "ул. Тестовая, 8",
+      "lat": 56.804114782658,
+      "lon": 60.66446450156376,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0041",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00042",
+      "address": "ул. Тестовая, 42",
+      "lat": 56.89210363926018,
+      "lon": 60.55342712456869,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0042",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00010",
+      "address": "ул. Тестовая, 10",
+      "lat": 56.88949284123905,
+      "lon": 60.56818799883781,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0043",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00044",
+      "address": "ул. Тестовая, 44",
+      "lat": 56.90172974576899,
+      "lon": 60.689750952568474,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0044",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00002",
+      "address": "ул. Тестовая, 2",
+      "lat": 56.9140524646877,
+      "lon": 60.57741476055148,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0045",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00016",
+      "address": "ул. Тестовая, 16",
+      "lat": 56.81829136116703,
+      "lon": 60.64060250390465,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0046",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00038",
+      "address": "ул. Тестовая, 38",
+      "lat": 56.92565831239861,
+      "lon": 60.64689945913023,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0047",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "FTTB",
+      "building_id": "B-00045",
+      "address": "ул. Тестовая, 45",
+      "lat": 56.921473808573346,
+      "lon": 60.65431811106921,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0048",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00008",
+      "address": "ул. Тестовая, 8",
+      "lat": 56.804114782658,
+      "lon": 60.66446450156376,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0049",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00027",
+      "address": "ул. Тестовая, 27",
+      "lat": 56.8856182117866,
+      "lon": 60.563140915917955,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0050",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00013",
+      "address": "ул. Тестовая, 13",
+      "lat": 56.9115398058904,
+      "lon": 60.69822666196691,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0051",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00006",
+      "address": "ул. Тестовая, 6",
+      "lat": 56.84185127122645,
+      "lon": 60.56178792427974,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0052",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "PON",
+      "building_id": "B-00027",
+      "address": "ул. Тестовая, 27",
+      "lat": 56.8856182117866,
+      "lon": 60.563140915917955,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0053",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "PON",
+      "building_id": "B-00050",
+      "address": "ул. Тестовая, 50",
+      "lat": 56.88760707771968,
+      "lon": 60.59350634787164,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0054",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0055",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "FTTB",
+      "building_id": "B-00046",
+      "address": "ул. Тестовая, 46",
+      "lat": 56.85984136091794,
+      "lon": 60.559920559076325,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0056",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00005",
+      "address": "ул. Тестовая, 5",
+      "lat": 56.862894852616535,
+      "lon": 60.59027117794472,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0057",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00029",
+      "address": "ул. Тестовая, 29",
+      "lat": 56.80590077207774,
+      "lon": 60.58675286502191,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0058",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "FTTB",
+      "building_id": "B-00043",
+      "address": "ул. Тестовая, 43",
+      "lat": 56.88530312551358,
+      "lon": 60.674394397589865,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0059",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "FTTB",
+      "building_id": "B-00042",
+      "address": "ул. Тестовая, 42",
+      "lat": 56.89210363926018,
+      "lon": 60.55342712456869,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0060",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00014",
+      "address": "ул. Тестовая, 14",
+      "lat": 56.87788828156681,
+      "lon": 60.6606005878952,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0061",
+      "work_type_code": "DEGRADATION",
+      "technology": "PON",
+      "building_id": "B-00047",
+      "address": "ул. Тестовая, 47",
+      "lat": 56.944239106818465,
+      "lon": 60.6138915486457,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0062",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00016",
+      "address": "ул. Тестовая, 16",
+      "lat": 56.81829136116703,
+      "lon": 60.64060250390465,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0063",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00010",
+      "address": "ул. Тестовая, 10",
+      "lat": 56.88949284123905,
+      "lon": 60.56818799883781,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0064",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00015",
+      "address": "ул. Тестовая, 15",
+      "lat": 56.81707305031951,
+      "lon": 60.587681666275934,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0065",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "FTTB",
+      "building_id": "B-00048",
+      "address": "ул. Тестовая, 48",
+      "lat": 56.937452696810986,
+      "lon": 60.579237318746756,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0066",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00049",
+      "address": "ул. Тестовая, 49",
+      "lat": 56.93477690603537,
+      "lon": 60.642498957287266,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0067",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00013",
+      "address": "ул. Тестовая, 13",
+      "lat": 56.9115398058904,
+      "lon": 60.69822666196691,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0068",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00016",
+      "address": "ул. Тестовая, 16",
+      "lat": 56.81829136116703,
+      "lon": 60.64060250390465,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T15:00:00+05:00",
+        "end": "2026-10-26T17:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T15:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0069",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00010",
+      "address": "ул. Тестовая, 10",
+      "lat": 56.88949284123905,
+      "lon": 60.56818799883781,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0070",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "PON",
+      "building_id": "B-00030",
+      "address": "ул. Тестовая, 30",
+      "lat": 56.928477923180516,
+      "lon": 60.67961768084635,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0071",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "PON",
+      "building_id": "B-00040",
+      "address": "ул. Тестовая, 40",
+      "lat": 56.929328899001014,
+      "lon": 60.66914802852856,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0072",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00034",
+      "address": "ул. Тестовая, 34",
+      "lat": 56.81749920513729,
+      "lon": 60.566679151548016,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0073",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00005",
+      "address": "ул. Тестовая, 5",
+      "lat": 56.862894852616535,
+      "lon": 60.59027117794472,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0074",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00009",
+      "address": "ул. Тестовая, 9",
+      "lat": 56.879516329984114,
+      "lon": 60.58340848152005,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0075",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00034",
+      "address": "ул. Тестовая, 34",
+      "lat": 56.81749920513729,
+      "lon": 60.566679151548016,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0076",
+      "work_type_code": "ADD_SERVICE",
+      "technology": "PON",
+      "building_id": "B-00029",
+      "address": "ул. Тестовая, 29",
+      "lat": 56.80590077207774,
+      "lon": 60.58675286502191,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0077",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00017",
+      "address": "ул. Тестовая, 17",
+      "lat": 56.89483901992789,
+      "lon": 60.598515948522014,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0078",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00013",
+      "address": "ул. Тестовая, 13",
+      "lat": 56.9115398058904,
+      "lon": 60.69822666196691,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0079",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "PON",
+      "building_id": "B-00022",
+      "address": "ул. Тестовая, 22",
+      "lat": 56.926267631184245,
+      "lon": 60.684655986179315,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0080",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00018",
+      "address": "ул. Тестовая, 18",
+      "lat": 56.92252355365408,
+      "lon": 60.587603496546805,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0081",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00010",
+      "address": "ул. Тестовая, 10",
+      "lat": 56.88949284123905,
+      "lon": 60.56818799883781,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0082",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00020",
+      "address": "ул. Тестовая, 20",
+      "lat": 56.91987442891316,
+      "lon": 60.676935184687025,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0083",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0084",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00037",
+      "address": "ул. Тестовая, 37",
+      "lat": 56.87006258693955,
+      "lon": 60.5596441070627,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0085",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00006",
+      "address": "ул. Тестовая, 6",
+      "lat": 56.84185127122645,
+      "lon": 60.56178792427974,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0086",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00002",
+      "address": "ул. Тестовая, 2",
+      "lat": 56.9140524646877,
+      "lon": 60.57741476055148,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T10:00:00+05:00",
+        "end": "2026-10-26T12:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T10:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0087",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00033",
+      "address": "ул. Тестовая, 33",
+      "lat": 56.892914146464626,
+      "lon": 60.685947234945694,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0088",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00002",
+      "address": "ул. Тестовая, 2",
+      "lat": 56.9140524646877,
+      "lon": 60.57741476055148,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0089",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00022",
+      "address": "ул. Тестовая, 22",
+      "lat": 56.926267631184245,
+      "lon": 60.684655986179315,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0090",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00015",
+      "address": "ул. Тестовая, 15",
+      "lat": 56.81707305031951,
+      "lon": 60.587681666275934,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T09:00:00+05:00",
+        "end": "2026-10-26T11:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T09:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0091",
+      "work_type_code": "DEGRADATION",
+      "technology": "FTTB",
+      "building_id": "B-00046",
+      "address": "ул. Тестовая, 46",
+      "lat": 56.85984136091794,
+      "lon": 60.559920559076325,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T18:00:00+05:00",
+        "end": "2026-10-26T20:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T18:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0092",
+      "work_type_code": "REPAIR",
+      "technology": "FTTB",
+      "building_id": "B-00020",
+      "address": "ул. Тестовая, 20",
+      "lat": 56.91987442891316,
+      "lon": 60.676935184687025,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0093",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00012",
+      "address": "ул. Тестовая, 12",
+      "lat": 56.861766982420036,
+      "lon": 60.61092504046911,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T17:00:00+05:00",
+        "end": "2026-10-26T19:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T17:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0094",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "PON",
+      "building_id": "B-00027",
+      "address": "ул. Тестовая, 27",
+      "lat": 56.8856182117866,
+      "lon": 60.563140915917955,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0095",
+      "work_type_code": "INST_PON_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00048",
+      "address": "ул. Тестовая, 48",
+      "lat": 56.937452696810986,
+      "lon": 60.579237318746756,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0005",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0096",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00007",
+      "address": "ул. Тестовая, 7",
+      "lat": 56.903369527406966,
+      "lon": 60.6490199832551,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0001",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T11:00:00+05:00",
+        "end": "2026-10-26T13:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T11:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0097",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00020",
+      "address": "ул. Тестовая, 20",
+      "lat": 56.91987442891316,
+      "lon": 60.676935184687025,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T16:00:00+05:00",
+        "end": "2026-10-26T18:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T16:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0098",
+      "work_type_code": "INST_PRIVATE_VLS",
+      "technology": "PON",
+      "building_id": "B-00040",
+      "address": "ул. Тестовая, 40",
+      "lat": 56.929328899001014,
+      "lon": 60.66914802852856,
+      "building_type": "PRIVATE",
+      "requires_height": true,
+      "access_node_id": "AN-0004",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T13:00:00+05:00",
+        "end": "2026-10-26T15:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T13:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0099",
+      "work_type_code": "REPAIR",
+      "technology": "PON",
+      "building_id": "B-00013",
+      "address": "ул. Тестовая, 13",
+      "lat": 56.9115398058904,
+      "lon": 60.69822666196691,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0002",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T12:00:00+05:00",
+        "end": "2026-10-26T14:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T12:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 0,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": false,
+      "previous_order_id": null
+    },
+    {
+      "order_id": "ORD-20261026-0100",
+      "work_type_code": "INST_FTTB_MKD",
+      "technology": "FTTB",
+      "building_id": "B-00024",
+      "address": "ул. Тестовая, 24",
+      "lat": 56.8811259598229,
+      "lon": 60.60586969141761,
+      "building_type": "MKD",
+      "requires_height": false,
+      "access_node_id": "AN-0003",
+      "registered_at": "2026-10-26T07:00:00+05:00",
+      "slot": {
+        "start": "2026-10-26T14:00:00+05:00",
+        "end": "2026-10-26T16:00:00+05:00"
+      },
+      "latest_start": "2026-10-26T14:00:00+05:00",
+      "deadline": "2026-10-27T12:00:00+05:00",
+      "required_equipment": {
+        "ONT": 1,
+        "ROUTER": 1,
+        "STB": 1
+      },
+      "is_repeat": true,
       "previous_order_id": null
     }
   ],
