@@ -94,8 +94,9 @@ public class PlanningService {
                     .toList();
             DayInput planned = new DayInput(date, now, plannedOrders, effective.absentStaffIds());
 
-            DaySolution solved = (isReplan ? replanFactory : solverFactory).buildSolver()
-                    .solve(factory.build(ref, planned, matrix));
+            DaySolution problem = factory.build(ref, planned, matrix);
+            applyCompletedPrefixFloor(problem, prefix, now);
+            DaySolution solved = (isReplan ? replanFactory : solverFactory).buildSolver().solve(problem);
             long ms = (System.nanoTime() - t0) / 1_000_000;
 
             int version = isReplan ? store.bumpVersion(date) : 1;
@@ -113,6 +114,24 @@ public class PlanningService {
             return merged;
         } finally {
             lock.unlock();
+        }
+    }
+
+    /**
+     * Остаток маршрута не может начаться раньше конца уже начатого визита
+     * (VISIT_DELAYED / ORDER_TRANSFERRED сдвигают end вперёд), иначе H6 ломается.
+     */
+    private void applyCompletedPrefixFloor(DaySolution problem, Map<String, List<Stop>> prefix,
+                                           OffsetDateTime now) {
+        Map<String, OffsetDateTime> floors = new HashMap<>();
+        prefix.forEach((staffId, stops) -> {
+            OffsetDateTime last = null;
+            for (Stop s : stops) if (s.end() != null && (last == null || s.end().isAfter(last))) last = s.end();
+            if (last != null && last.isAfter(now)) floors.put(staffId, last);
+        });
+        for (Staff staff : problem.getStaff()) {
+            OffsetDateTime floor = floors.get(staff.getStaffId());
+            if (floor != null) staff.setAvailableFrom(floor);
         }
     }
 

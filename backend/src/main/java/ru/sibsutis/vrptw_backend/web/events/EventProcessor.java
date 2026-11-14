@@ -21,6 +21,7 @@ public class EventProcessor {
 
     private static final Set<String> TYPES = Set.of("NEW_ORDER", "ORDER_CANCELLED", "VISIT_DELAYED",
             "ORDER_TRANSFERRED", "STAFF_UNAVAILABLE", "TIME_TICK");
+    private static final Set<String> TRANSFER_TARGETS = Set.of("STATION_EQUIPMENT", "TRUNK_CABLE");
 
     private final InMemoryDataStore store;
     private final PlanningService planning;
@@ -45,6 +46,7 @@ public class EventProcessor {
             if (ts.isBefore(last)) throw new ResponseStatusException(HttpStatus.CONFLICT, "События должны идти в порядке неубывания timestamp");
         });
         validateRefs(date, type, e);
+        validateStartedVisit(date, type, e, ts);
 
         boolean fresh = store.addEventIfAbsent(date, id, e);
         if (!fresh) {
@@ -52,8 +54,9 @@ public class EventProcessor {
                     (System.nanoTime() - t0) / 1_000_000, List.of(), List.of(), "Duplicate event; ignored");
         }
 
-        Map<String, List<Stop>> prefix = completedPrefix(date, ts);
         apply(date, type, e, ts);
+        // префикс строится по предыдущему плану, но с учётом end из VISIT_DELAYED/ORDER_TRANSFERRED
+        Map<String, List<Stop>> prefix = completedPrefix(date, ts);
         store.setNow(date, ts);
         Plan plan = planning.replan(date, ts, id, prefix);
         return new EventResult(id, true, false, plan.planVersion(), ts,
@@ -68,6 +71,43 @@ public class EventProcessor {
         if (staffId != null && !knownStaff(staffId))
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Неизвестный сотрудник: " + staffId);
     }
+    /**
+     * VISIT_DELAYED и ORDER_TRANSFERRED приходят только по уже начатому визиту
+     * (спека: `start ≤ timestamp`), иначе событие противоречит состоянию плана — 422.
+     */
+    private void validateStartedVisit(LocalDate date, String type, Map<String, Object> e, OffsetDateTime ts) {
+        if (!"VISIT_DELAYED".equals(type) && !"ORDER_TRANSFERRED".equals(type)) return;
+        String orderId = text(e, "order_id");
+        String staffId = text(e, "staff_id");
+        Stop stop = null;
+        String plannedStaff = null;
+        Plan plan = store.findPlan(date).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.CONFLICT, "План ещё не построен"));
+        for (var route : plan.routes()) {
+            for (Stop s : route.stops()) {
+                if ("VISIT".equals(s.type()) && orderId.equals(s.orderId())) {
+                    stop = s;
+                    plannedStaff = route.staffId();
+                }
+            }
+        }
+        if (stop == null) throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                "Наряд не в маршруте: " + orderId);
+        if (stop.start() == null || !stop.start().isBefore(ts)) throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                "Визит ещё не начат: " + orderId);
+        if (!staffId.equals(plannedStaff)) throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                "Сотрудник " + staffId + " не исполняет наряд " + orderId);
+
+        OffsetDateTime newEnd = OffsetDateTime.parse(text(e,
+                "ORDER_TRANSFERRED".equals(type) ? "actual_end" : "expected_end"));
+        if (!newEnd.isAfter(stop.start())) throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                "Конец визита должен быть позже его начала");
+        if ("VISIT_DELAYED".equals(type) && !newEnd.isAfter(stop.end())) throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                "expected_end должен быть позже планового окончания");
+        if ("ORDER_TRANSFERRED".equals(type) && !TRANSFER_TARGETS.contains(text(e, "transferred_to")))
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Неизвестное transferred_to: " + e.get("transferred_to"));
+    }
+
     private boolean knownOrder(LocalDate d, String id) {
         return store.findDay(d).map(day -> day.orders() != null && day.orders().stream().anyMatch(o -> o.orderId().equals(id))).orElse(false)
                 || store.extraOrders(d).stream().anyMatch(o -> o.orderId().equals(id));
@@ -80,7 +120,11 @@ public class EventProcessor {
         switch (type) {
             case "ORDER_CANCELLED" -> { store.removeOrder(date, (String) e.get("order_id"));
                 store.addCancelled(date, new CancelledOrder((String) e.get("order_id"), ts, (String) e.get("event_id"))); }
-            case "ORDER_TRANSFERRED" -> store.removeOrder(date, (String) e.get("order_id"));
+            // Начатый визит остаётся в плане (заморозка H10), меняется только его end (H5).
+            case "ORDER_TRANSFERRED" -> store.setVisitEnd(date, (String) e.get("order_id"),
+                    OffsetDateTime.parse(text(e, "actual_end")));
+            case "VISIT_DELAYED" -> store.setVisitEnd(date, (String) e.get("order_id"),
+                    OffsetDateTime.parse(text(e, "expected_end")));
             case "STAFF_UNAVAILABLE" -> store.markUnavailable(date, (String) e.get("staff_id"));
             case "NEW_ORDER" -> {
                 Object raw = e.get("order");
@@ -98,7 +142,10 @@ public class EventProcessor {
                 List<Stop> pre = new ArrayList<>();
                 for (Stop s : r.stops()) {
                     if ("DEPOT_START".equals(s.type())) { pre.add(s); continue; }
-                    if ("VISIT".equals(s.type()) && s.start() != null && s.start().isBefore(ts)) { pre.add(s); continue; }
+                    if ("VISIT".equals(s.type()) && s.start() != null && s.start().isBefore(ts)) {
+                        pre.add(withAdjustedEnd(date, s));
+                        continue;
+                    }
                     if ("BREAK".equals(s.type()) && s.end() != null && s.end().isBefore(ts)) { pre.add(s); continue; }
                     break;
                 }
@@ -106,6 +153,14 @@ public class EventProcessor {
             }
         });
         return prefix;
+    }
+
+    /** H5: end уже начатого визита берётся из VISIT_DELAYED / ORDER_TRANSFERRED. */
+    private Stop withAdjustedEnd(LocalDate date, Stop s) {
+        return store.visitEnd(date, s.orderId())
+                .map(end -> new Stop(s.seq(), s.type(), s.locationId(), s.orderId(), s.arrival(), s.start(), end,
+                        s.travelSec(), s.distanceM(), s.status(), s.equipmentAfter(), s.explanation()))
+                .orElse(s);
     }
 
     private List<String> changedStaff(Map<String, List<Stop>> prefix, Plan plan) {

@@ -28,6 +28,8 @@ public class Staff {
     private Equipment equipmentCapacity = Equipment.ZERO;
     private double experienceYears;
     private TravelMatrix travelMatrix;
+    /** Начало доступности после уже начатого визита (VISIT_DELAYED / ORDER_TRANSFERRED). */
+    private OffsetDateTime availableFrom;
 
     @PlanningListVariable(allowsUnassignedValues = true)
     private List<Visit> visits = new ArrayList<>();
@@ -54,6 +56,20 @@ public class Staff {
 
     public OffsetDateTime shiftEnd(OffsetDateTime day) {
         return shift.endAt(day);
+    }
+
+    /** Сотрудник не может начать следующую остановку раньше конца уже начатого визита. */
+    public OffsetDateTime startOfAvailability(OffsetDateTime day) {
+        OffsetDateTime shiftStart = shiftStart(day);
+        return availableFrom != null && availableFrom.isAfter(shiftStart) ? availableFrom : shiftStart;
+    }
+
+    public OffsetDateTime getAvailableFrom() {
+        return availableFrom;
+    }
+
+    public void setAvailableFrom(OffsetDateTime availableFrom) {
+        this.availableFrom = availableFrom;
     }
 
     public boolean hasProfile(Profile profile) {
