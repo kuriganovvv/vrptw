@@ -1,0 +1,28 @@
+{
+  "matrix_id": "mock-v1",
+  "points": [
+    "SC-01",
+    "B-00412"
+  ],
+  "durations_sec": [
+    [
+      0,
+      1110
+    ],
+    [
+      1048,
+      0
+    ]
+  ],
+  "distances_m": [
+    [
+      0,
+      4187
+    ],
+    [
+      4085,
+      0
+    ]
+  ],
+  "hourly_factors": []
+}
