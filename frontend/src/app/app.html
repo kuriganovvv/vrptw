@@ -1,0 +1,185 @@
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside
+    class="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-slate-200 bg-white md:flex"
+  >
+    <div class="flex h-16 items-center gap-2.5 border-b border-slate-100 px-5">
+      <div
+        class="grid size-9 place-items-center rounded-xl bg-brand text-lg font-bold text-white"
+        aria-hidden="true"
+      >
+        Р
+      </div>
+      <div class="leading-tight">
+        <div class="text-[15px] font-semibold text-brand">Ростелеком</div>
+        <div class="text-[11px] text-slate-500">Field Service</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 space-y-1 p-3" aria-label="Основное меню">
+      @for (item of nav; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-brand-50 text-brand font-medium"
+          class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50"
+        >
+          <app-icon [name]="item.icon" class="size-4" />
+          {{ item.label }}
+          @if (badgeFor(item); as badge) {
+            <span
+              class="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600"
+              >{{ badge }}</span
+            >
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="m-3 flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+      <div
+        class="grid size-9 place-items-center rounded-full bg-brand-100 text-sm font-semibold text-brand"
+      >
+        МП
+      </div>
+      <div class="min-w-0 leading-tight">
+        <div class="truncate text-sm font-medium">Мария Павлова</div>
+        <div class="text-xs text-slate-500">Диспетчер смены</div>
+      </div>
+    </div>
+
+    <div class="px-4 pb-4">
+      <button
+        type="button"
+        (click)="store.checkApi()"
+        class="flex w-full items-center gap-2 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[11px] text-slate-500 transition-colors hover:bg-slate-50"
+        [title]="
+          store.apiStatus() === 'online'
+            ? 'Backend доступен на localhost:8080'
+            : 'Проверить подключение к backend'
+        "
+      >
+        <span
+          class="size-2 rounded-full"
+          [class.bg-emerald-500]="store.apiStatus() === 'online'"
+          [class.bg-amber-400]="store.apiStatus() === 'demo'"
+          [class.bg-slate-300]="store.apiStatus() === 'checking'"
+          [class.bg-red-400]="store.apiStatus() === 'offline'"
+        ></span>
+        @switch (store.apiStatus()) {
+          @case ('online') {
+            API подключён
+          }
+          @case ('checking') {
+            Проверка API…
+          }
+          @case ('offline') {
+            API недоступен
+          }
+          @default {
+            Демо-данные
+          }
+        }
+      </button>
+    </div>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <!-- Top bar -->
+    <header
+      class="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-200 bg-white px-4 md:px-6"
+    >
+      <div class="grid size-9 shrink-0 place-items-center rounded-xl bg-brand text-base font-bold text-white md:hidden">
+        Р
+      </div>
+      <div class="min-w-0">
+        <h1 class="truncate text-base font-semibold md:text-lg">{{ current().title }}</h1>
+      </div>
+
+      <div class="ml-2 hidden items-center gap-2 sm:flex">
+        <span
+          class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1.5 text-sm text-slate-600"
+        >
+          <app-icon name="map-pin" class="size-3.5 text-brand" />
+          Екатеринбург
+        </span>
+        <span
+          class="hidden items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1.5 text-sm text-slate-600 lg:inline-flex"
+        >
+          <app-icon name="calendar" class="size-3.5 text-brand" />
+          {{ dateLabel() }}
+        </span>
+      </div>
+
+      <div class="ml-auto flex items-center gap-3">
+        <span class="hidden text-xs text-slate-500 lg:inline">{{ planStamp() }}</span>
+        <button
+          type="button"
+          (click)="replan()"
+          [disabled]="store.replanning()"
+          class="inline-flex items-center gap-2 rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-70 md:px-4"
+        >
+          <app-icon
+            name="refresh-cw"
+            class="size-4"
+            [class.spin]="store.replanning()"
+          />
+          <span class="hidden sm:inline">{{
+            store.replanning() ? 'Пересчитываем…' : 'Перепланировать'
+          }}</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 pb-24 md:p-6 md:pb-6">
+      <router-outlet />
+    </main>
+  </div>
+</div>
+
+<!-- Mobile navigation -->
+<nav
+  class="fixed inset-x-0 bottom-0 z-30 flex border-t border-slate-200 bg-white/95 px-2 py-1.5 backdrop-blur md:hidden"
+  aria-label="Мобильное меню"
+>
+  @for (item of nav; track item.path) {
+    <a
+      [routerLink]="item.path"
+      routerLinkActive="text-brand"
+      class="flex flex-1 flex-col items-center gap-1 rounded-lg px-1 py-1.5 text-[11px] text-slate-500"
+    >
+      <app-icon [name]="item.icon" class="size-5" />
+      {{ item.short }}
+    </a>
+  }
+</nav>
+
+<!-- Toast -->
+@if (store.toast(); as toast) {
+  <div
+    class="toast-in fixed bottom-20 right-4 z-50 flex max-w-sm items-center gap-2 rounded-xl px-4 py-3 text-sm shadow-xl md:bottom-5 md:right-5"
+    [class.bg-slate-900]="toast.tone !== 'warning'"
+    [class.text-white]="toast.tone !== 'warning'"
+    [class.bg-amber-50]="toast.tone === 'warning'"
+    [class.text-amber-900]="toast.tone === 'warning'"
+    [class.border]="toast.tone === 'warning'"
+    [class.border-amber-200]="toast.tone === 'warning'"
+    role="status"
+    aria-live="polite"
+  >
+    <app-icon
+      [name]="toast.tone === 'warning' ? 'triangle-alert' : 'check-circle-2'"
+      class="size-4 shrink-0"
+      [class.text-amber-500]="toast.tone === 'warning'"
+      [class.text-emerald-400]="toast.tone !== 'warning'"
+    />
+    <span class="min-w-0">{{ toast.text }}</span>
+    <button
+      type="button"
+      (click)="store.dismissToast()"
+      class="ml-1 rounded p-0.5 opacity-60 transition-opacity hover:opacity-100"
+      aria-label="Закрыть уведомление"
+    >
+      <app-icon name="x" class="size-3.5" />
+    </button>
+  </div>
+}
