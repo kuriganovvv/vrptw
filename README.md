@@ -33,33 +33,6 @@ curl http://localhost:8080/api/v1/health
 docker compose down
 ```
 
-## Загрузка данных
-
-По контракту данные загружаются через API. Команды выполняются из корня репозитория
-(Linux/macOS или Git Bash; в PowerShell используйте `curl.exe`):
-
-```bash
-# Справочники
-curl -X PUT http://localhost:8080/api/v1/reference \
-     -H 'Content-Type: application/json' \
-     --data-binary @data/reference.json
-
-# Матрица времени в пути
-curl -X PUT http://localhost:8080/api/v1/reference/travel-matrix \
-     -H 'Content-Type: application/json' \
-     --data-binary @data/travel_matrix.json
-
-# Наряды дня
-curl -X PUT http://localhost:8080/api/v1/days/2026-10-26 \
-     -H 'Content-Type: application/json' \
-     --data-binary @data/day_2026-10-26.json
-
-# Построение плана
-curl -X POST http://localhost:8080/api/v1/days/2026-10-26/plan
-```
-
-После загрузки дня интерфейс на <http://localhost> возьмёт справочники, наряды
-и план из сервиса. Пока данные не загружены, интерфейс показывает демо-данные.
 
 ## Локальный запуск
 
