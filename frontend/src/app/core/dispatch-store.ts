@@ -28,7 +28,7 @@ import {
 } from './models';
 import { forkJoin } from 'rxjs';
 import { DispatchApiService } from './dispatch-api.service';
-import { DEMO_NOW, DEMO_ORDERS, DEMO_PLAN, DEMO_REFERENCE, DEMO_STAFF_META } from './demo-data';
+import { DEMO_ORDERS, DEMO_PLAN, DEMO_REFERENCE, DEMO_STAFF_META } from './demo-data';
 import { fmtKm, fmtTime, fmtTimeRange, minutesOfDay, toModelIso } from './time';
 
 const PALETTE = ['#7C3AED', '#0EA5E9', '#F97316', '#10B981', '#8B5CF6', '#EC4899', '#14B8A6'];
@@ -78,6 +78,10 @@ export class DispatchStore {
   readonly days = signal<UiDay[]>([]);
   /** День, который сейчас показывает интерфейс. */
   readonly currentDate = signal<string>('');
+  /** Список дней уже запрошен (в том числе пустой ответ). */
+  readonly daysLoaded = signal(false);
+  /** Идёт переключение рабочего дня. */
+  readonly dayLoading = signal(false);
   readonly selectedStaffId = signal<string | null>('ST-001');
   readonly search = signal('');
   readonly problemTab = signal<ProblemTab>('risk');
@@ -91,6 +95,40 @@ export class DispatchStore {
 
   readonly now = computed(() => this.plan().as_of);
   readonly nowMinutes = computed(() => minutesOfDay(this.now()));
+
+  /**
+   * Состояние данных для мобильного сотрудника. Демо-данные здесь не показываем:
+   * пока сервис не отдал день и план, интерфейс остаётся в загрузке или ошибке.
+   */
+  readonly employeeLoading = computed(() => {
+    const status = this.apiStatus();
+    if (status === 'offline') return false;
+    if (status !== 'online') return true;
+    if (!this.daysLoaded()) return true;
+    // Первый день уже найден, но его наряды и справочники ещё грузятся.
+    return this.dayLoading() && !this.currentDate();
+  });
+
+  readonly employeeError = computed<string | null>(() => {
+    if (this.apiStatus() === 'offline') {
+      return 'Сервис планирования недоступен. Проверьте, что backend запущен на localhost:8080.';
+    }
+    if (
+      this.apiStatus() === 'online' &&
+      this.daysLoaded() &&
+      !this.dayLoading() &&
+      !this.currentDate()
+    ) {
+      return 'В сервисе нет загруженных дней или для них ещё не построен план.';
+    }
+    return null;
+  });
+
+  /** Маршрут конкретного сотрудника. Без подмены чужой бригадой. */
+  routeFor(staffId: string | null | undefined): RouteView | null {
+    if (!staffId) return null;
+    return this.routes().find((route) => route.staff.staff_id === staffId) ?? null;
+  }
 
   readonly staffById = computed(() => {
     const map = new Map<string, Staff>();
@@ -239,21 +277,11 @@ export class DispatchStore {
 
   readonly activeRoutes = computed(() => this.routes().filter((r) => r.visits > 0));
 
-  /** Бригада, выбранная в мобильном интерфейсе (с фолбэком на первую активную). */
-  readonly fieldRoute = computed<RouteView | null>(() => {
-    const routes = this.routes();
-    const id = this.fieldStaffId();
-    return (
-      routes.find((r) => r.staff.staff_id === id) ??
-      routes.find((r) => r.visits > 0) ??
-      routes[0] ??
-      null
-    );
-  });
+  /** Бригада, выбранная в диспетчерском разделе «Выезд» (без подмены другой бригадой). */
+  readonly fieldRoute = computed<RouteView | null>(() => this.routeFor(this.fieldStaffId()));
 
-  /** Отметки выбранной бригады, разложенные по order_id. */
-  readonly fieldMarksByOrder = computed<Record<string, FieldMark>>(() => {
-    const staffId = this.fieldRoute()?.staff.staff_id;
+  /** Отметки сотрудника, разложенные по order_id. */
+  marksFor(staffId: string | null | undefined): Record<string, FieldMark> {
     const result: Record<string, FieldMark> = {};
     if (!staffId) return result;
     for (const [key, mark] of Object.entries(this.fieldMarks())) {
@@ -261,7 +289,12 @@ export class DispatchStore {
       if (owner === staffId) result[orderId] = mark;
     }
     return result;
-  });
+  }
+
+  /** Отметки выбранной бригады (диспетчерский раздел «Выезд»). */
+  readonly fieldMarksByOrder = computed<Record<string, FieldMark>>(() =>
+    this.marksFor(this.fieldRoute()?.staff.staff_id),
+  );
 
   readonly fieldStops = computed(() => this.fieldRoute()?.stops ?? []);
 
@@ -442,12 +475,8 @@ export class DispatchStore {
   readonly planDateLabel = computed(() => this.plan().date);
 
   constructor() {
-    window.setTimeout(() => {
-      if (!this.toast()) {
-        this.showToast(`План версии ${this.plan().plan_version} актуален на ${fmtTime(this.now())}`, 'info');
-      }
-    }, 900);
-    this.loadFromBackend();
+    // Данные загружает оболочка соответствующего кабинета:
+    // диспетчерская — свои, мобильный сотрудник — только из сервиса.
   }
 
   selectStaff(staffId: string | null): void {
@@ -468,21 +497,25 @@ export class DispatchStore {
     this.fieldPickerOpen.update((open) => !open);
   }
 
-  markCalled(orderId: string): void {
-    this.patchFieldMark(orderId, { calledAt: this.markTime(orderId) });
+  markCalled(orderId: string, staffId?: string | null): void {
+    this.patchFieldMark(orderId, { calledAt: this.markTime(orderId, staffId) }, staffId);
     this.showToast('Абонент предупреждён о визите', 'success');
   }
 
-  markArrived(orderId: string): void {
-    this.patchFieldMark(orderId, { arrivedAt: this.markTime(orderId) });
+  markArrived(orderId: string, staffId?: string | null): void {
+    this.patchFieldMark(orderId, { arrivedAt: this.markTime(orderId, staffId) }, staffId);
     this.patchVisitStatus(orderId, 'IN_PROGRESS');
     this.showToast('Прибытие на адрес отмечено', 'success');
   }
 
-  markCompleted(orderId: string): void {
-    const mark = this.fieldMarksByOrder()[orderId];
-    const completedAt = this.markTime(orderId);
-    this.patchFieldMark(orderId, { arrivedAt: mark?.arrivedAt ?? completedAt, completedAt });
+  markCompleted(orderId: string, staffId?: string | null): void {
+    const mark = this.marksFor(staffId ?? this.fieldRoute()?.staff.staff_id)[orderId];
+    const completedAt = this.markTime(orderId, staffId);
+    this.patchFieldMark(
+      orderId,
+      { arrivedAt: mark?.arrivedAt ?? completedAt, completedAt },
+      staffId,
+    );
     this.patchVisitStatus(orderId, 'DONE');
     this.showToast('Визит завершён', 'success');
   }
@@ -493,21 +526,25 @@ export class DispatchStore {
   }
 
   /** Время отметки в модельном времени: не раньше `now` и планового начала визита, монотонно по визиту. */
-  private markTime(orderId: string): string {
+  private markTime(orderId: string, staffId?: string | null): string {
     const stop = this.plan()
       .routes.flatMap((route) => route.stops)
       .find((s) => s.order_id === orderId);
-    const existing = this.fieldMarksByOrder()[orderId];
+    const existing = this.marksFor(staffId ?? this.fieldRoute()?.staff.staff_id)[orderId];
     const last = existing?.completedAt ?? existing?.arrivedAt ?? existing?.calledAt;
     let ms = Math.max(new Date(this.now()).getTime(), new Date(stop?.start ?? this.now()).getTime());
     if (last) ms = Math.max(ms, new Date(last).getTime() + 60_000);
     return toModelIso(new Date(ms));
   }
 
-  private patchFieldMark(orderId: string, patch: Partial<FieldMark>): void {
-    const staffId = this.fieldRoute()?.staff.staff_id;
-    if (!staffId) return;
-    const key = `${staffId}|${orderId}`;
+  private patchFieldMark(
+    orderId: string,
+    patch: Partial<FieldMark>,
+    staffId?: string | null,
+  ): void {
+    const owner = staffId ?? this.fieldRoute()?.staff.staff_id;
+    if (!owner) return;
+    const key = `${owner}|${orderId}`;
     this.fieldMarks.update((marks) => ({ ...marks, [key]: { ...marks[key], ...patch } }));
   }
 
@@ -555,6 +592,7 @@ export class DispatchStore {
         this.apiStatus.set('online');
         this.api.listDays().subscribe({
           next: (days) => {
+            this.daysLoaded.set(true);
             if (!days.length) {
               this.showToast(
                 'Backend доступен, но день не загружен — показываю демо-данные',
@@ -566,7 +604,10 @@ export class DispatchStore {
             this.days.set(sorted);
             this.pickInitialDay(sorted.map((day) => day.date).reverse());
           },
-          error: () => this.showToast('Backend не отдал список загруженных дней', 'warning'),
+          error: () => {
+            this.daysLoaded.set(true);
+            this.showToast('Backend не отдал список загруженных дней', 'warning');
+          },
         });
       },
       error: () => {
@@ -580,27 +621,39 @@ export class DispatchStore {
   private pickInitialDay(dates: string[]): void {
     const [date, ...rest] = dates;
     if (!date) {
+      this.dayLoading.set(false);
       this.showToast('Планы ещё не построены — показываю демо-данные', 'warning');
       return;
     }
+    this.dayLoading.set(true);
     this.api.getPlan(date).subscribe({
       next: (plan) => this.applyDay(date, plan),
       error: () => this.pickInitialDay(rest),
     });
   }
 
-  /** Переключение рабочего дня диспетчером: только чтение, план не пересчитывается. */
+  /** Переключение рабочего дня: только чтение, план не пересчитывается. */
   selectDay(date: string): void {
-    if (!date || date === this.currentDate()) return;
-    this.api.getPlan(date).subscribe({
-      next: (plan) => this.applyDay(date, plan),
-      error: (error: { status?: number }) =>
+    if (!date || date === this.currentDate() || this.dayLoading()) return;
+    this.dayLoading.set(true);
+    forkJoin({ day: this.api.getDay(date), plan: this.api.getPlan(date) }).subscribe({
+      next: ({ day, plan }) => {
+        this.dayLoading.set(false);
+        this.orders.set(day.orders ?? []);
+        this.extraStaff.set([]);
+        this.currentDate.set(date);
+        this.applyLivePlan(plan);
+        this.showToast(`День ${date}: план версии ${plan.plan_version}`, 'success');
+      },
+      error: (error: { status?: number }) => {
+        this.dayLoading.set(false);
         this.showToast(
           error?.status === 404
             ? `План на ${date} ещё не построен`
             : `Не удалось получить план на ${date}`,
           'warning',
-        ),
+        );
+      },
     });
   }
 
@@ -613,67 +666,56 @@ export class DispatchStore {
         this.extraStaff.set([]);
         this.currentDate.set(date);
         this.applyLivePlan(plan);
+        this.dayLoading.set(false);
         this.showToast(`День ${date}: план версии ${plan.plan_version}`, 'success');
       },
-      error: () => this.showToast(`Не удалось загрузить данные дня ${date}`, 'warning'),
+      error: () => {
+        this.dayLoading.set(false);
+        this.showToast(`Не удалось загрузить данные дня ${date}`, 'warning');
+      },
     });
   }
 
-  loadLivePlan(date = this.plan().date): void {
+  loadLivePlan(date = this.currentDate() || this.plan().date): void {
     this.api.getPlan(date).subscribe({
       next: (plan) => {
         this.applyLivePlan(plan);
         this.showToast(`Получен план версии ${plan.plan_version} из API`, 'success');
       },
       error: (error: { status?: number }) => {
-        if (error?.status === 404) {
-          this.replan(date);
-          return;
-        }
-        this.showToast('План ещё не построен в backend — показываю демо-данные', 'warning');
+        this.showToast(
+          error?.status === 404
+            ? `План на ${date} ещё не построен`
+            : 'Не удалось получить план из API',
+          'warning',
+        );
       },
     });
   }
 
-  replan(date = this.plan().date): void {
+  /**
+   * Обновление плана только чтением. Интерфейс не вызывает POST /plan:
+   * пересчёт инициирует диспетчерская на стороне сервиса.
+   */
+  replan(date = this.currentDate() || this.plan().date): void {
     if (this.replanning()) return;
     this.replanning.set(true);
-    if (this.apiStatus() === 'online') {
-      this.api.buildPlan(date).subscribe({
-        next: (plan) => {
-          this.applyLivePlan(plan);
-          this.replanning.set(false);
-          this.showToast(`Маршруты пересчитаны: версия ${plan.plan_version}`, 'success');
-        },
-        error: (error: { status?: number }) => {
-          this.replanning.set(false);
-          this.showToast(
-            error?.status === 409
-              ? 'После событий план пересчитывается только через POST /events'
-              : 'Не удалось пересчитать план через API',
-            'warning',
-          );
-        },
-      });
-      return;
-    }
-
-    window.setTimeout(() => {
-      const plan = this.plan();
-      const nextAsOf = DEMO_NOW;
-      this.plan.set({
-        ...plan,
-        plan_version: plan.plan_version + 1,
-        as_of: nextAsOf,
-        computation_ms: 900 + Math.round(Math.random() * 1200),
-      });
-      this.replanning.set(false);
-      const assigned = plan.summary?.visits_planned ?? 0;
-      this.showToast(
-        `Маршруты пересчитаны: ${assigned} назначено, ${this.riskAlerts().length} в риске`,
-        'success',
-      );
-    }, 950);
+    this.api.getPlan(date).subscribe({
+      next: (plan) => {
+        this.applyLivePlan(plan);
+        this.replanning.set(false);
+        this.showToast(`План обновлён: версия ${plan.plan_version}`, 'success');
+      },
+      error: (error: { status?: number }) => {
+        this.replanning.set(false);
+        this.showToast(
+          error?.status === 404
+            ? `План на ${date} ещё не построен`
+            : 'Не удалось обновить план через API',
+          'warning',
+        );
+      },
+    });
   }
 
   private applyLivePlan(plan: Plan): void {

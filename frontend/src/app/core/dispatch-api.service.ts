@@ -34,12 +34,6 @@ export class DispatchApiService {
     return this.http.get<Plan>(`${this.baseUrl}/days/${date}/plan`).pipe(timeout(30_000));
   }
 
-  buildPlan(date: string, timeLimitSec = 300): Observable<Plan> {
-    return this.http
-      .post<Plan>(`${this.baseUrl}/days/${date}/plan`, { time_limit_sec: timeLimitSec })
-      .pipe(timeout(330_000));
-  }
-
   postEvent(date: string, event: unknown): Observable<unknown> {
     return this.http.post(`${this.baseUrl}/days/${date}/events`, event).pipe(timeout(10_000));
   }
