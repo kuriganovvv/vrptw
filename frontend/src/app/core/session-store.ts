@@ -11,18 +11,18 @@ export interface Session {
 }
 
 const STORAGE_KEY = 'vrptw.session.v2';
-/** Сессия прошлой версии: там был только табельный номер сотрудника. */
+/** Сессия прошлой версии (только табельный номер): больше не используется, её убираем. */
 const LEGACY_KEY = 'vrptw.employee.staff_id';
 
 function readStored(): Session | null {
   try {
+    // Сессию старого формата игнорируем и удаляем: иначе после обновления стенда
+    // человек попадает в кабинет сотрудника без экрана входа.
+    window.localStorage.removeItem(LEGACY_KEY);
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as Session;
-      if (parsed?.role === 'dispatcher' || parsed?.role === 'employee') return parsed;
-    }
-    const legacy = window.localStorage.getItem(LEGACY_KEY);
-    return legacy ? { role: 'employee', name: legacy, staffId: legacy } : null;
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Session;
+    return parsed?.role === 'dispatcher' || parsed?.role === 'employee' ? parsed : null;
   } catch {
     return null;
   }
