@@ -50,6 +50,13 @@ const NAV: NavItem[] = [
     icon: 'bar-chart-3',
     title: 'Аналитика смены',
   },
+  {
+    path: '/scenarios',
+    label: 'Сценарии',
+    short: 'Сценарии',
+    icon: 'sliders-horizontal',
+    title: 'Сценарный анализ смены',
+  },
 ];
 
 @Component({
