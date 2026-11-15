@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,14 +40,17 @@ public class PlanningService {
     private final PlanMerger merger;
     private final DaySolutionFactory factory = new DaySolutionFactory();
     private final ReentrantLock lock = new ReentrantLock();
+    private final boolean restockEnabled;
 
     public PlanningService(DataStore store, SolverFactory<DaySolution> solverFactory,
-                           PgpDetector pgp, PlanAssembler assembler, PlanMerger merger) {
+                           PgpDetector pgp, PlanAssembler assembler, PlanMerger merger,
+                           @Value("${dispatch.restock.enabled:true}") boolean restockEnabled) {
         this.store = store;
         this.solverFactory = solverFactory;
         this.pgp = pgp;
         this.assembler = assembler;
         this.merger = merger;
+        this.restockEnabled = restockEnabled;
         this.replanFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(DaySolution.class)
                 .withEntityClasses(Staff.class, Visit.class)
@@ -101,6 +105,7 @@ public class PlanningService {
             DayInput planned = new DayInput(date, now, plannedOrders, effective.absentStaffIds());
 
             DaySolution problem = factory.build(ref, planned, matrix);
+            problem.setRestockEnabled(restockEnabled);
             applyCompletedPrefixFloor(problem, prefix, now);
             DaySolution solved = (isReplan ? replanFactory : solverFactory).buildSolver().solve(problem);
             long ms = (System.nanoTime() - t0) / 1_000_000;

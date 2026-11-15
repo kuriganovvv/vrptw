@@ -38,6 +38,9 @@ public class DaySolution {
     @PlanningScore
     private HardMediumSoftScore score;
 
+    /** Выключатель заезда в СЦ за пополнением АО. */
+    private boolean restockEnabled = true;
+
     public DaySolution() {
     }
 
@@ -115,5 +118,13 @@ public class DaySolution {
 
     public void setScore(HardMediumSoftScore score) {
         this.score = score;
+    }
+
+    public boolean isRestockEnabled() {
+        return restockEnabled;
+    }
+
+    public void setRestockEnabled(boolean restockEnabled) {
+        this.restockEnabled = restockEnabled;
     }
 }

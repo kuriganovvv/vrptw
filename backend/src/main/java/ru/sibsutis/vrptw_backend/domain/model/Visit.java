@@ -49,6 +49,7 @@ public class Visit {
         boolean breakDone;
         long cumulativeTravelSec;
         long cumulativeDistanceM;
+        Equipment remaining;
 
         if (previousVisit == null) {
             if (staff.getShift() == null) {
@@ -59,6 +60,7 @@ public class Visit {
             breakDone = false;
             cumulativeTravelSec = 0;
             cumulativeDistanceM = 0;
+            remaining = staff.getEquipmentStart();
         } else {
             Timings previousTimings = previousVisit.getTimings();
             if (previousTimings == null) {
@@ -69,11 +71,48 @@ public class Visit {
             breakDone = previousTimings.breakDone();
             cumulativeTravelSec = previousTimings.cumulativeTravelSec();
             cumulativeDistanceM = previousTimings.cumulativeDistanceM();
+            remaining = previousTimings.equipmentAfter() == null
+                    ? staff.getEquipmentStart()
+                    : previousTimings.equipmentAfter();
         }
 
         TravelMatrix matrix = solution.getTravelMatrix();
         int travelSec = matrix.travelSec(fromLocation, order.getBuildingId());
         int distanceM = matrix.distanceM(fromLocation, order.getBuildingId());
+
+        OffsetDateTime readyToTravel = base;
+        Equipment required = order.getRequiredEquipment() == null ? Equipment.ZERO : order.getRequiredEquipment();
+
+        String restockLocationId = null;
+        OffsetDateTime restockStart = null;
+        OffsetDateTime restockEnd = null;
+        long restockTravelSec = 0;
+        long restockDistanceM = 0;
+
+        if (solution.isRestockEnabled() && !required.fitsInto(remaining)) {
+            ServiceCenter center = serviceCenter(solution, staff.getServiceCenterId());
+            if (center != null) {
+                long toCenterSec = matrix.travelSec(fromLocation, center.serviceCenterId());
+                OffsetDateTime candidateStart = readyToTravel.plusSeconds(toCenterSec);
+                OffsetDateTime candidateEnd = candidateStart.plusMinutes(center.restockDurationMin());
+                if (isOpen(center, candidateStart, candidateEnd, solution.getNow())) {
+                    restockLocationId = center.serviceCenterId();
+                    restockTravelSec = toCenterSec;
+                    restockDistanceM = matrix.distanceM(fromLocation, center.serviceCenterId());
+                    restockStart = candidateStart;
+                    restockEnd = candidateEnd;
+                    cumulativeTravelSec += toCenterSec;
+                    cumulativeDistanceM += restockDistanceM;
+                    readyToTravel = candidateEnd;
+                    fromLocation = center.serviceCenterId();
+                    travelSec = matrix.travelSec(fromLocation, order.getBuildingId());
+                    distanceM = matrix.distanceM(fromLocation, order.getBuildingId());
+                    remaining = staff.getEquipmentCapacity();
+                }
+            }
+        }
+
+        Equipment equipmentAfter = remaining.minus(required);
 
         // Перерыв ставится на выезде к этому визиту, на локации предыдущей остановки,
         // как только окно обеда открылось и это не срывает слот текущего визита.
@@ -81,12 +120,11 @@ public class Visit {
         OffsetDateTime breakStart = null;
         OffsetDateTime breakEnd = null;
         String breakLocationId = null;
-        OffsetDateTime readyToTravel = base;
 
         if (!breakDone) {
             OffsetDateTime windowFrom = staff.getShift().breakWindowFromAt(solution.getNow());
             OffsetDateTime windowTo = staff.getShift().breakWindowToAt(solution.getNow());
-            OffsetDateTime candidateStart = base.isBefore(windowFrom) ? windowFrom : base;
+            OffsetDateTime candidateStart = readyToTravel.isBefore(windowFrom) ? windowFrom : readyToTravel;
             OffsetDateTime candidateEnd = candidateStart.plusMinutes(staff.getShift().breakDurationMin());
             boolean insideWindow = !candidateStart.isAfter(windowTo);
             boolean keepsSlot = !candidateEnd.plusSeconds(travelSec).isAfter(order.getLatestStart());
@@ -107,7 +145,31 @@ public class Visit {
         return new Timings(arrival, start, end, departure, travelSec, distanceM,
                 cumulativeTravelSec + travelSec,
                 cumulativeDistanceM + distanceM,
-                breakStart, breakEnd, breakLocationId, breakDone);
+                breakStart, breakEnd, breakLocationId, breakDone,
+                restockStart, restockEnd, restockLocationId, restockTravelSec, restockDistanceM,
+                equipmentAfter);
+    }
+
+    private static ServiceCenter serviceCenter(DaySolution solution, String serviceCenterId) {
+        if (solution.getServiceCenters() == null) {
+            return null;
+        }
+        for (ServiceCenter center : solution.getServiceCenters()) {
+            if (center.serviceCenterId().equals(serviceCenterId)) {
+                return center;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isOpen(ServiceCenter center, OffsetDateTime start, OffsetDateTime end,
+                                  OffsetDateTime day) {
+        if (center.openingFrom() == null || center.openingTo() == null) {
+            return true;
+        }
+        OffsetDateTime open = Shift.localAt(day, center.openingFrom());
+        OffsetDateTime close = Shift.localAt(day, center.openingTo());
+        return !start.isBefore(open) && !end.isAfter(close);
     }
 
     public String locationId() {
@@ -132,6 +194,14 @@ public class Visit {
 
     public OffsetDateTime getDeparture() {
         return timings == null ? null : timings.departure();
+    }
+
+    public Equipment getEquipmentAfter() {
+        return timings == null ? null : timings.equipmentAfter();
+    }
+
+    public boolean hasRestock() {
+        return timings != null && timings.restockStart() != null;
     }
 
     public String getVisitId() {
@@ -207,6 +277,12 @@ public class Visit {
             OffsetDateTime breakStart,
             OffsetDateTime breakEnd,
             String breakLocationId,
-            boolean breakDone) {
+            boolean breakDone,
+            OffsetDateTime restockStart,
+            OffsetDateTime restockEnd,
+            String restockLocationId,
+            long restockTravelSec,
+            long restockDistanceM,
+            Equipment equipmentAfter) {
     }
 }

@@ -25,3 +25,5 @@ dispatch:
   pgp:
     min-orders: 3       
     window-minutes: 120
+  restock:
+    enabled: true

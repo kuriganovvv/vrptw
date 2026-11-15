@@ -1,15 +1,14 @@
 package ru.sibsutis.vrptw_backend.domain.constraint;
 
+import ru.sibsutis.vrptw_backend.domain.model.Equipment;
 import ru.sibsutis.vrptw_backend.domain.model.Visit;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import ai.timefold.solver.core.api.score.HardMediumSoftScore;
 import ai.timefold.solver.core.api.score.stream.Constraint;
-import ai.timefold.solver.core.api.score.stream.ConstraintCollectors;
 import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
 import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
-import static ai.timefold.solver.core.api.score.stream.ConstraintCollectors.sum;
 
 public class DispatchConstraintProvider implements ConstraintProvider {
 
@@ -24,7 +23,7 @@ public class DispatchConstraintProvider implements ConstraintProvider {
                 visitOutsideSlot(factory),
                 breakOutsideWindow(factory),
                 routeEndsAfterShift(factory),
-                equipmentOverflow(factory),
+                equipmentResidual(factory),
                 unassignedVisit(factory),
                 deadlineMissed(factory),
                 minimizeTravelTime(factory)
@@ -90,18 +89,15 @@ public class DispatchConstraintProvider implements ConstraintProvider {
                 .asConstraint("H2 route ends after shift");
     }
 
-    private Constraint equipmentOverflow(ConstraintFactory factory) {
+    private Constraint equipmentResidual(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
-                .filter(Visit::isAssigned)
-                .groupBy(Visit::getStaff,
-                        sum(visit -> visit.getOrder().getRequiredEquipment().ont()),
-                        sum(visit -> visit.getOrder().getRequiredEquipment().router()),
-                        sum(visit -> visit.getOrder().getRequiredEquipment().stb()))
-                .filter((staff, ont, router, stb) -> ont > staff.getEquipmentStart().ont()
-                        || router > staff.getEquipmentStart().router()
-                        || stb > staff.getEquipmentStart().stb())
-                .penalize(HardMediumSoftScore.ONE_HARD, (staff, ont, router, stb) -> 1)
-                .asConstraint("H7 equipment shortage");
+                .filter(visit -> visit.getEquipmentAfter() != null)
+                .filter(visit -> {
+                    Equipment after = visit.getEquipmentAfter();
+                    return after.ont() < 0 || after.router() < 0 || after.stb() < 0;
+                })
+                .penalize(HardMediumSoftScore.ONE_HARD, visit -> 1)
+                .asConstraint("H7 equipment residual");
     }
 
     private Constraint unassignedVisit(ConstraintFactory factory) {
