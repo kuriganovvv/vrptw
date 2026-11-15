@@ -616,7 +616,7 @@ export class DispatchStore {
   private applyDay(date: string, plan: Plan): void {
     forkJoin({ reference: this.api.getReference(), day: this.api.getDay(date) }).subscribe({
       next: ({ reference, day }) => {
-        this.reference.set(reference);
+        this.reference.set(this.withStaffNames(reference));
         this.orders.set(day.orders ?? []);
         this.extraStaff.set([]);
         this.currentDate.set(date);
@@ -707,6 +707,20 @@ export class DispatchStore {
       this.extraStaff.update((current) => [...current, ...priceholders]);
     }
     this.plan.set(plan);
+  }
+
+  /**
+   * `display_name` в контракте необязательный: если организаторы его не пришлют,
+   * в списках и на карте показываем идентификатор, иначе разбор строки падает.
+   */
+  private withStaffNames(reference: ReferenceData): ReferenceData {
+    return {
+      ...reference,
+      staff: (reference.staff ?? []).map((staff) => ({
+        ...staff,
+        display_name: staff.display_name?.trim() || staff.staff_id,
+      })),
+    };
   }
 
   private placeholderStaff(route: Route): Staff {
