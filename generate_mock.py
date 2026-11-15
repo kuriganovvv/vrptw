@@ -22,8 +22,124 @@ TZ = timezone(timedelta(hours=5))
 DAY = date(2026, 10, 26)
 NOW = datetime(2026, 10, 26, 8, 30, tzinfo=TZ)
 REFERENCE_FILE = "data/reference.json"
+# Упрощённые полигоны воды Екатеринбурга (OpenStreetMap, Overpass API).
+WATER_FILE = "tools/ekb_water_areas.json"
 
 os.makedirs("data", exist_ok=True)
+
+
+# ------------------------------------------------------------------- вода
+# Адреса в наборе синтетические: координаты домов и узлов расставляются случайно
+# вокруг сервисного центра. Без этой маски часть точек попадала в Городской пруд,
+# Верх-Исетское водохранилище и озеро Шарташ, и на карте диспетчера маркер визита
+# оказывался посреди воды.
+
+
+def load_water_areas(path):
+    """Кольца воды вместе с габаритами: габариты отсекают точки до честного теста."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            rings = json.load(f)
+    except FileNotFoundError:
+        print(f"Внимание: {path} не найден — проверка попадания в воду пропущена")
+        return []
+    return [
+        (ring, min(p[0] for p in ring), max(p[0] for p in ring),
+         min(p[1] for p in ring), max(p[1] for p in ring))
+        for ring in rings
+    ]
+
+
+WATER_AREAS = load_water_areas(WATER_FILE)
+
+# Порядок обхода фиксирован, случайные числа не расходуются: набор данных остаётся
+# детерминированным, меняются только координаты точек, попавших в воду.
+# Минимальный отступ от кромки воды: маркер на берегу выглядит как маркер в пруду.
+# Полигоны упрощены (ошибка до ~20 м), поэтому берём запас: до настоящей воды
+# остаётся не меньше 60 метров.
+WATER_CLEARANCE_M = 80.0
+NUDGE_DIRECTIONS = tuple(
+    (math.cos(math.radians(angle)), math.sin(math.radians(angle))) for angle in range(0, 360, 22)
+)
+NUDGE_RADII = (0.0006, 0.0012, 0.0018, 0.0024, 0.0036, 0.0048, 0.0072, 0.0096, 0.0144, 0.0192)
+
+
+def in_water(lat, lon):
+    """Лучевой тест: пересечения считаем по широте, поэтому делим на разницу широт."""
+    for ring, min_lat, max_lat, min_lon, max_lon in WATER_AREAS:
+        if lat < min_lat or lat > max_lat or lon < min_lon or lon > max_lon:
+            continue
+        inside = False
+        for index in range(len(ring) - 1):
+            lat1, lon1 = ring[index]
+            lat2, lon2 = ring[index + 1]
+            if (lat1 > lat) != (lat2 > lat):
+                crossing_lon = lon1 + (lat - lat1) * (lon2 - lon1) / (lat2 - lat1)
+                if lon < crossing_lon:
+                    inside = not inside
+        if inside:
+            return True
+    return False
+
+
+def distance_to_water_m(lat, lon):
+    """Расстояние до ближайшей кромки воды в метрах (плоская проекция в районе города)."""
+    lat_scale = 111_320.0
+    lon_scale = lat_scale * math.cos(math.radians(lat))
+    point_x, point_y = lon * lon_scale, lat * lat_scale
+    best = float("inf")
+    for ring, min_lat, max_lat, min_lon, max_lon in WATER_AREAS:
+        if lat < min_lat - 0.003 or lat > max_lat + 0.003:
+            continue
+        if lon < min_lon - 0.005 or lon > max_lon + 0.005:
+            continue
+        for index in range(len(ring) - 1):
+            lat1, lon1 = ring[index]
+            lat2, lon2 = ring[index + 1]
+            start_x, start_y = lon1 * lon_scale, lat1 * lat_scale
+            end_x, end_y = lon2 * lon_scale, lat2 * lat_scale
+            delta_x, delta_y = end_x - start_x, end_y - start_y
+            if delta_x == 0.0 and delta_y == 0.0:
+                distance = math.hypot(point_x - start_x, point_y - start_y)
+            else:
+                ratio = ((point_x - start_x) * delta_x + (point_y - start_y) * delta_y) / (
+                    delta_x * delta_x + delta_y * delta_y
+                )
+                ratio = max(0.0, min(1.0, ratio))
+                distance = math.hypot(point_x - (start_x + ratio * delta_x),
+                                      point_y - (start_y + ratio * delta_y))
+            if distance < best:
+                best = distance
+    return best
+
+
+def keep_on_land(lat, lon):
+    """Уводит точку из воды и от кромки воды минимум на `WATER_CLEARANCE_M` метров."""
+    if not WATER_AREAS:
+        return lat, lon
+    if not in_water(lat, lon) and distance_to_water_m(lat, lon) >= WATER_CLEARANCE_M:
+        return lat, lon
+    best_candidate, best_distance = None, -1.0
+    for radius in NUDGE_RADII:
+        for direction_lat, direction_lon in NUDGE_DIRECTIONS:
+            candidate = (lat + direction_lat * radius, lon + direction_lon * radius * 1.65)
+            if in_water(*candidate):
+                continue
+            clearance = distance_to_water_m(*candidate)
+            if clearance >= WATER_CLEARANCE_M:
+                NUDGED.append((round(lat, 6), round(lon, 6), round(clearance)))
+                return candidate
+            if clearance > best_distance:
+                best_candidate, best_distance = candidate, clearance
+    if best_candidate is not None:
+        print(f"Внимание: для {lat},{lon} не нашлось места дальше {best_distance:.0f} м от воды")
+        NUDGED.append((round(lat, 6), round(lon, 6), round(best_distance)))
+        return best_candidate
+    raise AssertionError(f"Не удалось увести точку {lat},{lon} от воды")
+
+
+# Точки, которые пришлось сдвинуть из воды — для отчёта генератора.
+NUDGED = []
 
 
 def at(day, hour, minute=0):
@@ -101,6 +217,10 @@ DISTRICTS = [
         "streets": ["ул. Сибирский тракт", "ул. Восточная", "ул. Луначарского", "ул. Первомайская", "ул. Сулимова"],
     },
 ]
+
+# Центры районов тоже не должны стоять в воде: от них отсчитываются дома и узлы.
+for district in DISTRICTS:
+    district["lat"], district["lon"] = keep_on_land(district["lat"], district["lon"])
 
 service_centers = [
     {
@@ -221,6 +341,7 @@ for district_index, district in enumerate(DISTRICTS):
             lon = district["lon"] + random.uniform(-0.024, 0.024)
 
         street = district["streets"][j % len(district["streets"])]
+        lat, lon = keep_on_land(lat, lon)
         building = {
             "building_id": building_id,
             "address": f"г. Екатеринбург, {street}, {2 + j * 2 + district_index}",
@@ -287,14 +408,17 @@ for district_index, district in enumerate(DISTRICTS):
             building_technology[fallback["building_id"]].add(technology)
 
         node_id = f"AN-{node_counter:04d}"
+        node_lat = district["lat"] + random.uniform(-0.012, 0.012)
+        node_lon = district["lon"] + random.uniform(-0.018, 0.018)
+        node_lat, node_lon = keep_on_land(node_lat, node_lon)
         node = {
             "access_node_id": node_id,
             "node_type": node_type,
             "technology": technology,
             "name": f"{label} {district['name'].split('«')[1].rstrip('»')}-{node_counter}",
             "address": f"г. Екатеринбург, {district['streets'][0]}, {1 + node_counter}",
-            "lat": round(district["lat"] + random.uniform(-0.012, 0.012), 6),
-            "lon": round(district["lon"] + random.uniform(-0.018, 0.018), 6),
+            "lat": round(node_lat, 6),
+            "lon": round(node_lon, 6),
             "buildings": [
                 {
                     "building_id": b["building_id"],
@@ -844,6 +968,20 @@ for node_id, node_orders in by_node.items():
             assert node_id in pgp_cluster_members, f"Лишняя группа (120 мин) на узле {node_id}"
             assert triple <= cluster_ids, f"Лишняя группа (120 мин) на узле {node_id}"
 
+# Ни одна точка не должна стоять в воде или у самой кромки: иначе маркер визита уезжает в пруд.
+water_candidates = (
+    [(sc["service_center_id"], sc["lat"], sc["lon"]) for sc in service_centers]
+    + [(node["access_node_id"], node["lat"], node["lon"]) for node in access_nodes]
+    + [(building["building_id"], building["lat"], building["lon"]) for building in buildings]
+)
+wet_points = [
+    f"{ident} {lat},{lon} ({distance_to_water_m(lat, lon):.0f} м до воды)"
+    for ident, lat, lon in water_candidates
+    # координаты в файле округлены до 1e-6 градуса (~10 см) — даём запас на округление
+    if in_water(lat, lon) or distance_to_water_m(lat, lon) < WATER_CLEARANCE_M - 0.5
+]
+assert not wet_points, f"Точки в воде или у кромки воды: {wet_points}"
+
 day_input = {
     "date": DAY.isoformat(),
     "now": iso(NOW),
@@ -859,3 +997,5 @@ print("travel_matrix.json:", len(points), "точек")
 print("day_2026-10-26.json:", len(orders), "нарядов;",
       "ПГП-узлов:", len(pgp_cluster_members),
       "нарядов в ПГП:", sum(len(v) for v in pgp_cluster_members.values()))
+if NUDGED:
+    print(f"от воды уведено точек: {len(NUDGED)} — {NUDGED}")
