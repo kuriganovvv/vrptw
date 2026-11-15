@@ -174,7 +174,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      const only = this.onlyStaffId();
+      const scope = this.onlyStaffId();
       const routes = this.routes();
       const date = this.store.currentDate();
       if (date !== this.lastDate) {
@@ -182,7 +182,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         this.fitted = false;
       }
       if (!this.map) return;
-      this.render(routes, only ?? this.store.selectedStaffId(), Boolean(only));
+      this.render(routes, this.store.selectedStaffId(), scope);
     });
   }
 
@@ -204,11 +204,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     this.layer = L.layerGroup().addTo(this.map);
 
     setTimeout(() => this.map?.invalidateSize(), 60);
-    this.render(
-      this.routes(),
-      this.onlyStaffId() ?? this.store.selectedStaffId(),
-      Boolean(this.onlyStaffId()),
-    );
+    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId());
     roadListeners.add(this.rerender);
   }
 
@@ -220,27 +216,25 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
 
   /** Перерисовать, когда подъехала дорожная геометрия очередного маршрута. */
   private readonly rerender = () =>
-    this.render(
-      this.routes(),
-      this.onlyStaffId() ?? this.store.selectedStaffId(),
-      Boolean(this.onlyStaffId()),
-    );
+    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId());
 
-  private render(routes: RouteView[], selectedId: string | null, only = false): void {
+  private render(routes: RouteView[], selectedId: string | null, scope: string | null): void {
     if (!this.map || !this.layer) return;
     this.layer.clearLayers();
 
-    const active = routes.filter((r) => r.visits > 0);
+    // В режиме одной бригады выбор в панели диспетчера игнорируем.
+    const effectiveSelected = scope ?? selectedId;
+    const active = routes.filter((r) => r.visits > 0 && (!scope || r.staff.staff_id === scope));
     const ordered = [
-      ...active.filter((r) => r.staff.staff_id !== selectedId),
-      ...active.filter((r) => r.staff.staff_id === selectedId),
+      ...active.filter((r) => r.staff.staff_id !== effectiveSelected),
+      ...active.filter((r) => r.staff.staff_id === effectiveSelected),
     ];
-    const focus = selectedId !== null;
+    const focus = effectiveSelected !== null;
 
     const bounds = L.latLngBounds([]);
 
     for (const view of ordered) {
-      const isSelected = view.staff.staff_id === selectedId;
+      const isSelected = view.staff.staff_id === effectiveSelected;
       const dim = focus && !isSelected;
       const color = view.meta.color;
 
@@ -285,7 +279,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
           className: 'route-line',
         }).addTo(this.layer);
         line.on('click', () => {
-          if (!only) this.store.selectStaff(view.staff.staff_id);
+          if (!scope) this.store.selectStaff(view.staff.staff_id);
         });
         line.bindTooltip(
           `<b>${view.staff.display_name}</b><br/>${view.visits} визитов · ${view.km
@@ -350,7 +344,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         }).addTo(this.layer);
 
         marker.on('click', () => {
-          if (!only) this.store.selectStaff(view.staff.staff_id);
+          if (!scope) this.store.selectStaff(view.staff.staff_id);
         });
         marker.bindTooltip(
           `<b>${order ? order.address : stopView.stop.location_id}</b><br/>
@@ -385,7 +379,8 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     }
 
     if (!this.fitted && bounds.isValid()) {
-      this.map.fitBounds(bounds, { padding: [only ? 34 : 46, only ? 34 : 46], maxZoom: only ? 14 : 13 });
+      const pad = scope ? 34 : 46;
+      this.map.fitBounds(bounds, { padding: [pad, pad], maxZoom: scope ? 14 : 13 });
       this.fitted = true;
     }
   }

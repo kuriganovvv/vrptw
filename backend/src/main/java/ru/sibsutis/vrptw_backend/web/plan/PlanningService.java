@@ -42,6 +42,14 @@ public class PlanningService {
     private final ReentrantLock lock = new ReentrantLock();
     private final boolean restockEnabled;
 
+    // Матрица организаторов — около 20 МБ, и её разбор в JSONB самая дорогая операция
+    // в обработке события (лимит 10 с). Держим разобранные DTO в памяти и сверяем
+    // по времени последнего сохранения: если справочники перезалили, метка меняется.
+    private volatile ReferenceData cachedReference;
+    private volatile OffsetDateTime cachedReferenceStamp;
+    private volatile TravelMatrix cachedMatrix;
+    private volatile OffsetDateTime cachedMatrixStamp;
+
     public PlanningService(DataStore store, SolverFactory<DaySolution> solverFactory,
                            PgpDetector pgp, PlanAssembler assembler, PlanMerger merger,
                            @Value("${dispatch.restock.enabled:true}") boolean restockEnabled) {
@@ -82,10 +90,8 @@ public class PlanningService {
     private Plan solve(LocalDate date, OffsetDateTime now, String eventId,
                        Map<String, List<Stop>> prefix, Map<String, PlanMerger.Unavailable> unavailable,
                        boolean isReplan) {
-        ReferenceData ref = store.findReference().orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.CONFLICT, "Справочники не загружены"));
-        TravelMatrix matrix = store.findTravelMatrix().orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.CONFLICT, "Матрица не загружена"));
+        ReferenceData ref = reference();
+        TravelMatrix matrix = matrix();
         DayInput day = store.findDay(date).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Наряды не загружены"));
         if (!lock.tryLock()) {
@@ -128,6 +134,38 @@ public class PlanningService {
         } finally {
             lock.unlock();
         }
+    }
+
+    /**
+     * Разобранный справочник с кэшем. В памяти (тесты, аварийный режим) метки времени
+     * нет — читаем каждый раз, там разбор дешёвый.
+     */
+    private ReferenceData reference() {
+        Optional<OffsetDateTime> stamp = store.referenceUpdatedAt();
+        if (stamp.isPresent() && stamp.get().equals(cachedReferenceStamp) && cachedReference != null) {
+            return cachedReference;
+        }
+        ReferenceData loaded = store.findReference().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.CONFLICT, "Справочники не загружены"));
+        if (stamp.isPresent()) {
+            cachedReference = loaded;
+            cachedReferenceStamp = stamp.get();
+        }
+        return loaded;
+    }
+
+    private TravelMatrix matrix() {
+        Optional<OffsetDateTime> stamp = store.travelMatrixUpdatedAt();
+        if (stamp.isPresent() && stamp.get().equals(cachedMatrixStamp) && cachedMatrix != null) {
+            return cachedMatrix;
+        }
+        TravelMatrix loaded = store.findTravelMatrix().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.CONFLICT, "Матрица не загружена"));
+        if (stamp.isPresent()) {
+            cachedMatrix = loaded;
+            cachedMatrixStamp = stamp.get();
+        }
+        return loaded;
     }
 
     /**

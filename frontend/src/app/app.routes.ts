@@ -39,6 +39,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/analytics/analytics-page').then((m) => m.AnalyticsPage),
       },
+      {
+        path: 'scenarios',
+        title: 'Сценарии смены — Ростелеком',
+        loadComponent: () =>
+          import('./features/scenarios/scenarios-page').then((m) => m.ScenariosPage),
+      },
     ],
   },
   {

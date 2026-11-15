@@ -25,5 +25,8 @@ dispatch:
   pgp:
     min-orders: 3       
     window-minutes: 60
+  scenario:
+    time-limit-sec: 5
+    max-time-limit-sec: 60
   restock:
     enabled: true
