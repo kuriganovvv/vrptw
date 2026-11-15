@@ -176,12 +176,13 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       ...active.filter((r) => r.staff.staff_id !== selectedId),
       ...active.filter((r) => r.staff.staff_id === selectedId),
     ];
+    const focus = selectedId !== null;
 
     const bounds = L.latLngBounds([]);
 
     for (const view of ordered) {
       const isSelected = view.staff.staff_id === selectedId;
-      const dim = selectedId !== null && !isSelected;
+      const dim = focus && !isSelected;
       const color = view.meta.color;
 
       const points: L.LatLngTuple[] = [];
@@ -202,19 +203,23 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         // Пока дорожная геометрия не получена — пунктирная прямая между точками.
         const shape: L.LatLngExpression[] = road ?? points;
 
-        L.polyline(shape, {
-          color: '#ffffff',
-          weight: isSelected ? 11 : 9,
-          opacity: dim ? 0.15 : 0.9,
-          lineCap: 'round',
-          lineJoin: 'round',
-          interactive: false,
-        }).addTo(this.layer);
+        // Белая подложка нужна только выделенному маршруту или общему обзору:
+        // десяток подложек одновременно превращает карту в белое месиво.
+        if (!focus || isSelected) {
+          L.polyline(shape, {
+            color: '#ffffff',
+            weight: isSelected ? 11 : 8,
+            opacity: focus ? 0.9 : 0.65,
+            lineCap: 'round',
+            lineJoin: 'round',
+            interactive: false,
+          }).addTo(this.layer);
+        }
 
         const line = L.polyline(shape, {
           color,
           weight: isSelected ? 6 : 4,
-          opacity: dim ? 0.15 : 1,
+          opacity: dim ? 0.12 : 1,
           lineCap: 'round',
           lineJoin: 'round',
           dashArray: road ? undefined : '7 8',
@@ -228,8 +233,28 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
           { sticky: true, direction: 'top', opacity: 1 },
         );
 
+        // «Огонёк» бежит от первой остановки к последней — видно направление движения.
+        if (!dim) {
+          L.polyline(shape, {
+            color: '#ffffff',
+            weight: isSelected ? 3.4 : 2.2,
+            opacity: 0.9,
+            lineCap: 'round',
+            dashArray: '1 18',
+            className: 'route-flow',
+            interactive: false,
+          }).addTo(this.layer);
+        }
+
+        if (isSelected) {
+          this.addDirectionArrows(points, color);
+        }
+
         if (!road) requestRoadGeometry(geometryKeyValue, coords);
       }
+
+      // В режиме фокуса подробности показываем только у выбранной бригады.
+      if (focus && !isSelected) continue;
 
       for (const stopView of view.stops) {
         if (stopView.stop.type !== 'VISIT') continue;
@@ -238,19 +263,26 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         const activeNow = stopView.stop.status === 'IN_PROGRESS';
         const fill = done || activeNow ? color : '#ffffff';
         const text = done || activeNow ? '#ffffff' : color;
+        const size = isSelected ? 22 : 12;
         const marker = L.marker([stopView.lat, stopView.lon], {
           icon: L.divIcon({
-            className: `stop-marker ${dim ? 'stop-marker--dim' : 'stop-marker--active'}`,
-            html: `<div style="
+            className: `stop-marker ${focus ? 'stop-marker--active' : ''}`,
+            html: isSelected
+              ? `<div style="
               width:22px;height:22px;border-radius:9999px;
               background:${fill};border:2.5px solid ${color};
               color:${text};font-weight:700;font-size:10px;
               display:flex;align-items:center;justify-content:center;
               box-shadow:0 0 0 3px #fff, 0 2px 6px rgba(15,23,42,.25);
               font-family:Geist, system-ui, sans-serif;
-            ">${stopView.stop.seq}</div>`,
-            iconSize: [22, 22],
-            iconAnchor: [11, 11],
+            ">${stopView.stop.seq}</div>`
+              : `<div style="
+              width:12px;height:12px;border-radius:9999px;
+              background:${fill};border:2px solid ${color};
+              box-shadow:0 0 0 2px #fff;
+            "></div>`,
+            iconSize: [size, size],
+            iconAnchor: [size / 2, size / 2],
           }),
           keyboard: false,
           zIndexOffset: isSelected ? 1000 : 0,
@@ -266,7 +298,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       }
 
       const depot = view.stops.find((s) => s.stop.type === 'DEPOT_START');
-      if (depot) {
+      if (depot && isSelected) {
         L.marker([depot.lat, depot.lon], {
           icon: L.divIcon({
             className: 'stop-marker',
@@ -292,6 +324,33 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     if (!this.fitted && bounds.isValid()) {
       this.map.fitBounds(bounds, { padding: [46, 46], maxZoom: 13 });
       this.fitted = true;
+    }
+  }
+
+  /** Стрелки по ходу маршрута: показываем только у выделенной бригады, чтобы не шуметь. */
+  private addDirectionArrows(points: L.LatLngTuple[], color: string): void {
+    const layer = this.layer;
+    if (!layer || points.length < 3) return;
+    const step = Math.max(1, Math.floor(points.length / 6));
+    for (let i = step; i < points.length - 1; i += step) {
+      const [lat1, lon1] = points[i];
+      const [lat2, lon2] = points[i + 1];
+      const meanLat = (((lat1 + lat2) / 2) * Math.PI) / 180;
+      const angle =
+        (Math.atan2((lon2 - lon1) * Math.cos(meanLat), lat2 - lat1) * 180) / Math.PI;
+      L.marker([(lat1 + lat2) / 2, (lon1 + lon2) / 2], {
+        icon: L.divIcon({
+          className: 'route-arrow',
+          html: `<div style="transform:rotate(${angle.toFixed(1)}deg)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="${color}" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 20 20 12 16 4 20z"/></svg>
+          </div>`,
+          iconSize: [15, 15],
+          iconAnchor: [7.5, 7.5],
+        }),
+        interactive: false,
+        keyboard: false,
+        zIndexOffset: 900,
+      }).addTo(layer);
     }
   }
 }
