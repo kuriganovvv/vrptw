@@ -22,6 +22,7 @@ import {
   Stop,
   StopStatus,
   StopView,
+  UiDay,
   UnassignedView,
   WorkType,
 } from './models';
@@ -73,6 +74,10 @@ export class DispatchStore {
   readonly extraStaff = signal<Staff[]>([]);
 
   readonly apiStatus = signal<ApiStatus>('demo');
+  /** Все дни, загруженные в сервис организаторами. */
+  readonly days = signal<UiDay[]>([]);
+  /** День, который сейчас показывает интерфейс. */
+  readonly currentDate = signal<string>('');
   readonly selectedStaffId = signal<string | null>('ST-001');
   readonly search = signal('');
   readonly problemTab = signal<ProblemTab>('risk');
@@ -546,7 +551,7 @@ export class DispatchStore {
     if (this.apiStatus() === 'checking') return;
     this.apiStatus.set('checking');
     this.api.health().subscribe({
-      next: (health) => {
+      next: () => {
         this.apiStatus.set('online');
         this.api.listDays().subscribe({
           next: (days) => {
@@ -557,20 +562,9 @@ export class DispatchStore {
               );
               return;
             }
-            const latest = [...days].sort((a, b) => a.date.localeCompare(b.date)).at(-1)!;
-            forkJoin({ reference: this.api.getReference(), day: this.api.getDay(latest.date) }).subscribe({
-              next: ({ reference, day }) => {
-                this.reference.set(reference);
-                this.orders.set(day.orders ?? []);
-                this.extraStaff.set([]);
-                this.showToast(
-                  `Данные из backend: ${health.team ?? 'сервис'} · день ${latest.date}`,
-                  'success',
-                );
-                this.loadLivePlan(latest.date);
-              },
-              error: () => this.showToast('Не удалось загрузить справочники и наряды дня', 'warning'),
-            });
+            const sorted = [...days].sort((a, b) => a.date.localeCompare(b.date));
+            this.days.set(sorted);
+            this.pickInitialDay(sorted.map((day) => day.date).reverse());
           },
           error: () => this.showToast('Backend не отдал список загруженных дней', 'warning'),
         });
@@ -579,6 +573,49 @@ export class DispatchStore {
         this.apiStatus.set('offline');
         this.showToast('Backend недоступен на localhost:8080 — работаем на демо-данных', 'warning');
       },
+    });
+  }
+
+  /** Открываем самый свежий день, по которому уже есть план. */
+  private pickInitialDay(dates: string[]): void {
+    const [date, ...rest] = dates;
+    if (!date) {
+      this.showToast('Планы ещё не построены — показываю демо-данные', 'warning');
+      return;
+    }
+    this.api.getPlan(date).subscribe({
+      next: (plan) => this.applyDay(date, plan),
+      error: () => this.pickInitialDay(rest),
+    });
+  }
+
+  /** Переключение рабочего дня диспетчером: только чтение, план не пересчитывается. */
+  selectDay(date: string): void {
+    if (!date || date === this.currentDate()) return;
+    this.api.getPlan(date).subscribe({
+      next: (plan) => this.applyDay(date, plan),
+      error: (error: { status?: number }) =>
+        this.showToast(
+          error?.status === 404
+            ? `План на ${date} ещё не построен`
+            : `Не удалось получить план на ${date}`,
+          'warning',
+        ),
+    });
+  }
+
+  /** Данные дня и его план: справочники и наряды берём из UI-методов сервиса. */
+  private applyDay(date: string, plan: Plan): void {
+    forkJoin({ reference: this.api.getReference(), day: this.api.getDay(date) }).subscribe({
+      next: ({ reference, day }) => {
+        this.reference.set(reference);
+        this.orders.set(day.orders ?? []);
+        this.extraStaff.set([]);
+        this.currentDate.set(date);
+        this.applyLivePlan(plan);
+        this.showToast(`День ${date}: план версии ${plan.plan_version}`, 'success');
+      },
+      error: () => this.showToast(`Не удалось загрузить данные дня ${date}`, 'warning'),
     });
   }
 
