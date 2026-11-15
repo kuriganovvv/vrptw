@@ -182,3 +182,8 @@ body {
     animation: none;
   }
 }
+
+/* Убираем флаг Leaflet, оставляя текстовую атрибуцию OpenStreetMap (требование лицензии) */
+.leaflet-attribution-flag {
+  display: none !important;
+}

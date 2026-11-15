@@ -12,7 +12,7 @@ import {
 import * as L from 'leaflet';
 import { DispatchStore } from '../../core/dispatch-store';
 import { RouteView } from '../../core/models';
-import { fmtTime } from '../../core/time';
+import { fmtTime, minutesOfDay } from '../../core/time';
 import { Icon } from '../../shared/icon';
 import { plural } from '../../shared/ui';
 
@@ -137,7 +137,10 @@ import { plural } from '../../shared/ui';
             class="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-2 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs text-slate-600 backdrop-blur"
           >
             <span class="size-2.5 rounded bg-brand"></span>
-            Сервисные центры · сейчас {{ nowLabel() }}
+            Сервисные центры · {{ timeScopeLabel() }}
+            @if (store.cursorActive()) {
+              <span class="text-slate-400">· бледные — пройдено, пунктир — впереди</span>
+            }
           </div>
         }
       </div>
@@ -170,6 +173,10 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
   );
 
   protected readonly nowLabel = () => fmtTime(this.store.now());
+  /** Подпись времени карты: «сейчас 12:40» или «просмотр на 15:10». */
+  protected readonly timeScopeLabel = computed(() =>
+    this.store.cursorActive() ? `просмотр на ${this.store.viewLabel()}` : `сейчас ${this.nowLabel()}`,
+  );
   protected readonly plural = plural;
 
   constructor() {
@@ -177,14 +184,24 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       const scope = this.onlyStaffId();
       const routes = this.routes();
       const date = this.store.currentDate();
+      // Время просмотра и выбор бригады читаем явно: без этого эффект не знает,
+      // что маркеры надо перерисовать при движении курсора на Ганте.
+      const selected = this.store.selectedStaffId();
+      const view = this.viewState();
       if (date !== this.lastDate) {
         this.lastDate = date;
         this.fitted = false;
       }
       if (!this.map) return;
-      this.render(routes, this.store.selectedStaffId(), scope);
+      this.render(routes, selected, scope, view);
     });
   }
+
+  /** Время, на которое показываем состояние маршрутов. */
+  private readonly viewState = computed(() => ({
+    minutes: this.store.viewMinutes(),
+    active: this.store.cursorActive(),
+  }));
 
   ngAfterViewInit(): void {
     this.map = L.map(this.mapEl.nativeElement, {
@@ -204,7 +221,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     this.layer = L.layerGroup().addTo(this.map);
 
     setTimeout(() => this.map?.invalidateSize(), 60);
-    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId());
+    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId(), this.viewState());
     roadListeners.add(this.rerender);
   }
 
@@ -216,9 +233,14 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
 
   /** Перерисовать, когда подъехала дорожная геометрия очередного маршрута. */
   private readonly rerender = () =>
-    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId());
+    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId(), this.viewState());
 
-  private render(routes: RouteView[], selectedId: string | null, scope: string | null): void {
+  private render(
+    routes: RouteView[],
+    selectedId: string | null,
+    scope: string | null,
+    view: { minutes: number; active: boolean },
+  ): void {
     if (!this.map || !this.layer) return;
     this.layer.clearLayers();
 
@@ -230,6 +252,9 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       ...active.filter((r) => r.staff.staff_id === effectiveSelected),
     ];
     const focus = effectiveSelected !== null;
+
+    const cursorActive = view.active;
+    const viewMinutes = view.minutes;
 
     const bounds = L.latLngBounds([]);
 
@@ -316,8 +341,13 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         const order = stopView.order;
         const done = stopView.stop.status === 'DONE';
         const activeNow = stopView.stop.status === 'IN_PROGRESS';
-        const fill = done || activeNow ? color : '#ffffff';
-        const text = done || activeNow ? '#ffffff' : color;
+        // Состояние визита на выбранное время: уже пройден, идёт сейчас или ещё впереди.
+        const pastStop = cursorActive && minutesOfDay(stopView.stop.end) <= viewMinutes;
+        const futureStop = cursorActive && minutesOfDay(stopView.stop.start) > viewMinutes;
+        const filled = !futureStop && (done || activeNow || pastStop || cursorActive);
+        const fill = filled ? color : '#ffffff';
+        const text = filled ? '#ffffff' : color;
+        const markerOpacity = !cursorActive || activeNow ? 1 : futureStop ? 0.4 : pastStop ? 0.65 : 1;
         const size = isSelected ? 22 : 12;
         const marker = L.marker([stopView.lat, stopView.lon], {
           icon: L.divIcon({
@@ -325,7 +355,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
             html: isSelected
               ? `<div style="
               width:22px;height:22px;border-radius:9999px;
-              background:${fill};border:2.5px solid ${color};
+              background:${fill};border:${futureStop ? '2.5px dashed' : '2.5px solid'} ${color};opacity:${markerOpacity};
               color:${text};font-weight:700;font-size:10px;
               display:flex;align-items:center;justify-content:center;
               box-shadow:0 0 0 3px #fff, 0 2px 6px rgba(15,23,42,.25);
@@ -333,7 +363,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
             ">${stopView.stop.seq}</div>`
               : `<div style="
               width:12px;height:12px;border-radius:9999px;
-              background:${fill};border:2px solid ${color};
+              background:${fill};border:${futureStop ? '2px dashed' : '2px solid'} ${color};opacity:${markerOpacity};
               box-shadow:0 0 0 2px #fff;
             "></div>`,
             iconSize: [size, size],
@@ -350,7 +380,9 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
           `<b>${order ? order.address : stopView.stop.location_id}</b><br/>
           ${view.staff.display_name} · ${stopView.timeLabel}<br/>
           <span style="color:#64748b">${
-            stopView.stop.status === 'DONE' ? 'Выполнено'
+            futureStop ? 'Ещё впереди'
+            : pastStop ? 'Уже пройдено'
+            : stopView.stop.status === 'DONE' ? 'Выполнено'
             : stopView.late ? 'Риск опоздания'
             : 'Запланировано'
           }</span>${

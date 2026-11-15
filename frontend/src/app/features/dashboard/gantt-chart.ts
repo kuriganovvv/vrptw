@@ -1,13 +1,15 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, computed, inject } from '@angular/core';
 import { DispatchStore } from '../../core/dispatch-store';
 import { RouteView, StopView } from '../../core/models';
-import { fmtTime, minutesOfDay } from '../../core/time';
+import { fmtMinutes, fmtTime, minutesOfDay } from '../../core/time';
 import { Icon } from '../../shared/icon';
 import { shortOrder } from '../../shared/ui';
 
 const DAY_START = 8 * 60;
 const DAY_END = 19 * 60;
 const SPAN = DAY_END - DAY_START;
+/** Шаг, с которым курсор двигается мышью и стрелками. */
+const CURSOR_STEP_MIN = 5;
 
 type BlockKind = 'visit' | 'break' | 'restock';
 
@@ -19,6 +21,8 @@ interface GanttBlock {
   kind: BlockKind;
   late: boolean;
   done: boolean;
+  /** Визит начинается позже выбранного времени просмотра. */
+  future: boolean;
 }
 
 interface GanttRow {
@@ -51,8 +55,23 @@ interface GanttRow {
             <span class="h-2.5 w-4 rounded-sm bg-orange-500"></span>Пополнение
           </span>
           <span class="inline-flex items-center gap-1.5">
-            <span class="h-3 w-0.5 bg-red-500"></span>Сейчас {{ nowLabel() }}
+            <span class="h-3 w-0.5" [class]="store.cursorActive() ? 'bg-amber-500' : 'bg-red-500'"></span>
+            @if (store.cursorActive()) {
+              Просмотр на {{ viewLabel() }}
+            } @else {
+              Сейчас {{ nowLabel() }}
+            }
           </span>
+          @if (store.cursorActive()) {
+            <button
+              type="button"
+              (click)="store.resetCursor()"
+              class="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-0.5 text-[11px] text-slate-600 transition-colors hover:bg-slate-50"
+            >
+              <app-icon name="refresh-cw" class="size-3" />
+              К текущему времени
+            </button>
+          }
         </div>
       </div>
 
@@ -68,16 +87,41 @@ interface GanttRow {
           </div>
 
           <div class="relative mt-1">
-            @if (nowPct() !== null) {
-              <div class="pointer-events-none absolute bottom-0 left-36 right-0 top-0 z-10">
+            @if (cursorPct() !== null) {
+              <div #track class="pointer-events-none absolute bottom-0 left-36 right-0 top-0 z-20">
                 <div
-                  class="absolute top-0 size-2.5 -translate-x-1/2 rounded-full bg-red-500"
-                  [style.left.%]="nowPct()"
-                ></div>
-                <div
-                  class="h-full w-0.5 -translate-x-1/2 bg-red-500/80"
-                  [style.left.%]="nowPct()"
-                ></div>
+                  class="pointer-events-auto absolute inset-y-0 w-5 -translate-x-1/2 cursor-ew-resize touch-none select-none rounded-sm focus:outline-none focus-visible:bg-amber-100/60"
+                  [style.left.%]="cursorPct()"
+                  (pointerdown)="startDrag($event)"
+                  (pointermove)="moveDrag($event)"
+                  (pointerup)="endDrag($event)"
+                  (pointercancel)="endDrag($event)"
+                  (dblclick)="store.resetCursor()"
+                  (keydown)="onKeydown($event)"
+                  tabindex="0"
+                  role="slider"
+                  aria-label="Время просмотра маршрутов"
+                  [attr.aria-valuemin]="dayStart"
+                  [attr.aria-valuemax]="dayEnd"
+                  [attr.aria-valuenow]="store.viewMinutes()"
+                  [attr.aria-valuetext]="viewLabel()"
+                  title="Потяните линию, чтобы посмотреть маршруты на другое время. Двойной клик — вернуться к текущему времени."
+                >
+                  <div
+                    class="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2"
+                    [class]="store.cursorActive() ? 'bg-amber-500' : 'bg-red-500/80'"
+                  ></div>
+                  <div
+                    class="absolute -top-1 left-1/2 size-3 -translate-x-1/2 rounded-full border-2 border-white shadow"
+                    [class]="store.cursorActive() ? 'bg-amber-500' : 'bg-red-500'"
+                  ></div>
+                  <div
+                    class="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md px-1.5 py-0.5 font-mono text-[10px] text-white shadow"
+                    [class]="store.cursorActive() ? 'bg-amber-600' : 'bg-slate-900/85'"
+                  >
+                    {{ viewLabel() }}
+                  </div>
+                </div>
               </div>
             }
 
@@ -116,6 +160,7 @@ interface GanttRow {
                         [class.border-slate-300]="block.kind === 'break'"
                         [class.bg-orange-500]="block.kind === 'restock'"
                         [class.opacity-60]="block.done"
+                        [class.opacity-30]="block.future && !block.done"
                         [class.ring-2]="block.late"
                         [class.ring-red-500]="block.late"
                         [class.ring-offset-1]="block.late"
@@ -133,7 +178,7 @@ interface GanttRow {
           </div>
 
           <div class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2 text-[11px] text-slate-500">
-            <span>{{ rows().length }} бригад · окно 08:00–19:00</span>
+            <span>{{ rows().length }} бригад · окно {{ dayStartLabel }}–{{ dayEndLabel }}</span>
             <span class="inline-flex items-center gap-1.5">
               <span class="size-1.5 rounded-full bg-red-500"></span>
               красная рамка — риск нарушения слота
@@ -146,6 +191,15 @@ interface GanttRow {
 })
 export class GanttChart {
   protected readonly store = inject(DispatchStore);
+
+  @ViewChild('track') private track?: ElementRef<HTMLDivElement>;
+
+  protected readonly dayStart = DAY_START;
+  protected readonly dayEnd = DAY_END;
+  protected readonly dayStartLabel = fmtMinutes(DAY_START);
+  protected readonly dayEndLabel = fmtMinutes(DAY_END);
+
+  private dragging = false;
 
   protected readonly ticks = [9, 12, 15, 18].map((hour) => ({
     label: `${String(hour).padStart(2, '0')}:00`,
@@ -160,13 +214,60 @@ export class GanttChart {
       .sort((a, b) => b.blocks.length - a.blocks.length);
   });
 
-  protected readonly nowPct = computed<number | null>(() => {
-    const now = this.store.nowMinutes();
-    if (now < DAY_START || now > DAY_END) return null;
-    return ((now - DAY_START) / SPAN) * 100;
+  /** Положение курсора времени просмотра; `null`, если он вне окна диаграммы. */
+  protected readonly cursorPct = computed<number | null>(() => {
+    const minutes = this.store.viewMinutes();
+    if (minutes < DAY_START || minutes > DAY_END) return null;
+    return ((minutes - DAY_START) / SPAN) * 100;
   });
 
   protected readonly nowLabel = computed(() => fmtTime(this.store.now()));
+  protected readonly viewLabel = computed(() => this.store.viewLabel());
+
+  protected startDrag(event: PointerEvent): void {
+    const handle = event.currentTarget as HTMLElement;
+    handle.setPointerCapture?.(event.pointerId);
+    this.dragging = true;
+    this.updateCursor(event);
+    event.preventDefault();
+  }
+
+  protected moveDrag(event: PointerEvent): void {
+    if (!this.dragging) return;
+    this.updateCursor(event);
+  }
+
+  protected endDrag(event: PointerEvent): void {
+    if (!this.dragging) return;
+    this.dragging = false;
+    (event.currentTarget as HTMLElement).releasePointerCapture?.(event.pointerId);
+  }
+
+  /** Стрелки двигают курсор на 5 минут, Home/End — к началу и концу окна. */
+  protected onKeydown(event: KeyboardEvent): void {
+    const current = this.store.viewMinutes();
+    let next: number | null = null;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') next = current - CURSOR_STEP_MIN;
+    else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') next = current + CURSOR_STEP_MIN;
+    else if (event.key === 'Home') next = DAY_START;
+    else if (event.key === 'End') next = DAY_END;
+    else if (event.key === 'Escape') {
+      this.store.resetCursor();
+      event.preventDefault();
+      return;
+    }
+    if (next === null) return;
+    this.store.setCursor(Math.max(DAY_START, Math.min(DAY_END, next)));
+    event.preventDefault();
+  }
+
+  private updateCursor(event: PointerEvent): void {
+    const rect = this.track?.nativeElement.getBoundingClientRect();
+    if (!rect || rect.width === 0) return;
+    const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+    const minutes = DAY_START + ratio * SPAN;
+    this.store.setCursor(Math.round(minutes / CURSOR_STEP_MIN) * CURSOR_STEP_MIN);
+  }
 
   private toRow(route: RouteView, selectedId: string | null): GanttRow {
     const blocks: GanttBlock[] = [];
@@ -215,6 +316,9 @@ export class GanttChart {
       kind,
       late: stop.risk,
       done: stop.stop.status === 'DONE',
+      // Без выбранного времени ничего не приглушаем: на «сейчас» виден весь план
+      // (визиты после текущего момента — такие же части маршрута, а не архив).
+      future: this.store.cursorActive() && start > this.store.viewMinutes(),
     };
   }
 }

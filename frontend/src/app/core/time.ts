@@ -60,6 +60,12 @@ export function fmtTime(iso: string | null | undefined): string {
   return timeFmt.format(new Date(iso));
 }
 
+/** Метка для минут от начала суток: 545 → «09:05». */
+export function fmtMinutes(minutes: number): string {
+  const total = Math.max(0, Math.min(24 * 60 - 1, Math.round(minutes)));
+  return `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
+}
+
 export function fmtTimeRange(start: string, end: string): string {
   return `${fmtTime(start)}–${fmtTime(end)}`;
 }

@@ -1,42 +1,76 @@
 import { Injectable, computed, signal } from '@angular/core';
 
-const STORAGE_KEY = 'vrptw.employee.staff_id';
+export type UserRole = 'dispatcher' | 'employee';
 
-function readStoredStaffId(): string | null {
+export interface Session {
+  role: UserRole;
+  /** Фамилия (или ФИО), которую ввёл пользователь на входе. */
+  name: string;
+  /** Табельный номер: есть только у сотрудника, нужен мобильному кабинету. */
+  staffId: string | null;
+}
+
+const STORAGE_KEY = 'vrptw.session.v2';
+/** Сессия прошлой версии: там был только табельный номер сотрудника. */
+const LEGACY_KEY = 'vrptw.employee.staff_id';
+
+function readStored(): Session | null {
   try {
-    return window.localStorage.getItem(STORAGE_KEY);
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Session;
+      if (parsed?.role === 'dispatcher' || parsed?.role === 'employee') return parsed;
+    }
+    const legacy = window.localStorage.getItem(LEGACY_KEY);
+    return legacy ? { role: 'employee', name: legacy, staffId: legacy } : null;
   } catch {
     return null;
   }
 }
 
 /**
- * Сессия мобильного сотрудника. Вход выполняется только на фронтенде:
- * логин — это `staff_id` из справочника сервиса, пароль не проверяется.
+ * Сессия демо-стенда. Вход выполняется только на фронтенде: роль, фамилия
+ * и общий пароль `1234`; сервис планирования пароль не проверяет.
  */
 @Injectable({ providedIn: 'root' })
 export class SessionStore {
-  private readonly staffIdState = signal<string | null>(readStoredStaffId());
+  private readonly state = signal<Session | null>(readStored());
 
-  readonly staffId = this.staffIdState.asReadonly();
-  readonly isAuthenticated = computed(() => Boolean(this.staffIdState()));
+  readonly session = this.state.asReadonly();
+  readonly role = computed(() => this.state()?.role ?? null);
+  readonly name = computed(() => this.state()?.name ?? '');
+  readonly staffId = computed(() => this.state()?.staffId ?? null);
+  readonly isAuthenticated = computed(() => this.state() !== null);
+  readonly isDispatcher = computed(() => this.state()?.role === 'dispatcher');
 
-  login(staffId: string): void {
-    const normalized = staffId.trim().toUpperCase();
-    this.staffIdState.set(normalized);
+  loginDispatcher(name: string): void {
+    this.persist({ role: 'dispatcher', name: name.trim() || 'Диспетчер', staffId: null });
+  }
+
+  loginEmployee(staffId: string, name: string): void {
+    this.persist({
+      role: 'employee',
+      name: name.trim() || staffId,
+      staffId: staffId.trim().toUpperCase(),
+    });
+  }
+
+  logout(): void {
+    this.state.set(null);
     try {
-      window.localStorage.setItem(STORAGE_KEY, normalized);
+      window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(LEGACY_KEY);
     } catch {
       // приватный режим браузера: сессия останется только в памяти
     }
   }
 
-  logout(): void {
-    this.staffIdState.set(null);
+  private persist(session: Session): void {
+    this.state.set(session);
     try {
-      window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
     } catch {
-      // ничего не хранили — и хорошо
+      // приватный режим браузера: сессия останется только в памяти
     }
   }
 }

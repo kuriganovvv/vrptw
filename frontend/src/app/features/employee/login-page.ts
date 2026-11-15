@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
 import { DispatchApiService } from '../../core/dispatch-api.service';
-import { SessionStore } from '../../core/session-store';
-import { Icon } from '../../shared/icon';
+import { Staff } from '../../core/models';
+import { SessionStore, UserRole } from '../../core/session-store';
+import { Icon, IconName } from '../../shared/icon';
 
 @Component({
   selector: 'app-login-page',
@@ -66,36 +66,55 @@ import { Icon } from '../../shared/icon';
         >
           <h1 class="text-[26px] font-bold tracking-tight text-slate-900">Вход в систему</h1>
           <p class="mt-1.5 text-sm leading-5 text-slate-500">
-            Для продолжения введите свой staff_id. Пароль на демо-стенде не проверяется.
+            Выберите роль, укажите фамилию и пароль демо-стенда.
           </p>
 
           <form class="mt-5 space-y-3" (ngSubmit)="submit()">
-            <div class="login-field">
-              <app-icon name="user" class="login-field__icon" />
-              <div class="min-w-0 flex-1">
-                <span class="login-field__label">Роль</span>
-                <span class="block text-sm font-medium text-slate-800">Сотрудник</span>
-              </div>
-              <app-icon name="chevron-down" class="size-4 text-slate-400" />
+            <div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Роль">
+              @for (item of roles; track item.value) {
+                <button
+                  type="button"
+                  role="radio"
+                  [attr.aria-checked]="role() === item.value"
+                  (click)="selectRole(item.value)"
+                  class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors"
+                  [class.border-brand]="role() === item.value"
+                  [class.bg-brand-50]="role() === item.value"
+                  [class.text-brand]="role() === item.value"
+                  [class.border-slate-200]="role() !== item.value"
+                  [class.text-slate-600]="role() !== item.value"
+                >
+                  <app-icon [name]="item.icon" class="size-4" />
+                  {{ item.label }}
+                </button>
+              }
             </div>
 
             <label class="login-field">
               <app-icon name="user" class="login-field__icon" />
               <span class="min-w-0 flex-1">
-                <span class="login-field__label">Логин (staff_id)</span>
+                <span class="login-field__label">Фамилия</span>
                 <input
-                  name="staffId"
+                  name="surname"
                   type="text"
-                  inputmode="text"
                   autocomplete="username"
                   spellcheck="false"
-                  placeholder="Например, ST-001"
+                  placeholder="Например, Ковалёв"
                   class="w-full border-0 bg-transparent p-0 text-sm font-medium text-slate-800 placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-0"
-                  [ngModel]="staffId()"
-                  (ngModelChange)="staffId.set($event)"
+                  [attr.list]="role() === 'employee' ? 'staff-surnames' : null"
+                  [ngModel]="surname()"
+                  (ngModelChange)="surname.set($event)"
                 />
               </span>
             </label>
+
+            @if (role() === 'employee') {
+              <datalist id="staff-surnames">
+                @for (option of surnames(); track option) {
+                  <option [value]="option"></option>
+                }
+              </datalist>
+            }
 
             <label class="login-field">
               <app-icon name="shield-check" class="login-field__icon" />
@@ -122,8 +141,9 @@ import { Icon } from '../../shared/icon';
             </label>
 
             <p class="px-1 text-xs leading-4 text-slate-400">
-              Пароль выдаётся администратором. Логин — это табельный номер сотрудника из справочника
-              сервиса.
+              Демо-стенд: пароль для всех ролей —
+              <span class="font-medium text-slate-500">1234</span>. Диспетчер входит по своей
+              фамилии, сотрудник — по фамилии из справочника бригад.
             </p>
 
             @if (error(); as message) {
@@ -148,16 +168,10 @@ import { Icon } from '../../shared/icon';
 
             <button
               type="submit"
-              [disabled]="submitting()"
-              class="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3.5 text-[15px] font-medium text-white transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-70"
+              class="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3.5 text-[15px] font-medium text-white transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
-              @if (submitting()) {
-                <app-icon name="refresh-cw" class="size-4 spin" />
-                Проверяем…
-              } @else {
-                Войти
-                <app-icon name="arrow-right" class="size-4" />
-              }
+              Войти
+              <app-icon name="arrow-right" class="size-4" />
             </button>
           </form>
 
@@ -171,7 +185,7 @@ import { Icon } from '../../shared/icon';
         </section>
 
         <p class="mt-auto pt-8 text-center text-[11px] leading-4 text-slate-400">
-          Мобильный кабинет сотрудника · данные поступают из сервиса планирования
+          Умная диспетчеризация выездных бригад · демо-стенд хакатона
         </p>
       </div>
     </div>
@@ -228,52 +242,104 @@ export class LoginPage {
   private readonly session = inject(SessionStore);
   private readonly router = inject(Router);
 
-  protected readonly staffId = signal('');
+  protected readonly demoPassword = '1234';
+  protected readonly roles: { value: UserRole; label: string; icon: IconName }[] = [
+    { value: 'dispatcher', label: 'Диспетчер', icon: 'radar' },
+    { value: 'employee', label: 'Сотрудник', icon: 'hard-hat' },
+  ];
+
+  protected readonly role = signal<UserRole>('dispatcher');
+  protected readonly surname = signal('');
   protected readonly password = signal('');
   protected readonly showPassword = signal(false);
-  protected readonly submitting = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly notice = signal<string | null>(null);
 
-  protected submit(): void {
-    if (this.submitting()) return;
-    const value = this.staffId().trim().toUpperCase();
-    this.notice.set(null);
+  private readonly staff = signal<Staff[]>([]);
 
-    if (!/^ST-\d{3}$/.test(value)) {
-      this.error.set('Логин — это staff_id вида ST-001. Проверьте номер и попробуйте снова.');
+  /** Фамилии из справочника — подсказки для входа сотрудника. */
+  protected readonly surnames = computed(() =>
+    [
+      ...new Set(
+        this.staff()
+          .map((person) => surnameOf(person.display_name))
+          .filter(Boolean),
+      ),
+    ].sort((a, b) => a.localeCompare(b, 'ru')),
+  );
+
+  constructor() {
+    // Справочник нужен только для подсказок и поиска сотрудника по фамилии:
+    // диспетчер входит и без него, если сервис ещё не поднят.
+    this.api.getReference().subscribe({
+      next: (reference) => this.staff.set(reference.staff ?? []),
+      error: () => this.staff.set([]),
+    });
+  }
+
+  protected selectRole(role: UserRole): void {
+    this.role.set(role);
+    this.error.set(null);
+    this.notice.set(null);
+  }
+
+  protected submit(): void {
+    this.notice.set(null);
+    const surname = this.surname().trim();
+
+    if (!surname) {
+      this.error.set('Укажите фамилию.');
+      return;
+    }
+    if (this.password().trim() !== this.demoPassword) {
+      this.error.set('Неверный пароль. На демо-стенде пароль — 1234.');
       return;
     }
 
     this.error.set(null);
-    this.submitting.set(true);
-    this.api
-      .getReference()
-      .pipe(finalize(() => this.submitting.set(false)))
-      .subscribe({
-        next: (reference) => {
-          const staff = reference.staff.find(
-            (item) => item.staff_id.toUpperCase() === value,
-          );
-          if (!staff) {
-            this.error.set(`Сотрудник ${value} не найден в справочнике сервиса.`);
-            return;
-          }
-          this.session.login(staff.staff_id);
-          void this.router.navigate(['/app/shift']);
-        },
-        error: () => {
-          this.error.set(
-            'Не удалось проверить сотрудника: сервис планирования недоступен на localhost:8080.',
-          );
-        },
-      });
+    if (this.role() === 'dispatcher') {
+      this.session.loginDispatcher(surname);
+      void this.router.navigate(['/dashboard']);
+      return;
+    }
+
+    // Сотрудник: фамилию ищем в справочнике бригад без учёта регистра и ё/е.
+    const query = normalize(surname);
+    // Фамилии в справочнике в мужском роде («Кузнецов»), сотрудник может ввести «Кузнецова»:
+    // поэтому одного совпадения по началу фамилии достаточно.
+    const sameSurname = (item: Staff) => {
+      const value = normalize(surnameOf(item.display_name));
+      return value === query || value.startsWith(query) || query.startsWith(value);
+    };
+    const person = this.staff().find(sameSurname);
+
+    if (!person) {
+      this.error.set(
+        this.staff().length
+          ? `Сотрудник с фамилией «${surname}» не найден. Выберите фамилию из подсказки.`
+          : 'Справочник сотрудников недоступен: проверьте, что backend запущен на localhost:8080.',
+      );
+      return;
+    }
+
+    this.session.loginEmployee(person.staff_id, person.display_name);
+    void this.router.navigate(['/app/shift']);
   }
 
   protected contactAdmin(): void {
     this.error.set(null);
     this.notice.set(
-      'Запросите доступ у диспетчера смены. В демо-версии вход выполняется по staff_id из справочника.',
+      'Запросите доступ у диспетчера смены. В демо-версии пароль у всех — 1234, фамилия — ваша.',
     );
   }
+}
+
+/** «Пётр Ковалёв» → «Ковалёв». */
+function surnameOf(displayName: string): string {
+  const parts = displayName.trim().split(/\s+/);
+  return parts.length > 1 ? parts[parts.length - 1] : (parts[0] ?? '');
+}
+
+function normalize(value: string): string {
+  return value.trim().toLowerCase().replace(/ё/g, 'е');
 }

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { employeeGuard, guestGuard } from './core/employee.guard';
+import { dispatcherGuard, employeeGuard, guestGuard } from './core/employee.guard';
 import { DispatcherLayout } from './layout/dispatcher-layout';
 
 export const routes: Routes = [
@@ -10,10 +10,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/employee/login-page').then((m) => m.LoginPage),
   },
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  // По умолчанию открывается экран входа: сначала выбираем роль, потом кабинет.
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
   {
     path: '',
     component: DispatcherLayout,
+    canActivate: [dispatcherGuard],
     children: [
       {
         path: 'dashboard',
@@ -89,5 +91,5 @@ export const routes: Routes = [
     ],
   },
   { path: 'field', redirectTo: 'app/shift' },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: 'login' },
 ];

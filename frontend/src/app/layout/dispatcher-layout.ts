@@ -9,6 +9,7 @@ import {
 } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { DispatchStore } from '../core/dispatch-store';
+import { SessionStore } from '../core/session-store';
 import { fmtDateLong, fmtTime } from '../core/time';
 import { Icon, IconName } from '../shared/icon';
 
@@ -65,6 +66,7 @@ const NAV: NavItem[] = [
 })
 export class DispatcherLayout {
   protected readonly store = inject(DispatchStore);
+  protected readonly session = inject(SessionStore);
   private readonly router = inject(Router);
 
   readonly nav = NAV;
@@ -102,5 +104,21 @@ export class DispatcherLayout {
 
   refreshPlan(): void {
     this.store.replan();
+  }
+
+  /** Инициалы для карточки пользователя: «Мария Павлова» → «МП». */
+  readonly initials = computed(() =>
+    this.session
+      .name()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('') || 'Д',
+  );
+
+  logout(): void {
+    this.session.logout();
+    void this.router.navigate(['/login']);
   }
 }

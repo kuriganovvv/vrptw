@@ -29,7 +29,7 @@ import {
 import { forkJoin } from 'rxjs';
 import { DispatchApiService } from './dispatch-api.service';
 import { DEMO_ORDERS, DEMO_PLAN, DEMO_REFERENCE, DEMO_STAFF_META } from './demo-data';
-import { fmtKm, fmtTime, fmtTimeRange, minutesOfDay, toModelIso } from './time';
+import { fmtKm, fmtMinutes, fmtTime, fmtTimeRange, minutesOfDay, toModelIso } from './time';
 
 const PALETTE = ['#7C3AED', '#0EA5E9', '#F97316', '#10B981', '#8B5CF6', '#EC4899', '#14B8A6'];
 
@@ -95,6 +95,15 @@ export class DispatchStore {
 
   readonly now = computed(() => this.plan().as_of);
   readonly nowMinutes = computed(() => minutesOfDay(this.now()));
+
+  /**
+   * Время просмотра: диспетчер тянет курсор по диаграмме Ганта и смотрит,
+   * как выглядели маршруты в другой момент смены. `null` — следуем за `now` плана.
+   */
+  readonly cursorMinutes = signal<number | null>(null);
+  readonly viewMinutes = computed(() => this.cursorMinutes() ?? this.nowMinutes());
+  readonly cursorActive = computed(() => this.cursorMinutes() !== null);
+  readonly viewLabel = computed(() => fmtMinutes(this.viewMinutes()));
 
   /**
    * Состояние данных для мобильного сотрудника. Демо-данные здесь не показываем:
@@ -495,6 +504,16 @@ export class DispatchStore {
     this.selectedStaffId.update((current) => (current === staffId ? null : staffId));
   }
 
+  /** Передвинуть курсор времени на диаграмме Ганта (минуты от начала суток). */
+  setCursor(minutes: number | null): void {
+    this.cursorMinutes.set(minutes);
+  }
+
+  /** Вернуться к текущему времени плана. */
+  resetCursor(): void {
+    this.cursorMinutes.set(null);
+  }
+
   /** Мобильный интерфейс бригады: выбор исполнителя и отметки по визиту. */
   selectFieldStaff(staffId: string): void {
     this.fieldStaffId.set(staffId);
@@ -748,6 +767,8 @@ export class DispatchStore {
     if (priceholders.length) {
       this.extraStaff.update((current) => [...current, ...priceholders]);
     }
+    // Другой день — другое время: курсор просмотра сбрасываем на «сейчас».
+    this.cursorMinutes.set(null);
     this.plan.set(plan);
   }
 
