@@ -2031,8 +2031,8 @@
         {
           "building_id": "B-00025",
           "address": "г. Екатеринбург, ул. Пушкина, 11",
-          "lat": 56.845724,
-          "lon": 60.591364,
+          "lat": 56.845154,
+          "lon": 60.591058,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2076,8 +2076,8 @@
         {
           "building_id": "B-00030",
           "address": "г. Екатеринбург, ул. Пушкина, 21",
-          "lat": 56.845435,
-          "lon": 60.595961,
+          "lat": 56.847104,
+          "lon": 60.597073,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2094,7 +2094,7 @@
         {
           "building_id": "B-00032",
           "address": "г. Екатеринбург, ул. Ленина, 25",
-          "lat": 56.85095,
+          "lat": 56.85215,
           "lon": 60.582235,
           "building_type": "MKD",
           "overhead_line": false,
@@ -2121,8 +2121,8 @@
         {
           "building_id": "B-00035",
           "address": "г. Екатеринбург, ул. Пушкина, 31",
-          "lat": 56.826619,
-          "lon": 60.606858,
+          "lat": 56.827732,
+          "lon": 60.607599,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2148,8 +2148,8 @@
         {
           "building_id": "B-00040",
           "address": "г. Екатеринбург, ул. Пушкина, 41",
-          "lat": 56.813983,
-          "lon": 60.634213,
+          "lat": 56.815096,
+          "lon": 60.634955,
           "building_type": "PRIVATE",
           "overhead_line": true,
           "zone_service_center_id": "SC-02"
@@ -2204,8 +2204,8 @@
         {
           "building_id": "B-00025",
           "address": "г. Екатеринбург, ул. Пушкина, 11",
-          "lat": 56.845724,
-          "lon": 60.591364,
+          "lat": 56.845154,
+          "lon": 60.591058,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2249,8 +2249,8 @@
         {
           "building_id": "B-00030",
           "address": "г. Екатеринбург, ул. Пушкина, 21",
-          "lat": 56.845435,
-          "lon": 60.595961,
+          "lat": 56.847104,
+          "lon": 60.597073,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2267,7 +2267,7 @@
         {
           "building_id": "B-00032",
           "address": "г. Екатеринбург, ул. Ленина, 25",
-          "lat": 56.85095,
+          "lat": 56.85215,
           "lon": 60.582235,
           "building_type": "MKD",
           "overhead_line": false,
@@ -2294,8 +2294,8 @@
         {
           "building_id": "B-00035",
           "address": "г. Екатеринбург, ул. Пушкина, 31",
-          "lat": 56.826619,
-          "lon": 60.606858,
+          "lat": 56.827732,
+          "lon": 60.607599,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2321,8 +2321,8 @@
         {
           "building_id": "B-00038",
           "address": "г. Екатеринбург, ул. Карла Либкнехта, 37",
-          "lat": 56.846573,
-          "lon": 60.582705,
+          "lat": 56.846368,
+          "lon": 60.583635,
           "building_type": "PRIVATE",
           "overhead_line": true,
           "zone_service_center_id": "SC-02"
@@ -2339,8 +2339,8 @@
         {
           "building_id": "B-00040",
           "address": "г. Екатеринбург, ул. Пушкина, 41",
-          "lat": 56.813983,
-          "lon": 60.634213,
+          "lat": 56.815096,
+          "lon": 60.634955,
           "building_type": "PRIVATE",
           "overhead_line": true,
           "zone_service_center_id": "SC-02"
@@ -2353,7 +2353,7 @@
       "technology": "XDSL",
       "name": "DSLAM Центр-7",
       "address": "г. Екатеринбург, ул. Малышева, 8",
-      "lat": 56.850288,
+      "lat": 56.852088,
       "lon": 60.582518,
       "buildings": [
         {
@@ -2386,7 +2386,7 @@
         {
           "building_id": "B-00032",
           "address": "г. Екатеринбург, ул. Ленина, 25",
-          "lat": 56.85095,
+          "lat": 56.85215,
           "lon": 60.582235,
           "building_type": "MKD",
           "overhead_line": false,
@@ -2433,8 +2433,8 @@
         {
           "building_id": "B-00025",
           "address": "г. Екатеринбург, ул. Пушкина, 11",
-          "lat": 56.845724,
-          "lon": 60.591364,
+          "lat": 56.845154,
+          "lon": 60.591058,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2469,8 +2469,8 @@
         {
           "building_id": "B-00030",
           "address": "г. Екатеринбург, ул. Пушкина, 21",
-          "lat": 56.845435,
-          "lon": 60.595961,
+          "lat": 56.847104,
+          "lon": 60.597073,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2478,8 +2478,8 @@
         {
           "building_id": "B-00035",
           "address": "г. Екатеринбург, ул. Пушкина, 31",
-          "lat": 56.826619,
-          "lon": 60.606858,
+          "lat": 56.827732,
+          "lon": 60.607599,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-02"
@@ -2615,8 +2615,8 @@
         {
           "building_id": "B-00054",
           "address": "г. Екатеринбург, ул. Чкалова, 30",
-          "lat": 56.817006,
-          "lon": 60.627242,
+          "lat": 56.816436,
+          "lon": 60.626936,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-03"
@@ -2806,8 +2806,8 @@
         {
           "building_id": "B-00054",
           "address": "г. Екатеринбург, ул. Чкалова, 30",
-          "lat": 56.817006,
-          "lon": 60.627242,
+          "lat": 56.816436,
+          "lon": 60.626936,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-03"
@@ -2943,8 +2943,8 @@
         {
           "building_id": "B-00054",
           "address": "г. Екатеринбург, ул. Чкалова, 30",
-          "lat": 56.817006,
-          "lon": 60.627242,
+          "lat": 56.816436,
+          "lon": 60.626936,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-03"
@@ -2966,8 +2966,8 @@
       "technology": "PON",
       "name": "OLT Запад-12",
       "address": "г. Екатеринбург, ул. Академика Сахарова, 13",
-      "lat": 56.842627,
-      "lon": 60.551515,
+      "lat": 56.843184,
+      "lon": 60.551886,
       "buildings": [
         {
           "building_id": "B-00061",
@@ -3062,8 +3062,8 @@
         {
           "building_id": "B-00071",
           "address": "г. Екатеринбург, ул. Академика Сахарова, 25",
-          "lat": 56.843254,
-          "lon": 60.569003,
+          "lat": 56.842843,
+          "lon": 60.570864,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-04"
@@ -3080,8 +3080,8 @@
         {
           "building_id": "B-00073",
           "address": "г. Екатеринбург, ул. Заводская, 29",
-          "lat": 56.842052,
-          "lon": 60.545744,
+          "lat": 56.839895,
+          "lon": 60.54748,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-04"
@@ -3235,8 +3235,8 @@
         {
           "building_id": "B-00071",
           "address": "г. Екатеринбург, ул. Академика Сахарова, 25",
-          "lat": 56.843254,
-          "lon": 60.569003,
+          "lat": 56.842843,
+          "lon": 60.570864,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-04"
@@ -3253,8 +3253,8 @@
         {
           "building_id": "B-00073",
           "address": "г. Екатеринбург, ул. Заводская, 29",
-          "lat": 56.842052,
-          "lon": 60.545744,
+          "lat": 56.839895,
+          "lon": 60.54748,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-04"
@@ -3330,8 +3330,8 @@
       "technology": "XDSL",
       "name": "DSLAM Запад-14",
       "address": "г. Екатеринбург, ул. Академика Сахарова, 15",
-      "lat": 56.841357,
-      "lon": 60.552554,
+      "lat": 56.841846,
+      "lon": 60.554363,
       "buildings": [
         {
           "building_id": "B-00062",
@@ -3473,8 +3473,8 @@
         {
           "building_id": "B-00088",
           "address": "г. Екатеринбург, ул. Луначарского, 20",
-          "lat": 56.853233,
-          "lon": 60.689841,
+          "lat": 56.849556,
+          "lon": 60.684751,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-05"
@@ -3637,8 +3637,8 @@
         {
           "building_id": "B-00088",
           "address": "г. Екатеринбург, ул. Луначарского, 20",
-          "lat": 56.853233,
-          "lon": 60.689841,
+          "lat": 56.849556,
+          "lon": 60.684751,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-05"
@@ -3727,8 +3727,8 @@
         {
           "building_id": "B-00098",
           "address": "г. Екатеринбург, ул. Луначарского, 40",
-          "lat": 56.864749,
-          "lon": 60.704017,
+          "lat": 56.863996,
+          "lon": 60.692202,
           "building_type": "PRIVATE",
           "overhead_line": true,
           "zone_service_center_id": "SC-05"
@@ -3819,8 +3819,8 @@
         {
           "building_id": "B-00088",
           "address": "г. Екатеринбург, ул. Луначарского, 20",
-          "lat": 56.853233,
-          "lon": 60.689841,
+          "lat": 56.849556,
+          "lon": 60.684751,
           "building_type": "MKD",
           "overhead_line": false,
           "zone_service_center_id": "SC-05"
