@@ -64,7 +64,7 @@ public class PlanningService {
         }
         DayInput day = store.findDay(date).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Наряды не загружены: PUT /api/v1/days/" + date));
-        return solve(date, day.now(), null, Map.of(), false);
+        return solve(date, day.now(), null, Map.of(), Map.of(), false);
     }
 
     /** День с учётом событий: используется UI, чтобы показать те же наряды, что видит солвер. */
@@ -74,12 +74,14 @@ public class PlanningService {
         return effectiveDay(day, store.now(date));
     }
 
-    public Plan replan(LocalDate date, OffsetDateTime ts, String eventId, Map<String, List<Stop>> completedPrefix) {
-        return solve(date, ts, eventId, completedPrefix, true);
+    public Plan replan(LocalDate date, OffsetDateTime ts, String eventId, Map<String, List<Stop>> completedPrefix,
+                       Map<String, PlanMerger.Unavailable> unavailable) {
+        return solve(date, ts, eventId, completedPrefix, unavailable, true);
     }
 
     private Plan solve(LocalDate date, OffsetDateTime now, String eventId,
-                       Map<String, List<Stop>> prefix, boolean isReplan) {
+                       Map<String, List<Stop>> prefix, Map<String, PlanMerger.Unavailable> unavailable,
+                       boolean isReplan) {
         ReferenceData ref = store.findReference().orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.CONFLICT, "Справочники не загружены"));
         TravelMatrix matrix = store.findTravelMatrix().orElseThrow(() ->
@@ -116,7 +118,7 @@ public class PlanningService {
             }
 
             Plan fresh = assembler.assemble(solved, effective, pgpRes.groups(), version, ms, ref);
-            Plan merged = merger.merge(fresh, prefix, ref, now);
+            Plan merged = merger.merge(fresh, prefix, ref, now, unavailable);
             merged = merger.withDayState(merged, store.cancelled(date), eventId);
             merged = merger.withAlerts(merged, store.alerts(date), effective, now);
             merged = resummarize(merged);

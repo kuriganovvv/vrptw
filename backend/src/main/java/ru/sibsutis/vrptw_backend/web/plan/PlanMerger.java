@@ -14,10 +14,20 @@ import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 @Component
 public class PlanMerger {
 
+    public record Unavailable(OffsetDateTime from, OffsetDateTime until) {
+    }
+
     public Plan merge(Plan fresh, Map<String, List<Stop>> prefix, ReferenceData ref, OffsetDateTime now) {
-        if (prefix.isEmpty()) return fresh;
+        return merge(fresh, prefix, ref, now, Map.of());
+    }
+
+    public Plan merge(Plan fresh, Map<String, List<Stop>> prefix, ReferenceData ref, OffsetDateTime now,
+                      Map<String, Unavailable> unavailable) {
+        if (prefix.isEmpty() && unavailable.isEmpty()) return fresh;
         List<Route> routes = new ArrayList<>();
+        Set<String> freshStaff = new HashSet<>();
         for (Route r : fresh.routes()) {
+            freshStaff.add(r.staffId());
             List<Stop> pre = prefix.getOrDefault(r.staffId(), List.of());
             if (pre.isEmpty()) { routes.add(r); continue; }
             List<Stop> stops = new ArrayList<>(pre);
@@ -30,8 +40,33 @@ public class PlanMerger {
             routes.add(new Route(r.staffId(), r.serviceCenterId(), r.status(), r.unavailableFrom(), r.unavailableUntil(),
                     reseq(stops), totals(stops, ref, r.staffId(), now)));
         }
+        for (Map.Entry<String, Unavailable> entry : unavailable.entrySet()) {
+            if (freshStaff.contains(entry.getKey())) continue;
+            List<Stop> stops = reseq(new ArrayList<>(prefix.getOrDefault(entry.getKey(), List.of())));
+            Unavailable window = entry.getValue();
+            routes.add(new Route(entry.getKey(), serviceCenterId(ref, entry.getKey(), stops), "UNAVAILABLE",
+                    window == null || window.from() == null ? now : window.from(),
+                    window == null ? null : window.until(),
+                    stops, totals(stops, ref, entry.getKey(), now)));
+        }
         return new Plan(fresh.date(), fresh.planVersion(), fresh.basedOnEventId(), now, fresh.computationMs(),
                 routes, fresh.unassigned(), fresh.pgpGroups(), fresh.cancelled(), fresh.alerts(), fresh.summary());
+    }
+
+    private static String serviceCenterId(ReferenceData ref, String staffId, List<Stop> stops) {
+        for (Stop stop : stops) {
+            if ("DEPOT_START".equals(stop.type()) && stop.locationId() != null) {
+                return stop.locationId();
+            }
+        }
+        if (ref != null && ref.staff() != null) {
+            for (var staff : ref.staff()) {
+                if (staff.staffId().equals(staffId)) {
+                    return staff.serviceCenterId();
+                }
+            }
+        }
+        return null;
     }
 
     public Plan withAlerts(Plan plan, List<Alert> existing, DayInput day, OffsetDateTime now) {

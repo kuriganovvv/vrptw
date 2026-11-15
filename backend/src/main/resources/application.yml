@@ -24,6 +24,6 @@ dispatch:
   version: "0.1.0"
   pgp:
     min-orders: 3       
-    window-minutes: 120
+    window-minutes: 60
   restock:
     enabled: true

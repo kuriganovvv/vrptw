@@ -126,9 +126,6 @@ public class DaySolutionFactory {
             staff.setTravelMatrix(matrix);
             result.add(staff);
         }
-        if (result.isEmpty()) {
-            throw new DataMappingException("Нет ни одного сотрудника на смене");
-        }
         return result;
     }
 

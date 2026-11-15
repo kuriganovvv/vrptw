@@ -55,6 +55,20 @@ public class InMemoryDataStore implements DataStore {
     }
     public Optional<DayInput> findDay(LocalDate d) { return Optional.ofNullable(days.get(d)); }
     public Optional<OffsetDateTime> dayUpdatedAt(LocalDate d) { return Optional.empty(); }
+
+    public void clearDays() {
+        days.clear();
+        plans.clear();
+        versions.clear();
+        events.clear();
+        modelNow.clear();
+        cancelled.clear();
+        alerts.clear();
+        removedOrders.clear();
+        extraOrders.clear();
+        unavailableStaff.clear();
+        visitEnds.clear();
+    }
     /** Даты, загруженные в сервис (для UI-списка дней). */
     public Set<LocalDate> loadedDates() { return Set.copyOf(days.keySet()); }
     public void savePlan(LocalDate d, Plan p) { plans.put(d, p); }

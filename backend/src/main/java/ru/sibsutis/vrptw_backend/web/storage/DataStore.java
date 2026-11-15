@@ -37,6 +37,9 @@ public interface DataStore {
 
     void saveDay(LocalDate date, DayInput day);
 
+    /** Полная замена справочников: загруженные дни, планы и события удаляются. */
+    void clearDays();
+
     Optional<DayInput> findDay(LocalDate d);
 
     /** Когда наряды этой даты последний раз сохранялись. */

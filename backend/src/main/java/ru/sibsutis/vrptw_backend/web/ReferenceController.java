@@ -24,6 +24,7 @@ public class ReferenceController {
 
     @PutMapping(path = "/reference", consumes = MediaType.APPLICATION_JSON_VALUE)
     public LoadResult putReference(@RequestBody ReferenceData body) {
+        store.clearDays();
         store.saveReference(body);
         Map<String, Integer> counts = new LinkedHashMap<>();
         counts.put("service_centers", size(body.serviceCenters()));
