@@ -4,14 +4,17 @@ import {
   ElementRef,
   OnDestroy,
   ViewChild,
+  computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import * as L from 'leaflet';
 import { DispatchStore } from '../../core/dispatch-store';
 import { RouteView } from '../../core/models';
 import { fmtTime } from '../../core/time';
 import { Icon } from '../../shared/icon';
+import { plural } from '../../shared/ui';
 
 @Component({
   selector: 'app-routes-map',
@@ -19,98 +22,124 @@ import { Icon } from '../../shared/icon';
   template: `
     <div
       class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white"
+      [class.h-full]="compact()"
     >
-      <div
-        class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-4 py-3"
-      >
-        <div class="flex items-center gap-2">
-          <app-icon name="route" class="size-4 text-brand" />
-          <h2 class="text-sm font-semibold">Маршруты бригад</h2>
-          <span class="text-xs text-slate-400">{{ routes().length }}</span>
-        </div>
-        <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-          @for (route of routes().slice(0, 6); track route.staff.staff_id) {
-            <button
-              type="button"
-              (click)="store.selectStaff(route.staff.staff_id)"
-              class="inline-flex items-center gap-1.5 transition-colors hover:text-slate-900"
-              [class.font-medium]="store.selectedStaffId() === route.staff.staff_id"
-            >
-              <span
-                class="h-1.5 w-4 rounded-full"
-                [style.background]="route.meta.color"
-              ></span>
-              {{ route.staff.display_name.split(' ')[1] }}
-            </button>
-          }
-        </div>
-      </div>
-
-      <div class="relative min-h-[360px] flex-1 bg-slate-100 lg:min-h-[520px]">
-        <div #mapEl class="absolute inset-0 z-0 h-full w-full"></div>
-
-        @if (store.selectedRoute(); as route) {
-          <div
-            class="pointer-events-none absolute left-3 top-3 z-20 w-60 rounded-xl border border-slate-200 bg-white/95 p-3 text-sm shadow-lg backdrop-blur"
-          >
-            <div class="flex items-center gap-2">
-              <span
-                class="size-2.5 rounded-full"
-                [style.background]="route.meta.color"
-              ></span>
-              <span class="truncate font-semibold">{{ route.staff.display_name }}</span>
+      @if (!compact()) {
+        <div
+          class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-4 py-3"
+        >
+          <div class="flex items-center gap-2">
+            <app-icon name="route" class="size-4 text-brand" />
+            <h2 class="text-sm font-semibold">Маршруты бригад</h2>
+            <span class="text-xs text-slate-400">{{ routes().length }}</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600">
+            @for (route of routes().slice(0, 6); track route.staff.staff_id) {
               <button
                 type="button"
-                (click)="store.selectStaff(null)"
-                class="pointer-events-auto ml-auto rounded p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                aria-label="Сбросить выбор"
+                (click)="store.selectStaff(route.staff.staff_id)"
+                class="inline-flex items-center gap-1.5 transition-colors hover:text-slate-900"
+                [class.font-medium]="store.selectedStaffId() === route.staff.staff_id"
               >
-                <app-icon name="x" class="size-3.5" />
+                <span
+                  class="h-1.5 w-4 rounded-full"
+                  [style.background]="route.meta.color"
+                ></span>
+                {{ route.staff.display_name.split(' ')[1] }}
               </button>
+            }
+          </div>
+        </div>
+      }
+
+      <div
+        [class]="
+          compact()
+            ? 'relative min-h-[260px] flex-1 bg-slate-100'
+            : 'relative min-h-[360px] flex-1 bg-slate-100 lg:min-h-[520px]'
+        "
+      >
+        <div #mapEl class="absolute inset-0 z-0 h-full w-full"></div>
+
+        @if (!compact()) {
+          @if (store.selectedRoute(); as route) {
+            <div
+              class="pointer-events-none absolute left-3 top-3 z-20 w-60 rounded-xl border border-slate-200 bg-white/95 p-3 text-sm shadow-lg backdrop-blur"
+            >
+              <div class="flex items-center gap-2">
+                <span
+                  class="size-2.5 rounded-full"
+                  [style.background]="route.meta.color"
+                ></span>
+                <span class="truncate font-semibold">{{ route.staff.display_name }}</span>
+                <button
+                  type="button"
+                  (click)="store.selectStaff(null)"
+                  class="pointer-events-auto ml-auto rounded p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                  aria-label="Сбросить выбор"
+                >
+                  <app-icon name="x" class="size-3.5" />
+                </button>
+              </div>
+              <dl class="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+                <dt class="text-slate-500">Статус</dt>
+                <dd
+                  class="text-right font-medium"
+                  [class.text-red-600]="route.risk"
+                  [class.text-emerald-700]="!route.risk && route.presence === 'На заявке'"
+                >
+                  {{ route.presence }}
+                </dd>
+                <dt class="text-slate-500">Прибытие</dt>
+                <dd class="text-right font-medium">{{ route.eta ?? '—' }}</dd>
+                <dt class="text-slate-500">Выполнено</dt>
+                <dd class="text-right font-medium">{{ route.done }} из {{ route.visits }}</dd>
+                <dt class="text-slate-500">Пробег</dt>
+                <dd class="text-right font-medium">
+                  {{ route.km.toFixed(1).replace('.', ',') }} км
+                </dd>
+              </dl>
+              @if (route.nextStop?.order; as order) {
+                <div class="mt-2 border-t border-slate-100 pt-2">
+                  <div class="text-[10px] uppercase tracking-wide text-slate-400">
+                    Следующая точка
+                  </div>
+                  <div class="mt-0.5 truncate text-xs text-slate-600" [title]="order.address">
+                    {{ order.address }}
+                  </div>
+                </div>
+              }
+              @if (route.risk) {
+                <div class="mt-2 flex items-center gap-1 text-xs font-medium text-red-600">
+                  <app-icon name="alarm-clock" class="size-3.5" />
+                  Не успевает в окно клиента
+                </div>
+              }
             </div>
-            <dl class="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
-              <dt class="text-slate-500">Статус</dt>
-              <dd
-                class="text-right font-medium"
-                [class.text-red-600]="route.risk"
-                [class.text-emerald-700]="!route.risk && route.presence === 'На заявке'"
-              >
-                {{ route.presence }}
-              </dd>
-              <dt class="text-slate-500">Прибытие</dt>
-              <dd class="text-right font-medium">{{ route.eta ?? '—' }}</dd>
-              <dt class="text-slate-500">Выполнено</dt>
-              <dd class="text-right font-medium">{{ route.done }} из {{ route.visits }}</dd>
-              <dt class="text-slate-500">Пробег</dt>
-              <dd class="text-right font-medium">
-                {{ route.km.toFixed(1).replace('.', ',') }} км
-              </dd>
-            </dl>
-            @if (route.nextStop?.order; as order) {
-              <div class="mt-2 border-t border-slate-100 pt-2">
-                <div class="text-[10px] uppercase tracking-wide text-slate-400">
-                  Следующая точка
-                </div>
-                <div class="mt-0.5 truncate text-xs text-slate-600" [title]="order.address">
-                  {{ order.address }}
-                </div>
-              </div>
-            }
-            @if (route.risk) {
-              <div class="mt-2 flex items-center gap-1 text-xs font-medium text-red-600">
-                <app-icon name="alarm-clock" class="size-3.5" />
-                Не успевает в окно клиента
-              </div>
-            }
+          }
+        } @else if (singleRoute(); as route) {
+          <div
+            class="pointer-events-none absolute left-3 top-3 z-20 rounded-xl border border-white/80 bg-white/95 px-3 py-2 text-xs shadow-lg backdrop-blur"
+          >
+            <div class="flex items-center gap-1.5 font-medium text-slate-800">
+              <span class="size-2 rounded-full bg-brand"></span>
+              Мой маршрут
+            </div>
+            <div class="mt-0.5 text-slate-500">
+              {{ route.visits }} {{ plural(route.visits, 'визит', 'визита', 'визитов') }} ·
+              {{ route.km.toFixed(1).replace('.', ',') }} км
+            </div>
           </div>
         }
 
-        <div
-          class="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-2 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs text-slate-600 backdrop-blur"
-        >
-          <span class="size-2.5 rounded bg-brand"></span>
-          Сервисные центры · сейчас {{ nowLabel() }}
-        </div>
+        @if (!compact()) {
+          <div
+            class="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-2 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs text-slate-600 backdrop-blur"
+          >
+            <span class="size-2.5 rounded bg-brand"></span>
+            Сервисные центры · сейчас {{ nowLabel() }}
+          </div>
+        }
       </div>
     </div>
   `,
@@ -118,21 +147,42 @@ import { Icon } from '../../shared/icon';
 export class RoutesMap implements AfterViewInit, OnDestroy {
   protected readonly store = inject(DispatchStore);
 
+  /** Ограничить карту одним сотрудником (мобильный раздел «Карта»). */
+  readonly onlyStaffId = input<string | null>(null);
+  /** Компактный режим без легенды и общей панели выбора бригады. */
+  readonly compact = input(false);
+
   @ViewChild('mapEl', { static: true }) private mapEl!: ElementRef<HTMLDivElement>;
 
   private map?: L.Map;
   private layer?: L.LayerGroup;
   private fitted = false;
+  private lastDate = '';
 
-  protected readonly routes = this.store.activeRoutes;
+  protected readonly routes = computed<RouteView[]>(() => {
+    const staffId = this.onlyStaffId();
+    const all = this.store.routes();
+    return staffId ? all.filter((route) => route.staff.staff_id === staffId) : this.store.activeRoutes();
+  });
+
+  protected readonly singleRoute = computed<RouteView | null>(() =>
+    this.onlyStaffId() ? (this.routes()[0] ?? null) : null,
+  );
+
   protected readonly nowLabel = () => fmtTime(this.store.now());
+  protected readonly plural = plural;
 
   constructor() {
     effect(() => {
-      const routes = this.store.routes();
-      const selected = this.store.selectedStaffId();
+      const scope = this.onlyStaffId();
+      const routes = this.routes();
+      const date = this.store.currentDate();
+      if (date !== this.lastDate) {
+        this.lastDate = date;
+        this.fitted = false;
+      }
       if (!this.map) return;
-      this.render(routes, selected);
+      this.render(routes, this.store.selectedStaffId(), scope);
     });
   }
 
@@ -154,7 +204,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     this.layer = L.layerGroup().addTo(this.map);
 
     setTimeout(() => this.map?.invalidateSize(), 60);
-    this.render(this.store.routes(), this.store.selectedStaffId());
+    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId());
     roadListeners.add(this.rerender);
   }
 
@@ -165,23 +215,27 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
   }
 
   /** Перерисовать, когда подъехала дорожная геометрия очередного маршрута. */
-  private readonly rerender = () => this.render(this.store.routes(), this.store.selectedStaffId());
+  private readonly rerender = () =>
+    this.render(this.routes(), this.store.selectedStaffId(), this.onlyStaffId());
 
-  private render(routes: RouteView[], selectedId: string | null): void {
+  private render(routes: RouteView[], selectedId: string | null, scope: string | null): void {
     if (!this.map || !this.layer) return;
     this.layer.clearLayers();
 
-    const active = routes.filter((r) => r.visits > 0);
+    // В режиме одной бригады выбор в панели диспетчера игнорируем.
+    const effectiveSelected = scope ?? selectedId;
+    const active = routes.filter((r) => r.visits > 0 && (!scope || r.staff.staff_id === scope));
     const ordered = [
-      ...active.filter((r) => r.staff.staff_id !== selectedId),
-      ...active.filter((r) => r.staff.staff_id === selectedId),
+      ...active.filter((r) => r.staff.staff_id !== effectiveSelected),
+      ...active.filter((r) => r.staff.staff_id === effectiveSelected),
     ];
+    const focus = effectiveSelected !== null;
 
     const bounds = L.latLngBounds([]);
 
     for (const view of ordered) {
-      const isSelected = view.staff.staff_id === selectedId;
-      const dim = selectedId !== null && !isSelected;
+      const isSelected = view.staff.staff_id === effectiveSelected;
+      const dim = focus && !isSelected;
       const color = view.meta.color;
 
       const points: L.LatLngTuple[] = [];
@@ -202,25 +256,31 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         // Пока дорожная геометрия не получена — пунктирная прямая между точками.
         const shape: L.LatLngExpression[] = road ?? points;
 
-        L.polyline(shape, {
-          color: '#ffffff',
-          weight: isSelected ? 11 : 9,
-          opacity: dim ? 0.15 : 0.9,
-          lineCap: 'round',
-          lineJoin: 'round',
-          interactive: false,
-        }).addTo(this.layer);
+        // Белая подложка нужна только выделенному маршруту или общему обзору:
+        // десяток подложек одновременно превращает карту в белое месиво.
+        if (!focus || isSelected) {
+          L.polyline(shape, {
+            color: '#ffffff',
+            weight: isSelected ? 11 : 8,
+            opacity: focus ? 0.9 : 0.65,
+            lineCap: 'round',
+            lineJoin: 'round',
+            interactive: false,
+          }).addTo(this.layer);
+        }
 
         const line = L.polyline(shape, {
           color,
           weight: isSelected ? 6 : 4,
-          opacity: dim ? 0.15 : 1,
+          opacity: dim ? 0.12 : 1,
           lineCap: 'round',
           lineJoin: 'round',
           dashArray: road ? undefined : '7 8',
           className: 'route-line',
         }).addTo(this.layer);
-        line.on('click', () => this.store.selectStaff(view.staff.staff_id));
+        line.on('click', () => {
+          if (!scope) this.store.selectStaff(view.staff.staff_id);
+        });
         line.bindTooltip(
           `<b>${view.staff.display_name}</b><br/>${view.visits} визитов · ${view.km
             .toFixed(1)
@@ -228,8 +288,28 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
           { sticky: true, direction: 'top', opacity: 1 },
         );
 
+        // «Огонёк» бежит от первой остановки к последней — видно направление движения.
+        if (!dim) {
+          L.polyline(shape, {
+            color: '#ffffff',
+            weight: isSelected ? 3.4 : 2.2,
+            opacity: 0.9,
+            lineCap: 'round',
+            dashArray: '1 18',
+            className: 'route-flow',
+            interactive: false,
+          }).addTo(this.layer);
+        }
+
+        if (isSelected) {
+          this.addDirectionArrows(points, color);
+        }
+
         if (!road) requestRoadGeometry(geometryKeyValue, coords);
       }
+
+      // В режиме фокуса подробности показываем только у выбранной бригады.
+      if (focus && !isSelected) continue;
 
       for (const stopView of view.stops) {
         if (stopView.stop.type !== 'VISIT') continue;
@@ -238,25 +318,34 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         const activeNow = stopView.stop.status === 'IN_PROGRESS';
         const fill = done || activeNow ? color : '#ffffff';
         const text = done || activeNow ? '#ffffff' : color;
+        const size = isSelected ? 22 : 12;
         const marker = L.marker([stopView.lat, stopView.lon], {
           icon: L.divIcon({
-            className: `stop-marker ${dim ? 'stop-marker--dim' : 'stop-marker--active'}`,
-            html: `<div style="
+            className: `stop-marker ${focus ? 'stop-marker--active' : ''}`,
+            html: isSelected
+              ? `<div style="
               width:22px;height:22px;border-radius:9999px;
               background:${fill};border:2.5px solid ${color};
               color:${text};font-weight:700;font-size:10px;
               display:flex;align-items:center;justify-content:center;
               box-shadow:0 0 0 3px #fff, 0 2px 6px rgba(15,23,42,.25);
               font-family:Geist, system-ui, sans-serif;
-            ">${stopView.stop.seq}</div>`,
-            iconSize: [22, 22],
-            iconAnchor: [11, 11],
+            ">${stopView.stop.seq}</div>`
+              : `<div style="
+              width:12px;height:12px;border-radius:9999px;
+              background:${fill};border:2px solid ${color};
+              box-shadow:0 0 0 2px #fff;
+            "></div>`,
+            iconSize: [size, size],
+            iconAnchor: [size / 2, size / 2],
           }),
           keyboard: false,
           zIndexOffset: isSelected ? 1000 : 0,
         }).addTo(this.layer);
 
-        marker.on('click', () => this.store.selectStaff(view.staff.staff_id));
+        marker.on('click', () => {
+          if (!scope) this.store.selectStaff(view.staff.staff_id);
+        });
         marker.bindTooltip(
           `<b>${order ? order.address : stopView.stop.location_id}</b><br/>
           ${view.staff.display_name} · ${stopView.timeLabel}<br/>
@@ -274,7 +363,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
       }
 
       const depot = view.stops.find((s) => s.stop.type === 'DEPOT_START');
-      if (depot) {
+      if (depot && isSelected) {
         L.marker([depot.lat, depot.lon], {
           icon: L.divIcon({
             className: 'stop-marker',
@@ -298,8 +387,36 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     }
 
     if (!this.fitted && bounds.isValid()) {
-      this.map.fitBounds(bounds, { padding: [46, 46], maxZoom: 13 });
+      const pad = scope ? 34 : 46;
+      this.map.fitBounds(bounds, { padding: [pad, pad], maxZoom: scope ? 14 : 13 });
       this.fitted = true;
+    }
+  }
+
+  /** Стрелки по ходу маршрута: показываем только у выделенной бригады, чтобы не шуметь. */
+  private addDirectionArrows(points: L.LatLngTuple[], color: string): void {
+    const layer = this.layer;
+    if (!layer || points.length < 3) return;
+    const step = Math.max(1, Math.floor(points.length / 6));
+    for (let i = step; i < points.length - 1; i += step) {
+      const [lat1, lon1] = points[i];
+      const [lat2, lon2] = points[i + 1];
+      const meanLat = (((lat1 + lat2) / 2) * Math.PI) / 180;
+      const angle =
+        (Math.atan2((lon2 - lon1) * Math.cos(meanLat), lat2 - lat1) * 180) / Math.PI;
+      L.marker([(lat1 + lat2) / 2, (lon1 + lon2) / 2], {
+        icon: L.divIcon({
+          className: 'route-arrow',
+          html: `<div style="transform:rotate(${angle.toFixed(1)}deg)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="${color}" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 20 20 12 16 4 20z"/></svg>
+          </div>`,
+          iconSize: [15, 15],
+          iconAnchor: [7.5, 7.5],
+        }),
+        interactive: false,
+        keyboard: false,
+        zIndexOffset: 900,
+      }).addTo(layer);
     }
   }
 }

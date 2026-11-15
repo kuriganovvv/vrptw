@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { DispatchStore } from '../../core/dispatch-store';
 import { fmtDateLong, fmtTime } from '../../core/time';
 import { Icon } from '../../shared/icon';
+import { DaySwitcher } from './day-switcher';
 import { GanttChart } from './gantt-chart';
 import { OrdersTable } from './orders-table';
 import { ProblemsPanel } from './problems-panel';
@@ -11,7 +12,16 @@ import { StatsCards } from './stats-cards';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [StatsCards, RoutesMap, StaffPanel, ProblemsPanel, GanttChart, OrdersTable, Icon],
+  imports: [
+    StatsCards,
+    RoutesMap,
+    StaffPanel,
+    ProblemsPanel,
+    GanttChart,
+    OrdersTable,
+    DaySwitcher,
+    Icon,
+  ],
   template: `
     <div class="space-y-4 md:space-y-5">
       <div
@@ -31,7 +41,8 @@ import { StatsCards } from './stats-cards';
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-2 text-xs text-slate-600">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+          <app-day-switcher />
           <span class="rounded-lg bg-white px-2.5 py-1.5 shadow-sm">
             <span class="font-semibold text-brand">{{ store.stats()[1].value }}</span> назначено
           </span>

@@ -39,8 +39,8 @@ const STATE_META: Record<FieldVisitState, StateMeta> = {
   },
 };
 
-/** Демо-телефон абонента: в проде приходит из CRM, здесь детерминированно выводим из номера наряда. */
-function subscriberPhone(orderId: string): string {
+/** Демо-телефон абонента: в API поле отсутствует, поэтому номер детерминированно выводится из наряда. */
+export function subscriberPhone(orderId: string): string {
   let hash = 0;
   for (let i = 0; i < orderId.length; i += 1) hash = (hash * 31 + orderId.charCodeAt(i)) >>> 0;
   const p1 = 900 + (hash % 100);
@@ -51,16 +51,16 @@ function subscriberPhone(orderId: string): string {
   return `+7 (${p1}) ${pad(p2, 3)}-${pad(p3, 2)}-${pad(p4, 2)}`;
 }
 
-function telHref(phone: string): string {
+export function telHref(phone: string): string {
   return `tel:${phone.replace(/[^\d+]/g, '')}`;
 }
 
 /** Маршрут до точки в Яндекс.Картах: `~` — старт от текущего местоположения. */
-function yandexRoute(lat: number, lon: number): string {
+export function yandexRoute(lat: number, lon: number): string {
   return `https://yandex.ru/maps/?rtext=~${lat.toFixed(6)},${lon.toFixed(6)}&rtt=auto`;
 }
 
-function gisPoint(lat: number, lon: number): string {
+export function gisPoint(lat: number, lon: number): string {
   return `https://2gis.ru/geo/${lon.toFixed(6)},${lat.toFixed(6)}`;
 }
 
@@ -119,6 +119,7 @@ function gisPoint(lat: number, lon: number): string {
         }
       </section>
 
+      <!-- Текущий визит -->
       @if (current(); as visit) {
         <section class="overflow-hidden rounded-2xl border border-brand/30 bg-white shadow-sm">
           <div class="flex items-center gap-2 bg-brand-50 px-4 py-2 text-xs font-medium text-brand">

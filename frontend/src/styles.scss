@@ -162,3 +162,23 @@ body {
 .stop-marker--active:hover {
   transform: scale(1.12);
 }
+
+/* «Огонёк» бежит по маршруту от первой остановки к последней: видно направление. */
+@keyframes route-flow {
+  to {
+    stroke-dashoffset: -19;
+  }
+}
+.route-flow {
+  animation: route-flow 1.1s linear infinite;
+  pointer-events: none;
+}
+.route-arrow {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-flow {
+    animation: none;
+  }
+}

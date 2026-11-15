@@ -24,6 +24,7 @@ public class PlanAssembler {
     private static final String TYPE_DEPOT_END = "DEPOT_END";
     private static final String TYPE_VISIT = "VISIT";
     private static final String TYPE_BREAK = "BREAK";
+    private static final String TYPE_RESTOCK = "RESTOCK";
     private static final String STATUS_PLANNED = "PLANNED";
     private static final String REASON_NO_STAFF = "NO_QUALIFIED_STAFF";
     private static final String REASON_NO_EQUIPMENT = "NO_EQUIPMENT";
@@ -77,15 +78,24 @@ public class PlanAssembler {
                 continue;
             }
 
+            if (t.restockStart() != null) {
+                stops.add(new Stop(seq++, TYPE_RESTOCK, t.restockLocationId(), null,
+                        t.restockStart(), t.restockStart(), t.restockEnd(),
+                        t.restockTravelSec(), t.restockDistanceM(),
+                        STATUS_PLANNED, dto(staff.getEquipmentCapacity()), null));
+                travelSec += t.restockTravelSec();
+                distanceM += t.restockDistanceM();
+                remaining = staff.getEquipmentCapacity();
+            }
+
             if (t.breakStart() != null) {
                 stops.add(new Stop(seq++, TYPE_BREAK, t.breakLocationId(), null,
                         t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
                         STATUS_PLANNED, dto(remaining), null));
             }
-            if (!visit.isJoint() || visit.isPrimaryJoint()) {
-                remaining = remaining.minus(visit.getOrder().getRequiredEquipment());
-            }
-
+            remaining = t.equipmentAfter() == null
+                    ? remaining.minus(visit.getOrder().getRequiredEquipment())
+                    : t.equipmentAfter();
             travelSec += t.travelSec();
             distanceM += t.distanceM();
             workMin += visit.getWorkType().durationMin();

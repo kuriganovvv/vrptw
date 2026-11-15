@@ -115,6 +115,15 @@ public class PostgresDataStore implements DataStore {
     }
 
     @Override
+    @Transactional
+    public void clearDays() {
+        jdbc.update("DELETE FROM day");
+        for (String table : DAY_STATE_TABLES) {
+            jdbc.update("DELETE FROM " + table);
+        }
+    }
+
+    @Override
     public Optional<OffsetDateTime> dayUpdatedAt(LocalDate d) {
         return firstTimestamp("SELECT updated_at FROM day WHERE date = ?", d);
     }

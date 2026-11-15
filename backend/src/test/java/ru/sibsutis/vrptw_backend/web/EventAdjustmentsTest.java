@@ -119,6 +119,42 @@ class EventAdjustmentsTest {
                 .andExpect(status().isUnprocessableEntity());
     }
 
+    @Test
+    void staffUnavailableKeepsStartedVisitsAndMarksRoute() throws Exception {
+        ApiTestSupport.loadReferenceMatrixAndDay(mvc);
+        mvc.perform(post(DAY + "/plan")).andExpect(status().isOk());
+
+        Map<String, Object> visit = earliestVisit(planStops());
+        String orderId = (String) visit.get("order_id");
+        OffsetDateTime start = time(visit.get("start"));
+        OffsetDateTime eventTs = start.plusMinutes(10);
+
+        mvc.perform(post(DAY + "/events").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"event_id\":\"EV-UNAVAIL-1\",\"type\":\"STAFF_UNAVAILABLE\",\"timestamp\":\""
+                        + eventTs + "\",\"staff_id\":\"ST-001\",\"until\":null,\"reason\":\"ILLNESS\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.plan_version").value(2));
+
+        String body = currentPlan();
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> routes = JsonPath.read(body, "$.routes[*]");
+        Map<String, Object> route = routes.stream()
+                .filter(r -> "UNAVAILABLE".equals(r.get("status")))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Нет маршрута со статусом UNAVAILABLE: " + body));
+        assertThat(route.get("staff_id")).isEqualTo("ST-001");
+        assertThat(time(route.get("unavailable_from"))).isEqualTo(eventTs);
+
+        // H10: начатый визит остался в плане и не сдвинулся
+        Map<String, Object> kept = stopById(body, orderId);
+        assertThat(time(kept.get("start"))).isEqualTo(start);
+
+        // H9: наряд не оказался одновременно и в маршруте, и в unassigned
+        List<String> unassigned = JsonPath.read(body, "$.unassigned[*].order_id");
+        assertThat(unassigned).doesNotContain(orderId);
+    }
+
     // ---------- helpers ----------
 
     private String currentPlan() throws Exception {

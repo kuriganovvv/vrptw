@@ -13,6 +13,7 @@ import ru.sibsutis.vrptw_backend.dto.event.EventResult;
 import ru.sibsutis.vrptw_backend.dto.plan.CancelledOrder;
 import ru.sibsutis.vrptw_backend.dto.plan.Plan;
 import ru.sibsutis.vrptw_backend.dto.plan.Stop;
+import ru.sibsutis.vrptw_backend.web.plan.PlanMerger;
 import ru.sibsutis.vrptw_backend.web.plan.PlanningService;
 import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
@@ -56,8 +57,9 @@ public class EventProcessor {
 
         apply(date, type, e, ts);
         Map<String, List<Stop>> prefix = completedPrefix(date, ts);
+        Map<String, PlanMerger.Unavailable> unavailable = unavailableWindows(date, ts, type, e);
         store.setNow(date, ts);
-        Plan plan = planning.replan(date, ts, id, prefix);
+        Plan plan = planning.replan(date, ts, id, prefix, unavailable);
         return new EventResult(id, true, false, plan.planVersion(), ts,
                 (System.nanoTime() - t0) / 1_000_000, changedStaff(prefix, plan), List.of(), "Event applied; plan replanned");
     }
@@ -84,7 +86,10 @@ public class EventProcessor {
                 new ResponseStatusException(HttpStatus.CONFLICT, "План ещё не построен"));
         for (var route : plan.routes()) {
             for (Stop s : route.stops()) {
-                if ("VISIT".equals(s.type()) && orderId.equals(s.orderId())) {
+                // У совместного наряда два визита — в маршрутах разных сотрудников.
+                // Событие относится к тому сотруднику, который указан в staff_id.
+                if ("VISIT".equals(s.type()) && orderId.equals(s.orderId())
+                        && (staffId == null || staffId.equals(route.staffId()))) {
                     stop = s;
                     plannedStaff = route.staffId();
                 }
@@ -159,6 +164,32 @@ public class EventProcessor {
                 .map(end -> new Stop(s.seq(), s.type(), s.locationId(), s.orderId(), s.arrival(), s.start(), end,
                         s.travelSec(), s.distanceM(), s.status(), s.equipmentAfter(), s.explanation()))
                 .orElse(s);
+    }
+
+    /**
+     * Сотрудники, недоступные в течение дня. Маршрут такого сотрудника не пересчитывается,
+     * но уже начатая часть сохраняется: иначе наряды с начатыми визитами пропадают из плана.
+     */
+    private Map<String, PlanMerger.Unavailable> unavailableWindows(LocalDate date, OffsetDateTime ts,
+                                                                   String type, Map<String, Object> e) {
+        Map<String, PlanMerger.Unavailable> result = new LinkedHashMap<>();
+        store.findPlan(date).ifPresent(plan -> {
+            for (var route : plan.routes()) {
+                if ("UNAVAILABLE".equals(route.status())) {
+                    result.put(route.staffId(),
+                            new PlanMerger.Unavailable(route.unavailableFrom(), route.unavailableUntil()));
+                }
+            }
+        });
+        if ("STAFF_UNAVAILABLE".equals(type)) {
+            result.put(text(e, "staff_id"), new PlanMerger.Unavailable(ts, optionalTime(e, "until")));
+        }
+        return result;
+    }
+
+    private static OffsetDateTime optionalTime(Map<String, Object> e, String field) {
+        Object value = e.get(field);
+        return value instanceof String s && !s.isBlank() ? OffsetDateTime.parse(s) : null;
     }
 
     private List<String> changedStaff(Map<String, List<Stop>> prefix, Plan plan) {

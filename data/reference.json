@@ -64,7 +64,7 @@
   "staff": [
     {
       "staff_id": "ST-001",
-      "display_name": "Монтажник 001",
+      "display_name": "Пётр Ковалёв",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -98,7 +98,7 @@
     },
     {
       "staff_id": "ST-002",
-      "display_name": "Монтажник 002",
+      "display_name": "Алексей Смирнов",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -132,7 +132,7 @@
     },
     {
       "staff_id": "ST-003",
-      "display_name": "Монтажник 003",
+      "display_name": "Дмитрий Кузнецов",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -167,7 +167,7 @@
     },
     {
       "staff_id": "ST-004",
-      "display_name": "Монтажник 004",
+      "display_name": "Сергей Попов",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -201,7 +201,7 @@
     },
     {
       "staff_id": "ST-005",
-      "display_name": "Монтажник 005",
+      "display_name": "Андрей Васильев",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -235,7 +235,7 @@
     },
     {
       "staff_id": "ST-006",
-      "display_name": "Монтажник 006",
+      "display_name": "Николай Петров",
       "service_center_id": "SC-01",
       "profiles": [
         "LTP3"
@@ -270,7 +270,7 @@
     },
     {
       "staff_id": "ST-007",
-      "display_name": "Инсталлятор 007",
+      "display_name": "Михаил Соколов",
       "service_center_id": "SC-01",
       "profiles": [
         "INSTALL"
@@ -303,7 +303,7 @@
     },
     {
       "staff_id": "ST-008",
-      "display_name": "Инсталлятор 008",
+      "display_name": "Игорь Михайлов",
       "service_center_id": "SC-01",
       "profiles": [
         "INSTALL"
@@ -337,7 +337,7 @@
     },
     {
       "staff_id": "ST-009",
-      "display_name": "Монтажник 009",
+      "display_name": "Артём Новиков",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -372,7 +372,7 @@
     },
     {
       "staff_id": "ST-010",
-      "display_name": "Монтажник 010",
+      "display_name": "Владимир Фёдоров",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -406,7 +406,7 @@
     },
     {
       "staff_id": "ST-011",
-      "display_name": "Монтажник 011",
+      "display_name": "Денис Морозов",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -440,7 +440,7 @@
     },
     {
       "staff_id": "ST-012",
-      "display_name": "Монтажник 012",
+      "display_name": "Антон Волков",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -475,7 +475,7 @@
     },
     {
       "staff_id": "ST-013",
-      "display_name": "Монтажник 013",
+      "display_name": "Роман Алексеев",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -509,7 +509,7 @@
     },
     {
       "staff_id": "ST-014",
-      "display_name": "Монтажник 014",
+      "display_name": "Егор Лебедев",
       "service_center_id": "SC-02",
       "profiles": [
         "LTP3"
@@ -543,7 +543,7 @@
     },
     {
       "staff_id": "ST-015",
-      "display_name": "Инсталлятор 015",
+      "display_name": "Виктор Семёнов",
       "service_center_id": "SC-02",
       "profiles": [
         "INSTALL"
@@ -576,7 +576,7 @@
     },
     {
       "staff_id": "ST-016",
-      "display_name": "Инсталлятор 016",
+      "display_name": "Павел Егоров",
       "service_center_id": "SC-02",
       "profiles": [
         "INSTALL"
@@ -610,7 +610,7 @@
     },
     {
       "staff_id": "ST-017",
-      "display_name": "Монтажник 017",
+      "display_name": "Максим Павлов",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -644,7 +644,7 @@
     },
     {
       "staff_id": "ST-018",
-      "display_name": "Монтажник 018",
+      "display_name": "Кирилл Козлов",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -679,7 +679,7 @@
     },
     {
       "staff_id": "ST-019",
-      "display_name": "Монтажник 019",
+      "display_name": "Олег Степанов",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -713,7 +713,7 @@
     },
     {
       "staff_id": "ST-020",
-      "display_name": "Монтажник 020",
+      "display_name": "Илья Николаев",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -747,7 +747,7 @@
     },
     {
       "staff_id": "ST-021",
-      "display_name": "Монтажник 021",
+      "display_name": "Григорий Орлов",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -782,7 +782,7 @@
     },
     {
       "staff_id": "ST-022",
-      "display_name": "Монтажник 022",
+      "display_name": "Степан Андреев",
       "service_center_id": "SC-03",
       "profiles": [
         "LTP3"
@@ -816,7 +816,7 @@
     },
     {
       "staff_id": "ST-023",
-      "display_name": "Инсталлятор 023",
+      "display_name": "Юрий Макаров",
       "service_center_id": "SC-03",
       "profiles": [
         "INSTALL"
@@ -849,7 +849,7 @@
     },
     {
       "staff_id": "ST-024",
-      "display_name": "Инсталлятор 024",
+      "display_name": "Вадим Никитин",
       "service_center_id": "SC-03",
       "profiles": [
         "INSTALL"
@@ -883,7 +883,7 @@
     },
     {
       "staff_id": "ST-025",
-      "display_name": "Монтажник 025",
+      "display_name": "Тимур Захаров",
       "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
@@ -917,7 +917,7 @@
     },
     {
       "staff_id": "ST-026",
-      "display_name": "Монтажник 026",
+      "display_name": "Борис Зайцев",
       "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
@@ -951,7 +951,7 @@
     },
     {
       "staff_id": "ST-027",
-      "display_name": "Монтажник 027",
+      "display_name": "Глеб Соловьёв",
       "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
@@ -986,7 +986,7 @@
     },
     {
       "staff_id": "ST-028",
-      "display_name": "Монтажник 028",
+      "display_name": "Лев Борисов",
       "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
@@ -1020,7 +1020,7 @@
     },
     {
       "staff_id": "ST-029",
-      "display_name": "Монтажник 029",
+      "display_name": "Руслан Яковлев",
       "service_center_id": "SC-04",
       "profiles": [
         "LTP3"
@@ -1054,7 +1054,7 @@
     },
     {
       "staff_id": "ST-030",
-      "display_name": "Инсталлятор 030",
+      "display_name": "Эдуард Григорьев",
       "service_center_id": "SC-04",
       "profiles": [
         "INSTALL"
@@ -1087,7 +1087,7 @@
     },
     {
       "staff_id": "ST-031",
-      "display_name": "Инсталлятор 031",
+      "display_name": "Аркадий Романов",
       "service_center_id": "SC-04",
       "profiles": [
         "INSTALL"
@@ -1120,7 +1120,7 @@
     },
     {
       "staff_id": "ST-032",
-      "display_name": "Инсталлятор 032",
+      "display_name": "Валерий Воробьёв",
       "service_center_id": "SC-04",
       "profiles": [
         "INSTALL"
@@ -1154,7 +1154,7 @@
     },
     {
       "staff_id": "ST-033",
-      "display_name": "Монтажник 033",
+      "display_name": "Игнат Фролов",
       "service_center_id": "SC-05",
       "profiles": [
         "LTP3"
@@ -1189,7 +1189,7 @@
     },
     {
       "staff_id": "ST-034",
-      "display_name": "Монтажник 034",
+      "display_name": "Савелий Александров",
       "service_center_id": "SC-05",
       "profiles": [
         "LTP3"
@@ -1223,7 +1223,7 @@
     },
     {
       "staff_id": "ST-035",
-      "display_name": "Монтажник 035",
+      "display_name": "Матвей Медведев",
       "service_center_id": "SC-05",
       "profiles": [
         "LTP3"
@@ -1257,7 +1257,7 @@
     },
     {
       "staff_id": "ST-036",
-      "display_name": "Монтажник 036",
+      "display_name": "Данила Ершов",
       "service_center_id": "SC-05",
       "profiles": [
         "LTP3"
@@ -1292,7 +1292,7 @@
     },
     {
       "staff_id": "ST-037",
-      "display_name": "Монтажник 037",
+      "display_name": "Арсений Тарасов",
       "service_center_id": "SC-05",
       "profiles": [
         "LTP3"
@@ -1326,7 +1326,7 @@
     },
     {
       "staff_id": "ST-038",
-      "display_name": "Инсталлятор 038",
+      "display_name": "Вячеслав Белов",
       "service_center_id": "SC-05",
       "profiles": [
         "INSTALL"
@@ -1359,7 +1359,7 @@
     },
     {
       "staff_id": "ST-039",
-      "display_name": "Инсталлятор 039",
+      "display_name": "Родион Комаров",
       "service_center_id": "SC-05",
       "profiles": [
         "INSTALL"
@@ -1392,7 +1392,7 @@
     },
     {
       "staff_id": "ST-040",
-      "display_name": "Инсталлятор 040",
+      "display_name": "Семён Гусев",
       "service_center_id": "SC-05",
       "profiles": [
         "INSTALL"

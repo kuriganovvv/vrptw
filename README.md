@@ -33,33 +33,6 @@ curl http://localhost:8080/api/v1/health
 docker compose down
 ```
 
-## Загрузка данных
-
-По контракту данные загружаются через API. Команды выполняются из корня репозитория
-(Linux/macOS или Git Bash; в PowerShell используйте `curl.exe`):
-
-```bash
-# Справочники
-curl -X PUT http://localhost:8080/api/v1/reference \
-     -H 'Content-Type: application/json' \
-     --data-binary @data/reference.json
-
-# Матрица времени в пути
-curl -X PUT http://localhost:8080/api/v1/reference/travel-matrix \
-     -H 'Content-Type: application/json' \
-     --data-binary @data/travel_matrix.json
-
-# Наряды дня
-curl -X PUT http://localhost:8080/api/v1/days/2026-10-26 \
-     -H 'Content-Type: application/json' \
-     --data-binary @data/day_2026-10-26.json
-
-# Построение плана
-curl -X POST http://localhost:8080/api/v1/days/2026-10-26/plan
-```
-
-После загрузки дня интерфейс на <http://localhost> возьмёт справочники, наряды
-и план из сервиса. Пока данные не загружены, интерфейс показывает демо-данные.
 
 ## Локальный запуск
 
@@ -86,8 +59,38 @@ Production-сборка frontend: `npm run build`.
 - `/orders` — наряды дня;
 - `/staff` — сотрудники;
 - `/analytics` — метрики смены;
-- `/field` — мобильный интерфейс бригады: навигация к следующему адресу и отметки
-  о звонке абоненту, прибытии и завершении визита.
+- `/scenarios` — сценарный анализ: «что если на смену выйдет меньше сотрудников»
+  и «какой запас АО нужен, чтобы не заезжать в СЦ».
+
+## Мобильный кабинет сотрудника
+
+- `/login` — вход по `staff_id` (`ST-001…ST-040`), пароль на демо-стенде не проверяется;
+- `/app/shift` — «Моя смена»: выбор дня, карта только своего маршрута, текущий
+  наряд, напоминание позвонить за 30 минут до слота, отметки о прибытии и завершении;
+- `/app/orders` — мои наряды дня;
+- `/app/map` — карта и точки только своего маршрута;
+- `/app/profile` — профиль, смена и квалификация сотрудника.
+
+Кабинет работает только на данных сервиса: дни — `GET /api/v1/ui/days`, наряды —
+`GET /api/v1/ui/days/{date}`, справочники — `GET /api/v1/ui/reference`, план —
+`GET /api/v1/days/{date}/plan`. Переключение дня и обновление плана выполняются
+только чтением, `POST /plan` из интерфейса не вызывается. Чужая бригада сотруднику
+не подставляется: маршрут ищется строго по его `staff_id`. Телефон абонента в API
+отсутствует, поэтому в интерфейсе он помечен как демонстрационный.
+
+## Сценарный анализ
+
+Дополнительный эндпоинт считает гипотетический план, не меняя рабочий план дня:
+
+```bash
+curl -s -X POST http://localhost:8080/api/v1/days/2026-10-26/scenarios \
+  -H 'Content-Type: application/json' \
+  -d '{"staff_delta": -3, "time_limit_sec": 5}'
+```
+
+Ответ содержит метрики базового и сценарного планов, новые нераспределённые
+наряды с причинами и рекомендацию по запасу АО в рюкзаке. Подробности —
+в [docs/scenario-analysis.md](docs/scenario-analysis.md).
 
 ## Backend и PostgreSQL
 

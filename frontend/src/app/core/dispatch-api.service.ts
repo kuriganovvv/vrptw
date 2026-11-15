@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { DayInput, Health, LoadResult, Plan, ReferenceData, UiDay } from './models';
+import { DayInput, Health, LoadResult, Plan, ReferenceData, ScenarioRequest, ScenarioResult, UiDay } from './models';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL', {
   providedIn: 'root',
@@ -34,14 +34,15 @@ export class DispatchApiService {
     return this.http.get<Plan>(`${this.baseUrl}/days/${date}/plan`).pipe(timeout(30_000));
   }
 
-  buildPlan(date: string, timeLimitSec = 300): Observable<Plan> {
-    return this.http
-      .post<Plan>(`${this.baseUrl}/days/${date}/plan`, { time_limit_sec: timeLimitSec })
-      .pipe(timeout(330_000));
-  }
-
   postEvent(date: string, event: unknown): Observable<unknown> {
     return this.http.post(`${this.baseUrl}/days/${date}/events`, event).pipe(timeout(10_000));
+  }
+
+  /** Сценарный анализ: базовый план решается заново с тем же лимитом, что и сценарий. */
+  runScenario(date: string, request: ScenarioRequest): Observable<ScenarioResult> {
+    return this.http
+      .post<ScenarioResult>(`${this.baseUrl}/days/${date}/scenarios`, request)
+      .pipe(timeout(180_000));
   }
 
   putReference(payload: unknown): Observable<LoadResult> {

@@ -235,6 +235,81 @@ export interface Plan {
   summary?: PlanSummary;
 }
 
+/** Сценарный анализ: сравнение базового плана и гипотетической смены. */
+
+export interface ScenarioMetrics {
+  staff_count: number;
+  orders_total: number;
+  visits_planned: number;
+  unassigned: number;
+  pgp_orders: number;
+  slot_hits: number;
+  deadline_hits: number;
+  slot_hit_rate: number;
+  deadline_hit_rate: number;
+  travel_sec_total: number;
+  distance_m_total: number;
+  utilization_cv: number;
+  restock_stops: number;
+  restock_min: number;
+}
+
+export interface ScenarioDelta {
+  assigned: number;
+  unassigned: number;
+  slot_hits: number;
+  deadline_hits: number;
+  travel_sec_total: number;
+  distance_m_total: number;
+  utilization_cv: number;
+  restock_stops: number;
+}
+
+export interface EquipmentAdvice {
+  staff_id: string;
+  display_name: string;
+  visits: number;
+  restock_stops: number;
+  current_start: Equipment;
+  required_start: Equipment;
+  additional_start: Equipment;
+  current_capacity: Equipment;
+  required_capacity: Equipment;
+  additional_capacity: Equipment;
+}
+
+export interface EquipmentRecommendation {
+  restock_stops: number;
+  staff: EquipmentAdvice[];
+  total_additional_start: Equipment;
+  total_additional_capacity: Equipment;
+  note: string;
+}
+
+export interface ScenarioRequest {
+  staff_delta?: number;
+  excluded_staff_ids?: string[];
+  equipment_start?: Equipment;
+  equipment_capacity?: Equipment;
+  use_recommended_equipment?: boolean;
+  time_limit_sec?: number;
+}
+
+export interface ScenarioResult {
+  date: string;
+  as_of: string;
+  computation_ms: number;
+  time_limit_sec: number;
+  staff_delta: number;
+  excluded_staff_ids: string[];
+  baseline: ScenarioMetrics;
+  scenario: ScenarioMetrics;
+  delta: ScenarioDelta;
+  newly_unassigned: UnassignedOrder[];
+  equipment_recommendation: EquipmentRecommendation;
+  scenario_plan: Plan;
+}
+
 export interface Health {
   status: string;
   team?: string;

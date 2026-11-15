@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,7 @@ import ru.sibsutis.vrptw_backend.dto.plan.Stop;
 import ru.sibsutis.vrptw_backend.dto.reference.ReferenceData;
 import ru.sibsutis.vrptw_backend.dto.reference.TravelMatrix;
 import ru.sibsutis.vrptw_backend.service.DaySolutionFactory;
+import ru.sibsutis.vrptw_backend.service.JointVisitFinalizer;
 import ru.sibsutis.vrptw_backend.web.pgp.PgpDetector;
 import ru.sibsutis.vrptw_backend.web.storage.DataStore;
 
@@ -39,14 +41,25 @@ public class PlanningService {
     private final PlanMerger merger;
     private final DaySolutionFactory factory = new DaySolutionFactory();
     private final ReentrantLock lock = new ReentrantLock();
+    private final boolean restockEnabled;
+
+    // Матрица организаторов — около 20 МБ, и её разбор в JSONB самая дорогая операция
+    // в обработке события (лимит 10 с). Держим разобранные DTO в памяти и сверяем
+    // по времени последнего сохранения: если справочники перезалили, метка меняется.
+    private volatile ReferenceData cachedReference;
+    private volatile OffsetDateTime cachedReferenceStamp;
+    private volatile TravelMatrix cachedMatrix;
+    private volatile OffsetDateTime cachedMatrixStamp;
 
     public PlanningService(DataStore store, SolverFactory<DaySolution> solverFactory,
-                           PgpDetector pgp, PlanAssembler assembler, PlanMerger merger) {
+                           PgpDetector pgp, PlanAssembler assembler, PlanMerger merger,
+                           @Value("${dispatch.restock.enabled:true}") boolean restockEnabled) {
         this.store = store;
         this.solverFactory = solverFactory;
         this.pgp = pgp;
         this.assembler = assembler;
         this.merger = merger;
+        this.restockEnabled = restockEnabled;
         this.replanFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(DaySolution.class)
                 .withEntityClasses(Staff.class, Visit.class)
@@ -60,7 +73,7 @@ public class PlanningService {
         }
         DayInput day = store.findDay(date).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Наряды не загружены: PUT /api/v1/days/" + date));
-        return solve(date, day.now(), null, Map.of(), false);
+        return solve(date, day.now(), null, Map.of(), Map.of(), false);
     }
 
     /** День с учётом событий: используется UI, чтобы показать те же наряды, что видит солвер. */
@@ -70,16 +83,16 @@ public class PlanningService {
         return effectiveDay(day, store.now(date));
     }
 
-    public Plan replan(LocalDate date, OffsetDateTime ts, String eventId, Map<String, List<Stop>> completedPrefix) {
-        return solve(date, ts, eventId, completedPrefix, true);
+    public Plan replan(LocalDate date, OffsetDateTime ts, String eventId, Map<String, List<Stop>> completedPrefix,
+                       Map<String, PlanMerger.Unavailable> unavailable) {
+        return solve(date, ts, eventId, completedPrefix, unavailable, true);
     }
 
     private Plan solve(LocalDate date, OffsetDateTime now, String eventId,
-                       Map<String, List<Stop>> prefix, boolean isReplan) {
-        ReferenceData ref = store.findReference().orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.CONFLICT, "Справочники не загружены"));
-        TravelMatrix matrix = store.findTravelMatrix().orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.CONFLICT, "Матрица не загружена"));
+                       Map<String, List<Stop>> prefix, Map<String, PlanMerger.Unavailable> unavailable,
+                       boolean isReplan) {
+        ReferenceData ref = reference();
+        TravelMatrix matrix = matrix();
         DayInput day = store.findDay(date).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Наряды не загружены"));
         if (!lock.tryLock()) {
@@ -101,8 +114,11 @@ public class PlanningService {
             DayInput planned = new DayInput(date, now, plannedOrders, effective.absentStaffIds());
 
             DaySolution problem = factory.build(ref, planned, matrix);
+            problem.setRestockEnabled(restockEnabled);
             applyCompletedPrefixFloor(problem, prefix, now);
-            DaySolution solved = (isReplan ? replanFactory : solverFactory).buildSolver().solve(problem);
+            SolverFactory<DaySolution> usedFactory = isReplan ? replanFactory : solverFactory;
+            DaySolution solved = usedFactory.buildSolver().solve(problem);
+            JointVisitFinalizer.dropIncompletePairs(solved, usedFactory);
             long ms = (System.nanoTime() - t0) / 1_000_000;
 
             int version = isReplan ? store.bumpVersion(date) : 1;
@@ -111,7 +127,7 @@ public class PlanningService {
             }
 
             Plan fresh = assembler.assemble(solved, effective, pgpRes.groups(), version, ms, ref);
-            Plan merged = merger.merge(fresh, prefix, ref, now);
+            Plan merged = merger.merge(fresh, prefix, ref, now, unavailable);
             merged = merger.withDayState(merged, store.cancelled(date), eventId);
             merged = merger.withAlerts(merged, store.alerts(date), effective, now);
             merged = resummarize(merged);
@@ -121,6 +137,38 @@ public class PlanningService {
         } finally {
             lock.unlock();
         }
+    }
+
+    /**
+     * Разобранный справочник с кэшем. В памяти (тесты, аварийный режим) метки времени
+     * нет — читаем каждый раз, там разбор дешёвый.
+     */
+    private ReferenceData reference() {
+        Optional<OffsetDateTime> stamp = store.referenceUpdatedAt();
+        if (stamp.isPresent() && stamp.get().equals(cachedReferenceStamp) && cachedReference != null) {
+            return cachedReference;
+        }
+        ReferenceData loaded = store.findReference().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.CONFLICT, "Справочники не загружены"));
+        if (stamp.isPresent()) {
+            cachedReference = loaded;
+            cachedReferenceStamp = stamp.get();
+        }
+        return loaded;
+    }
+
+    private TravelMatrix matrix() {
+        Optional<OffsetDateTime> stamp = store.travelMatrixUpdatedAt();
+        if (stamp.isPresent() && stamp.get().equals(cachedMatrixStamp) && cachedMatrix != null) {
+            return cachedMatrix;
+        }
+        TravelMatrix loaded = store.findTravelMatrix().orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.CONFLICT, "Матрица не загружена"));
+        if (stamp.isPresent()) {
+            cachedMatrix = loaded;
+            cachedMatrixStamp = stamp.get();
+        }
+        return loaded;
     }
 
     /**
@@ -143,16 +191,20 @@ public class PlanningService {
 
     /** Солвер видел только остаток дня; после мерджа префикса сводка считается по всем маршрутам. */
     private Plan resummarize(Plan plan) {
-        int visits = 0;
+        Set<String> plannedOrders = new HashSet<>();
         long travel = 0;
         List<Double> utilizations = new ArrayList<>();
         for (Route route : plan.routes()) {
-            visits += route.totals().visits();
+            for (Stop stop : route.stops()) {
+                if ("VISIT".equals(stop.type()) && stop.orderId() != null) {
+                    plannedOrders.add(stop.orderId());
+                }
+            }
             travel += route.totals().travelSec();
             utilizations.add(route.totals().utilization());
         }
         PlanSummary s = plan.summary();
-        PlanSummary sum = new PlanSummary(s.ordersTotal(), visits, s.unassigned(), s.pgpOrders(),
+        PlanSummary sum = new PlanSummary(s.ordersTotal(), plannedOrders.size(), s.unassigned(), s.pgpOrders(),
                 s.cancelled(), travel, cv(utilizations));
         return new Plan(plan.date(), plan.planVersion(), plan.basedOnEventId(), plan.asOf(),
                 plan.computationMs(), plan.routes(), plan.unassigned(), plan.pgpGroups(),

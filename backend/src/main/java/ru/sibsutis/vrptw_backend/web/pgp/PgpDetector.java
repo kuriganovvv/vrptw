@@ -37,27 +37,31 @@ public class PgpDetector {
         }
         List<PgpGroup> groups = new ArrayList<>();
         Set<String> grouped = new LinkedHashSet<>();
+        Map<String, Integer> perNode = new LinkedHashMap<>();
         for (var e : byNode.entrySet()) {
             List<Order> sorted = e.getValue();
             sorted.sort(Comparator.comparing(Order::registeredAt));
             List<Order> cluster = new ArrayList<>();
             for (Order o : sorted) {
                 if (!cluster.isEmpty() && Duration.between(cluster.get(0).registeredAt(), o.registeredAt()).toMinutes() > windowMinutes) {
-                    flush(e.getKey(), cluster, detectedAt, groups, grouped);
+                    flush(e.getKey(), cluster, detectedAt, groups, grouped, perNode);
                     cluster = new ArrayList<>();
                 }
                 cluster.add(o);
             }
-            flush(e.getKey(), cluster, detectedAt, groups, grouped);
+            flush(e.getKey(), cluster, detectedAt, groups, grouped, perNode);
         }
         List<Order> planned = orders.stream().filter(o -> !grouped.contains(o.orderId())).toList();
         return new Result(groups, planned);
     }
 
-    private void flush(String node, List<Order> cluster, OffsetDateTime at, List<PgpGroup> groups, Set<String> grouped) {
+    private void flush(String node, List<Order> cluster, OffsetDateTime at, List<PgpGroup> groups,
+                       Set<String> grouped, Map<String, Integer> perNode) {
         if (cluster.size() < minOrders) return;
+        int seq = perNode.merge(node, 1, Integer::sum);
+        String groupId = "PGP-" + at.toLocalDate() + "-" + node + (seq > 1 ? "-" + seq : "");
         List<String> ids = cluster.stream().map(Order::orderId).toList();
-        groups.add(new PgpGroup("PGP-" + at.toLocalDate() + "-" + node, node, ids, at,
+        groups.add(new PgpGroup(groupId, node, ids, at,
                 "TRANSFER_TO_STATION", "Подозрение на ПГП: " + cluster.size() + " наряд(ов) с узла за " + windowMinutes + " мин"));
         grouped.addAll(ids);
     }
