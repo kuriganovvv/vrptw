@@ -6,6 +6,7 @@ import {
   ViewChild,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import * as L from 'leaflet';
 import { DispatchStore } from '../../core/dispatch-store';
@@ -118,6 +119,9 @@ import { Icon } from '../../shared/icon';
 export class RoutesMap implements AfterViewInit, OnDestroy {
   protected readonly store = inject(DispatchStore);
 
+  /** Если задан — показываем маршрут только этой бригады (мобильный экран сотрудника). */
+  readonly onlyStaffId = input<string | null>(null);
+
   @ViewChild('mapEl', { static: true }) private mapEl!: ElementRef<HTMLDivElement>;
 
   private map?: L.Map;
@@ -131,8 +135,9 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     effect(() => {
       const routes = this.store.routes();
       const selected = this.store.selectedStaffId();
+      const scope = this.onlyStaffId();
       if (!this.map) return;
-      this.render(routes, selected);
+      this.render(routes, selected, scope);
     });
   }
 
@@ -154,7 +159,7 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
     this.layer = L.layerGroup().addTo(this.map);
 
     setTimeout(() => this.map?.invalidateSize(), 60);
-    this.render(this.store.routes(), this.store.selectedStaffId());
+    this.render(this.store.routes(), this.store.selectedStaffId(), this.onlyStaffId());
     roadListeners.add(this.rerender);
   }
 
@@ -165,23 +170,26 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
   }
 
   /** Перерисовать, когда подъехала дорожная геометрия очередного маршрута. */
-  private readonly rerender = () => this.render(this.store.routes(), this.store.selectedStaffId());
+  private readonly rerender = () =>
+    this.render(this.store.routes(), this.store.selectedStaffId(), this.onlyStaffId());
 
-  private render(routes: RouteView[], selectedId: string | null): void {
+  private render(routes: RouteView[], selectedId: string | null, scope: string | null): void {
     if (!this.map || !this.layer) return;
     this.layer.clearLayers();
 
-    const active = routes.filter((r) => r.visits > 0);
+    // В режиме одной бригады выбор в панели диспетчера игнорируем.
+    const effectiveSelected = scope ?? selectedId;
+    const active = routes.filter((r) => r.visits > 0 && (!scope || r.staff.staff_id === scope));
     const ordered = [
-      ...active.filter((r) => r.staff.staff_id !== selectedId),
-      ...active.filter((r) => r.staff.staff_id === selectedId),
+      ...active.filter((r) => r.staff.staff_id !== effectiveSelected),
+      ...active.filter((r) => r.staff.staff_id === effectiveSelected),
     ];
-    const focus = selectedId !== null;
+    const focus = effectiveSelected !== null;
 
     const bounds = L.latLngBounds([]);
 
     for (const view of ordered) {
-      const isSelected = view.staff.staff_id === selectedId;
+      const isSelected = view.staff.staff_id === effectiveSelected;
       const dim = focus && !isSelected;
       const color = view.meta.color;
 
