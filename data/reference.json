@@ -3885,7 +3885,8 @@
       "deadline_kind": "WORKING_DAYS",
       "deadline_value": 3,
       "repeat_deadline_value": null,
-      "pgp_relevant": false
+      "pgp_relevant": false,
+      "joint": false
     },
     {
       "code": "INST_FTTB_MKD",
@@ -3911,7 +3912,8 @@
       "deadline_kind": "WORKING_DAYS",
       "deadline_value": 5,
       "repeat_deadline_value": null,
-      "pgp_relevant": false
+      "pgp_relevant": false,
+      "joint": true
     },
     {
       "code": "ADD_SERVICE",

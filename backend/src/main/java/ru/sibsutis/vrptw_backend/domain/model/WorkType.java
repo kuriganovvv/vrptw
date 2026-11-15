@@ -11,5 +11,6 @@ public record WorkType(
         Set<Profile> profiles,
         int durationMin,
         Integer maxStartDelayMin,
-        boolean pgpRelevant) {
-}
+        boolean pgpRelevant,
+        boolean joint
+) {}

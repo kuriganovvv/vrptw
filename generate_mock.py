@@ -326,6 +326,11 @@ work_types = [
 ]
 work_type_by_code = {w["code"]: w for w in work_types}
 
+# ВЛС в частном секторе выполняют два сотрудника одновременно.
+for work_type in work_types:
+    work_type.setdefault("joint", False)
+work_type_by_code["INST_PRIVATE_VLS"]["joint"] = True
+
 reference = {
     "service_centers": service_centers,
     "staff": staff,

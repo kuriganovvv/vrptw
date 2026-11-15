@@ -97,6 +97,8 @@ export interface WorkType {
   deadline_value: number | null;
   repeat_deadline_value: number | null;
   pgp_relevant: boolean;
+  /** Два сотрудника выезжают на наряд одновременно (например, ВЛС в частном секторе). */
+  joint?: boolean;
 }
 
 export interface ReferenceData {

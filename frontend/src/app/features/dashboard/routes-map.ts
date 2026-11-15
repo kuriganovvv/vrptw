@@ -259,8 +259,16 @@ export class RoutesMap implements AfterViewInit, OnDestroy {
         marker.on('click', () => this.store.selectStaff(view.staff.staff_id));
         marker.bindTooltip(
           `<b>${order ? order.address : stopView.stop.location_id}</b><br/>
-           ${view.staff.display_name} · ${stopView.timeLabel}<br/>
-           <span style="color:#64748b">${stopView.stop.status === 'DONE' ? 'Выполнено' : stopView.late ? 'Риск опоздания' : 'Запланировано'}</span>`,
+          ${view.staff.display_name} · ${stopView.timeLabel}<br/>
+          <span style="color:#64748b">${
+            stopView.stop.status === 'DONE' ? 'Выполнено'
+            : stopView.late ? 'Риск опоздания'
+            : 'Запланировано'
+          }</span>${
+            stopView.stop.explanation?.includes('Совместный')
+              ? '<br/><span style="color:#F97316">👥 Совместный визит (2 сотрудника)</span>'
+              : ''
+          }`,
           { direction: 'top', offset: [0, -12], opacity: 1 },
         );
       }

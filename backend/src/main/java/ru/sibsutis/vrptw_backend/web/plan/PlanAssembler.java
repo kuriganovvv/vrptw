@@ -3,7 +3,9 @@ package ru.sibsutis.vrptw_backend.web.plan;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -44,7 +46,11 @@ public class PlanAssembler {
             travelTotal += route.totals().travelSec();
         }
         List<UnassignedOrder> unassigned = unassigned(solution, reference);
-        int visitsPlanned = (int) solution.getVisits().stream().filter(Visit::isAssigned).count();
+        int visitsPlanned = (int) solution.getVisits().stream()
+            .filter(Visit::isAssigned)
+            .map(v -> v.getOrder().getOrderId())
+            .distinct()
+            .count();
         int pgpOrders = pgpGroups.stream().mapToInt(g -> g.orderIds().size()).sum();
         PlanSummary summary = new PlanSummary(
                 day.orders() == null ? 0 : day.orders().size(),
@@ -64,6 +70,7 @@ public class PlanAssembler {
         long travelSec = 0;
         long distanceM = 0;
         int workMin = 0;
+
         for (Visit visit : staff.getVisits()) {
             Visit.Timings t = visit.getTimings();
             if (t == null) {
@@ -75,13 +82,21 @@ public class PlanAssembler {
                         t.breakStart(), t.breakStart(), t.breakEnd(), 0L, 0L,
                         STATUS_PLANNED, dto(remaining), null));
             }
-            remaining = remaining.minus(visit.getOrder().getRequiredEquipment());
+            if (!visit.isJoint() || visit.isPrimaryJoint()) {
+                remaining = remaining.minus(visit.getOrder().getRequiredEquipment());
+            }
+
             travelSec += t.travelSec();
             distanceM += t.distanceM();
             workMin += visit.getWorkType().durationMin();
+
+            String explanation = visit.isJoint()
+                ? "Совместный визит: требуются 2 сотрудника (ВЛС)"
+                : null;
+
             stops.add(new Stop(seq++, TYPE_VISIT, visit.locationId(), visit.getOrder().getOrderId(),
                     t.arrival(), t.start(), t.end(), t.travelSec(), t.distanceM(),
-                    STATUS_PLANNED, dto(remaining), null));
+                    STATUS_PLANNED, dto(remaining), explanation));
         }
 
         long backSec = 0;
@@ -106,12 +121,19 @@ public class PlanAssembler {
         return new Route(staff.getStaffId(), staff.getServiceCenterId(), "ACTIVE", null, null, stops, totals);
     }
 
-    /** Порядок по записке: H1 → H7 → H4 → H2 → STAFF_UNAVAILABLE → OTHER. */
     private List<UnassignedOrder> unassigned(DaySolution solution, ReferenceData reference) {
         List<UnassignedOrder> result = new ArrayList<>();
+        Set<String> processedJointOrders = new HashSet<>();
         for (Visit visit : solution.getVisits()) {
             if (visit.isAssigned()) {
                 continue;
+            }
+
+            if (visit.isJoint()) {
+                if (processedJointOrders.contains(visit.getOrder().getOrderId())) {
+                    continue;
+                }
+                processedJointOrders.add(visit.getOrder().getOrderId());
             }
             result.add(classify(visit, solution, reference));
         }

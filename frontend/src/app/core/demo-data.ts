@@ -228,6 +228,7 @@ const WORK_TYPES: WorkType[] = [
     deadline_value: null,
     repeat_deadline_value: null,
     pgp_relevant: false,
+    joint: true,
   },
   {
     code: 'ADD_SERVICE',

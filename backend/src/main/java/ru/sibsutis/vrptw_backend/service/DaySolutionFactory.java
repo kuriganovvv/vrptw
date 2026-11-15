@@ -85,8 +85,10 @@ public class DaySolutionFactory {
             for (String profile : workType.profiles()) {
                 profiles.add(parseEnum(Profile.class, profile, "work_type.profiles"));
             }
+            boolean isJoint = Boolean.TRUE.equals(workType.joint());
             result.put(code, new WorkType(code, workType.name(), profiles,
-                    workType.durationMin(), workType.maxStartDelayMin(), workType.pgpRelevant()));
+                    workType.durationMin(), workType.maxStartDelayMin(), workType.pgpRelevant(),
+                    isJoint));
         }
         if (result.isEmpty()) {
             throw new DataMappingException("Справочник типов работ пуст");
@@ -138,38 +140,55 @@ public class DaySolutionFactory {
             return result;
         }
         for (var orderDto : day.orders()) {
-            WorkTypeCode code = parseEnum(WorkTypeCode.class, orderDto.workTypeCode(), "order.work_type_code");
+            WorkTypeCode code = parseEnum(WorkTypeCode.class, orderDto.workTypeCode(),
+                "order.work_type_code");
             WorkType workType = workTypes.get(code);
             if (workType == null) {
                 throw new DataMappingException("Неизвестный тип работ " + orderDto.workTypeCode()
-                        + " у наряда " + orderDto.orderId());
+                    + " у наряда " + orderDto.orderId());
             }
-            if (orderDto.slot() == null || orderDto.slot().start() == null || orderDto.slot().end() == null) {
+            if (orderDto.slot() == null || orderDto.slot().start() == null
+                    || orderDto.slot().end() == null) {
                 throw new DataMappingException("У наряда " + orderDto.orderId() + " не задан слот");
             }
-
             Order order = Order.builder()
-                    .orderId(orderDto.orderId())
-                    .workTypeCode(code)
-                    .technology(parseEnum(Technology.class, orderDto.technology(), "order.technology"))
-                    .buildingId(orderDto.buildingId())
-                    .address(orderDto.address())
-                    .lat(orderDto.lat())
-                    .lon(orderDto.lon())
-                    .buildingType(parseEnum(BuildingType.class, orderDto.buildingType(), "order.building_type"))
-                    .requiresHeight(orderDto.requiresHeight())
-                    .accessNodeId(orderDto.accessNodeId())
-                    .registeredAt(orderDto.registeredAt())
-                    .slotStart(orderDto.slot().start())
-                    .slotEnd(orderDto.slot().end())
-                    .latestStart(orderDto.latestStart())
-                    .deadline(orderDto.deadline())
-                    .requiredEquipment(equipment(orderDto.requiredEquipment()))
-                    .isRepeat(orderDto.isRepeat())
-                    .previousOrderId(orderDto.previousOrderId())
-                    .build();
+                .orderId(orderDto.orderId())
+                .workTypeCode(code)
+                .technology(parseEnum(Technology.class, orderDto.technology(), "order.technology"))
+                .buildingId(orderDto.buildingId())
+                .address(orderDto.address())
+                .lat(orderDto.lat())
+                .lon(orderDto.lon())
+                .buildingType(parseEnum(BuildingType.class, orderDto.buildingType(),
+                    "order.building_type"))
+                .requiresHeight(orderDto.requiresHeight())
+                .accessNodeId(orderDto.accessNodeId())
+                .registeredAt(orderDto.registeredAt())
+                .slotStart(orderDto.slot().start())
+                .slotEnd(orderDto.slot().end())
+                .latestStart(orderDto.latestStart())
+                .deadline(orderDto.deadline())
+                .requiredEquipment(equipment(orderDto.requiredEquipment()))
+                .isRepeat(orderDto.isRepeat())
+                .previousOrderId(orderDto.previousOrderId())
+                .build();
 
-            result.add(new Visit(order, workType));
+            if (workType.joint()) {
+                Visit visitA = new Visit(order, workType);
+                visitA.setVisitId(orderDto.orderId() + "-A");
+                visitA.setJointGroupId(orderDto.orderId());
+                visitA.setPrimaryJoint(true);
+
+                Visit visitB = new Visit(order, workType);
+                visitB.setVisitId(orderDto.orderId() + "-B");
+                visitB.setJointGroupId(orderDto.orderId());
+                visitB.setPrimaryJoint(false);
+
+                result.add(visitA);
+                result.add(visitB);
+            } else {
+                result.add(new Visit(order, workType));
+            }
         }
         return result;
     }

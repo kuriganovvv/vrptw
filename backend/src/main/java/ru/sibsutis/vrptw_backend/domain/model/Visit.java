@@ -17,6 +17,8 @@ public class Visit {
     private String visitId;
     private Order order;
     private WorkType workType;
+    private String jointGroupId;
+    private boolean primaryJoint;
 
     @InverseRelationShadowVariable(sourceVariableName = "visits")
     private Staff staff;
@@ -31,6 +33,26 @@ public class Visit {
     private Timings timings;
 
     public Visit() {
+    }
+
+    public boolean isJoint() {
+        return jointGroupId != null;
+    }
+
+    public String getJointGroupId() {
+        return jointGroupId;
+    }
+
+    public void setJointGroupId(String jointGroupId) {
+        this.jointGroupId = jointGroupId;
+    }
+
+    public boolean isPrimaryJoint() {
+        return primaryJoint;
+    }
+
+    public void setPrimaryJoint(boolean primaryJoint) {
+        this.primaryJoint = primaryJoint;
     }
 
     public Visit(Order order, WorkType workType) {

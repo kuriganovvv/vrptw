@@ -14,5 +14,6 @@ public record WorkType(
         @JsonProperty("deadline_kind") String deadlineKind,
         @JsonProperty("deadline_value") Integer deadlineValue,
         @JsonProperty("repeat_deadline_value") Integer repeatDeadlineValue,
-        @JsonProperty("pgp_relevant") boolean pgpRelevant) {
+        @JsonProperty("pgp_relevant") boolean pgpRelevant,
+        Boolean joint) {
 }

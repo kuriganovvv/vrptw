@@ -41,7 +41,7 @@ class DispatchSolverTest {
     @Test
     void assignsFiveOrdersToSingleStaff() {
         WorkType repair = new WorkType(WorkTypeCode.REPAIR, "Устранение неисправности",
-                Set.of(Profile.LTP3), 60, null, true);
+                Set.of(Profile.LTP3), 60, null, true, false);
 
         List<String> points = new ArrayList<>(List.of("SC-01"));
         List<Order> orders = new ArrayList<>();

@@ -119,7 +119,6 @@ function gisPoint(lat: number, lon: number): string {
         }
       </section>
 
-      <!-- Текущий визит -->
       @if (current(); as visit) {
         <section class="overflow-hidden rounded-2xl border border-brand/30 bg-white shadow-sm">
           <div class="flex items-center gap-2 bg-brand-50 px-4 py-2 text-xs font-medium text-brand">
@@ -156,6 +155,12 @@ function gisPoint(lat: number, lon: number): string {
                 <p class="mt-1 text-xs text-slate-500">
                   {{ workType(visit) }}
                 </p>
+                @if (visit.stop.stop.explanation?.includes('Совместный')) {
+                  <p class="mt-0.5 inline-flex items-center gap-1 rounded-lg bg-orange-50 px-2 py-1 text-[11px] font-medium text-orange-700">
+                    <app-icon name="users" class="size-3.5" />
+                    Совместный визит — требуется второй сотрудник
+                  </p>
+                }
               </div>
             </div>
 
