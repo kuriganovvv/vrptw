@@ -119,6 +119,35 @@ python3 loadtest/run_loadtest.py
 Результаты прогона сохраняются в `loadtest/results.json`; скрипты и данные
 исключены из git через `.gitignore`.
 
+## Бонус: `JAVA_OPTS` в контейнере
+
+В `docker-compose.yml` был задан `JAVA_OPTS=-Xmx2g -Xms512m`, но
+`backend/Dockerfile` запускает приложение в exec-форме:
+
+```dockerfile
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+В такой форме переменная `JAVA_OPTS` не подставляется в командную строку, и
+контейнер работал на дефолтной куче. Заменили переменную на
+`JAVA_TOOL_OPTIONS` — её JVM читает сама, независимо от формы `ENTRYPOINT`.
+Проверка на образе `vrptw-backend:latest`:
+
+```text
+# было: JAVA_OPTS
+size_t InitialHeapSize = 65011712   {ergonomic}
+size_t MaxHeapSize     = 1027604480 {ergonomic}   # ~980 МБ
+
+# стало: JAVA_TOOL_OPTIONS
+Picked up JAVA_TOOL_OPTIONS: -Xmx2g -Xms512m
+size_t InitialHeapSize = 536870912  {command line} # 512 МБ
+size_t MaxHeapSize     = 2147483648 {command line} # 2 ГБ
+```
+
+`jcmd` в образе нет (это JRE, а не JDK), поэтому флаги проверены через
+`java -XX:+PrintFlagsFinal`. Запускать backend из compose на 8080 для проверки
+не потребовалось — настройка применяется на старте JVM.
+
 ## Вывод
 
 На реальном размере матрицы и трёх днях по 400 нарядов **все события
