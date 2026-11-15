@@ -130,12 +130,20 @@ export class DispatchStore {
     return this.plan().routes.map((route, index) => {
       const staff = staffById.get(route.staff_id) ?? this.placeholderStaff(route);
       const staffMeta = meta[staff.staff_id] ?? { color: PALETTE[index % PALETTE.length], district: 'Екатеринбург' };
+      // Точка маршрута ищется по идентификатору локации: у VISIT и BREAK это дом,
+      // у DEPOT_* и RESTOCK — сервисный центр. Если ничего не нашлось, берём
+      // предыдущую известную точку, а не центр города: иначе каждый маршрут
+      // получает фиктивный крюк через площадь 1905 года.
+      let lastLat: number | null = null;
+      let lastLon: number | null = null;
       const stops: StopView[] = route.stops.map((stop) => {
         const order = stop.order_id ? orderById.get(stop.order_id) : undefined;
-        const building = stop.type === 'VISIT' ? buildingById.get(stop.location_id) : undefined;
-        const center = stop.type === 'VISIT' ? undefined : scById.get(stop.location_id);
-        const lat = building?.lat ?? center?.lat ?? order?.lat ?? 56.8389;
-        const lon = building?.lon ?? center?.lon ?? order?.lon ?? 60.6057;
+        const building = buildingById.get(stop.location_id);
+        const center = scById.get(stop.location_id);
+        const lat = building?.lat ?? center?.lat ?? order?.lat ?? lastLat ?? 56.8389;
+        const lon = building?.lon ?? center?.lon ?? order?.lon ?? lastLon ?? 60.6057;
+        lastLat = lat;
+        lastLon = lon;
         const late = this.isLate(stop, order);
         return {
           stop,
