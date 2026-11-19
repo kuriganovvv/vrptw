@@ -5,7 +5,7 @@
 Система автоматизирует распределение нарядов между выездными бригадами с учётом временных окон, квалификации сотрудников и запаса оборудования, а также включает модуль сценарного анализа («what-if» моделирование) и мобильный кабинет инженера.
 
 **Стек:** Java 21 · Spring Boot · Timefold Solver · PostgreSQL · Docker Compose · Angular  
-
+![map_small](docs/gifs/map_small.gif)
 
 # Установка и запуск
 Состоит из backend на Spring Boot и frontend на Angular; в Docker оба контейнера поднимаются через `docker compose`.
